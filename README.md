@@ -47,18 +47,18 @@ Il progetto è anche una soluzione Visual Studio (`SpriteGenerator.sln`) compati
   * Spostamento pixel a scorrimento (tasti freccia o pulsanti ▲ ▼ ◄ ►)
   * Inversione colori NOT (`Ctrl+I`)
 
-### 2. Gestione Multi-Sprite & Aggiunta di Più Nemici
+### 2. Gestione Multi-Sprite 
 * **Striscia orizzontale (Filmstrip)**: anteprima in miniatura di tutti gli sprite/frame con selezione immediata.
 * **Pulsante `+ 1 Sprite`**: aggiunge un singolo sprite vuoto.
-* **Pulsante `➕ Aggiungi Più Nemici...`**: apre una finestra guidata con 3 modalità:
-  1. **Libreria Preset Nemici ZX Spectrum**: permette di aggiungere nemici completi pronti all'uso con 4 frame direzionali/animati:
+* **Pulsante `➕ Aggiungi Sprite`**: apre una finestra guidata con 3 modalità:
+  1. **Libreria Preset Sprite ZX Spectrum**: permette di aggiungere Sprite completi pronti all'uso con 4 frame direzionali/animati:
      - *Nemico Tipo 1: Tank / Ricognitore (4 direzioni)*
      - *Nemico Tipo 2: Drone Alieno / Invader (4 frame rotazione)*
      - *Nemico Tipo 3: Pipistrello delle Caverne (4 frame battito ali)*
      - *Nemico Tipo 4: Ragno Cybernetico (4 direzioni)*
   2. **Nuovo Set Nemico (N Frame)**: genera al volo un blocco di N sprite vuoti con prefisso personalizzato e suffisso a 4 direzioni (`_Nord, _Est, _Sud, _Ovest`) o numerico (`_0, _1, _2...`).
   3. **Incolla Dati Assembly (`db`/`defb`)**: incolla liste di byte per creare automaticamente più sprite con rilevamento del numero di frame.
-* **Pulsante `📋 Incolla da Appunti`**: scorciatoia con un clic per importare istantaneamente sequenze `db` di altri nemici dagli appunti di Windows.
+* **Pulsante `📋 Incolla da Appunti`**: scorciatoia con un clic per importare istantaneamente sequenze `db` di altri Sprite dagli appunti di Windows.
 * **Ridenominazione immediata**: casella di testo dedicata nel pannello destro per rinominare lo sprite corrente (aggiorna la filmstrip e l'etichetta assembly in tempo reale).
 
 ### 3. Palette Ufficiale Sinclair ZX Spectrum
