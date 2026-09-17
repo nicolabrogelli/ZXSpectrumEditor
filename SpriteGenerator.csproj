@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A3D69804-9E7B-4B45-B139-E43E51FCE5D9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ZXSpectrumSpriteGenerator</RootNamespace>
+    <AssemblyName>ZXSpectrumSpriteGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Models\ZxSpectrumPalette.cs" />
+    <Compile Include="Models\Sprite.cs" />
+    <Compile Include="Models\SpriteProject.cs" />
+    <Compile Include="Services\SpriteExporter.cs" />
+    <Compile Include="Services\SpriteImporter.cs" />
+    <Compile Include="Services\ProjectStorage.cs" />
+    <Compile Include="Models\EnemyPresets.cs" />
+    <Compile Include="Models\GameMap.cs" />
+    <Compile Include="Services\MapExporter.cs" />
+    <Compile Include="UI\Controls\SpriteCanvas.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\SpriteFilmstrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\MapCanvas.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\ImportExportDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImportExportDialog.Designer.cs">
+      <DependentUpon>ImportExportDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddEnemiesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddEnemiesDialog.Designer.cs">
+      <DependentUpon>AddEnemiesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MapEditorView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MapEditorView.Designer.cs">
+      <DependentUpon>MapEditorView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UI\ImportExportDialog.resx">
+      <DependentUpon>ImportExportDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddEnemiesDialog.resx">
+      <DependentUpon>AddEnemiesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MapEditorView.resx">
+      <DependentUpon>MapEditorView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

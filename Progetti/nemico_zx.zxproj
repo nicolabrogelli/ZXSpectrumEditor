@@ -1,0 +1,249 @@
+﻿{
+  "formatVersion": 1,
+  "title": "Nemico ZX Spectrum (4 Posizioni)",
+  "defaultWidth": 16,
+  "defaultHeight": 16,
+  "selectedIndex": 20,
+  "sprites": [
+    {
+      "name": "Nemico_Pos1_Nord",
+      "groupName": "Nemico 1",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000000002AAA7FFF7FFF7C3F7C3F7FFF7FFF7FFF00002AAA00002AAA00000000"
+    },
+    {
+      "name": "Nemico_Pos2_Est",
+      "groupName": "Nemico 1",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "0048012C04BC12FE4BFE2E7FBC3FFE7CFFF27FC97F253C943250094005000400"
+    },
+    {
+      "name": "Nemico_Pos3_Sud",
+      "groupName": "Nemico 1",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000007E00FF017E80FF016680E7016680FF017E80FF017E8081017E810080000"
+    },
+    {
+      "name": "Nemico_Pos4_Ovest",
+      "groupName": "Nemico 1",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "120034803D207F487FD2FE74FC3D3E7F4FFF93FEA4FE293C0A4C029000A00020"
+    },
+    {
+      "name": "Nemico_2_Drone_Pos1",
+      "groupName": "Nemico_2",
+      "width": 16,
+      "height": 16,
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000003C007E00FF01FF81BD81FF83FFC7FFE73CE73CE63C62184318C60060000"
+    },
+    {
+      "name": "Nemico_2_Drone_Pos2",
+      "groupName": "Nemico_2",
+      "width": 16,
+      "height": 16,
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "0000018007E00FF01BD81FF83FFC7FFE7FFE73CE63C6318C21846006C0030000"
+    },
+    {
+      "name": "Nemico_2_Drone_Pos3",
+      "groupName": "Nemico_2",
+      "width": 16,
+      "height": 16,
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000003C007E00FF01FF83FFC7FFE73CE73CE7FFE3FFC1FF80FF0124821840000"
+    },
+    {
+      "name": "Nemico_2_Drone_Pos4",
+      "groupName": "Nemico_2",
+      "width": 16,
+      "height": 16,
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "0000018007E00FF01BD81FF83FFC7FFE7FFE73CE63C6318C21846006C0030000"
+    },
+    {
+      "name": "Nemico_3_Pipistrello_AliSu",
+      "groupName": "Nemico_3",
+      "width": 16,
+      "height": 16,
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "00008001C003E007700E381C1C380FF007E00660066003C00180000000000000"
+    },
+    {
+      "name": "Nemico_3_Pipistrello_AliOrizz",
+      "groupName": "Nemico_3",
+      "width": 16,
+      "height": 16,
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000000000000FFFF7FFE3FFC1FF80FF007E0066007E003C00180000000000000"
+    },
+    {
+      "name": "Nemico_3_Pipistrello_AliGiu",
+      "groupName": "Nemico_3",
+      "width": 16,
+      "height": 16,
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "00000000000003C007E00FF03FFC7FFEE7E7C663866104200000000000000000"
+    },
+    {
+      "name": "Nemico_3_Pipistrello_Chiuso",
+      "groupName": "Nemico_3",
+      "width": 16,
+      "height": 16,
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "0000000003C007E00FF00A500FF00FF007E007E003C003C00180018000000000"
+    },
+    {
+      "name": "Nemico_4_Ragno_Sud",
+      "groupName": "Nemico_4",
+      "width": 16,
+      "height": 16,
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000089914E72381C0FF01FF81BD81FF80FF03FFC6FF661869189899100000000"
+    },
+    {
+      "name": "Nemico_4_Ragno_Est",
+      "groupName": "Nemico_4",
+      "width": 16,
+      "height": 16,
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "0000039007D00EA01FC03FF87DBC7DBC3FF81FC00EA007D00390000000000000"
+    },
+    {
+      "name": "Nemico_4_Ragno_Nord",
+      "groupName": "Nemico_4",
+      "width": 16,
+      "height": 16,
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "00008991918961866FF63FFC0FF01FF81BD81FF80FF0381C4E72899100000000"
+    },
+    {
+      "name": "Nemico_4_Ragno_Ovest",
+      "groupName": "Nemico_4",
+      "width": 16,
+      "height": 16,
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "000009C00BE0057003F81FFC3DBE3DBE1FFC03F805700BE009C0000000000000"
+    },
+    {
+      "name": "Nemico_5_0",
+      "groupName": "Nemico_5",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "06000C00180038007400CA8085C003C00640CEC0D840FFC0E200C880D5400880"
+    },
+    {
+      "name": "Nemico_5_1",
+      "groupName": "Nemico_5",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "0180030006000E001D0032A0217000F0019063B066107FF07880622065500220"
+    },
+    {
+      "name": "Nemico_5_2",
+      "groupName": "Nemico_5",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "006000C00180038007400CA8085C003C006430EC31843FFC3E20308831540088"
+    },
+    {
+      "name": "Nemico_5_3",
+      "groupName": "Nemico_5",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "00180030006000E001D0032A0217000F0019063B066107FF0788062206550022"
+    },
+    {
+      "name": "Nemico_6_0",
+      "groupName": "Nemico_6",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "03400F703F3C3F4C5F665F769F7F007F8E008EFF46FE40F22004300C0C3002C0"
+    },
+    {
+      "name": "Nemico_6_1",
+      "groupName": "Nemico_6",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "03C00FF03FAC3FCC5FC647B699BF9E7F8E7F8D9F45E641F22004300C0C3003C0"
+    },
+    {
+      "name": "Nemico_6_2",
+      "groupName": "Nemico_6",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "03C00FF02FBC37C85BE65DE69EDF9E3F8C7F8B7F47BE41C2000430040C3003C0"
+    },
+    {
+      "name": "Nemico_6_3",
+      "groupName": "Nemico_6",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "dataHex": "03C00BF03DBC3DCC5DE65EF49EE39E1F887F877F077E41B20000000000000000"
+    }
+  ]
+}

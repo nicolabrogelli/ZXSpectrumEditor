@@ -1,0 +1,11 @@
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\bin\Debug\ZXSpectrumSpriteGenerator.exe
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\bin\Debug\ZXSpectrumSpriteGenerator.pdb
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\SpriteGenerator.csproj.AssemblyReference.cache
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\SpriteGenerator.csproj.CoreCompileInputs.cache
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\ZXSpectrumSpriteGenerator.exe
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\ZXSpectrumSpriteGenerator.pdb
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\ZXSpectrumSpriteGenerator.UI.ImportExportDialog.resources
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\ZXSpectrumSpriteGenerator.UI.AddEnemiesDialog.resources
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\ZXSpectrumSpriteGenerator.UI.MapEditorView.resources
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\ZXSpectrumSpriteGenerator.UI.MainForm.resources
+C:\Users\nicol\Documents\Progetti\c#\ZX SPECTRUM\SpriteGnerator\obj\Debug\SpriteGenerator.csproj.GenerateResource.cache
