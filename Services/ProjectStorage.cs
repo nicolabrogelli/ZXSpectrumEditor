@@ -73,6 +73,31 @@ namespace ZXSpectrumSpriteGenerator.Services
             }
 
             sb.AppendLine("  ],");
+            sb.AppendLine($"  \"selectedTileIndex\": {project.SelectedTileIndex},");
+            sb.AppendLine("  \"tiles\": [");
+
+            for (int t = 0; t < project.Tiles.Count; t++)
+            {
+                var tile = project.Tiles[t];
+                sb.AppendLine("    {");
+                sb.AppendLine($"      \"name\": \"{EscapeJson(tile.Name)}\",");
+                sb.AppendLine($"      \"inkColor\": {tile.InkColor},");
+                sb.AppendLine($"      \"paperColor\": {tile.PaperColor},");
+                sb.AppendLine($"      \"bright\": {(tile.Bright ? "true" : "false")},");
+
+                byte[] data = tile.GetBytesRowByRow();
+                string hex = ByteArrayToHex(data);
+                sb.AppendLine($"      \"dataHex\": \"{hex}\"");
+
+                sb.Append("    }");
+                if (t < project.Tiles.Count - 1)
+                {
+                    sb.Append(",");
+                }
+                sb.AppendLine();
+            }
+
+            sb.AppendLine("  ],");
             sb.AppendLine($"  \"selectedMapIndex\": {project.SelectedMapIndex},");
             sb.AppendLine("  \"maps\": [");
 
@@ -133,8 +158,18 @@ namespace ZXSpectrumSpriteGenerator.Services
                 throw new InvalidDataException("Formato file non valido: sezione 'sprites' non trovata.");
 
             int arrayOpen = json.IndexOf('[', spritesStart);
+            int tilesKeywordIdx = json.IndexOf("\"tiles\"", StringComparison.OrdinalIgnoreCase);
             int mapsKeywordIdx = json.IndexOf("\"maps\"", StringComparison.OrdinalIgnoreCase);
-            int arrayClose = mapsKeywordIdx > 0 ? json.LastIndexOf(']', mapsKeywordIdx) : json.LastIndexOf(']');
+
+            int nextSectionIdx = -1;
+            if (tilesKeywordIdx > 0 && mapsKeywordIdx > 0)
+                nextSectionIdx = Math.Min(tilesKeywordIdx, mapsKeywordIdx);
+            else if (tilesKeywordIdx > 0)
+                nextSectionIdx = tilesKeywordIdx;
+            else if (mapsKeywordIdx > 0)
+                nextSectionIdx = mapsKeywordIdx;
+
+            int arrayClose = nextSectionIdx > 0 ? json.LastIndexOf(']', nextSectionIdx) : json.LastIndexOf(']');
             if (arrayOpen < 0 || arrayClose < arrayOpen)
                 throw new InvalidDataException("Formato file non valido: array 'sprites' malformato.");
 
@@ -181,6 +216,57 @@ namespace ZXSpectrumSpriteGenerator.Services
 
             project.SelectedIndex = Math.Max(0, Math.Min(project.Sprites.Count - 1, selIdx));
 
+            // Estrai array di tile (Tileset 8x8)
+            int selTileIdx = ExtractInt(json, "selectedTileIndex", 0);
+            project.Tiles.Clear();
+            if (tilesKeywordIdx > 0)
+            {
+                int tileArrayOpen = json.IndexOf('[', tilesKeywordIdx);
+                int tileArrayClose = mapsKeywordIdx > 0 ? json.LastIndexOf(']', mapsKeywordIdx) : json.LastIndexOf(']');
+                if (tileArrayOpen > 0 && tileArrayClose > tileArrayOpen)
+                {
+                    string tilesBlock = json.Substring(tileArrayOpen + 1, tileArrayClose - tileArrayOpen - 1);
+                    var tileMatches = Regex.Matches(tilesBlock, @"\{[^{}]*\}");
+
+                    foreach (Match m in tileMatches)
+                    {
+                        string objStr = m.Value;
+                        string tName = ExtractString(objStr, "name") ?? $"Tile_{project.Tiles.Count + 1}";
+                        int ink = ExtractInt(objStr, "inkColor", 7);
+                        int paper = ExtractInt(objStr, "paperColor", 0);
+                        bool bright = ExtractBool(objStr, "bright", true);
+                        string hex = ExtractString(objStr, "dataHex");
+
+                        var tile = new Tile(tName)
+                        {
+                            InkColor = ink,
+                            PaperColor = paper,
+                            Bright = bright
+                        };
+
+                        if (!string.IsNullOrEmpty(hex))
+                        {
+                            tile.SetFromBytesRowByRow(HexToByteArray(hex));
+                        }
+
+                        project.Tiles.Add(tile);
+                    }
+                }
+            }
+
+            // Se non ci sono tile nel file (es. file salvato con vecchia versione), inizializza con i preset di default
+            if (project.Tiles.Count == 0)
+            {
+                project.Tiles.Add(new Tile("Muro_Mattoni", TilePresets.BrickWall) { InkColor = 7, PaperColor = 0, Bright = true });
+                project.Tiles.Add(new Tile("Piattaforma", TilePresets.Platform) { InkColor = 5, PaperColor = 0, Bright = true });
+                project.Tiles.Add(new Tile("Scala", TilePresets.Ladder) { InkColor = 6, PaperColor = 0, Bright = true });
+                project.Tiles.Add(new Tile("Blocco_Pietra", TilePresets.StoneBlock) { InkColor = 7, PaperColor = 0, Bright = false });
+                project.Tiles.Add(new Tile("Spuntoni", TilePresets.Spikes) { InkColor = 2, PaperColor = 0, Bright = true });
+                project.Tiles.Add(new Tile("Gemma", TilePresets.Gem) { InkColor = 6, PaperColor = 0, Bright = true });
+            }
+
+            project.SelectedTileIndex = Math.Max(0, Math.Min(project.Tiles.Count - 1, selTileIdx));
+
             // Estrai array di mappe se presente
             project.Maps.Clear();
             if (mapsKeywordIdx > 0)
@@ -196,9 +282,9 @@ namespace ZXSpectrumSpriteGenerator.Services
                     {
                         string objStr = m.Value;
                         string mName = ExtractString(objStr, "name") ?? $"Mappa {project.Maps.Count + 1}";
-                        int mW = ExtractInt(objStr, "width", 16);
-                        int mH = ExtractInt(objStr, "height", 12);
-                        int tSize = ExtractInt(objStr, "tileSize", 16);
+                        int mW = ExtractInt(objStr, "width", 32);
+                        int mH = ExtractInt(objStr, "height", 24);
+                        int tSize = ExtractInt(objStr, "tileSize", 8);
                         int paper = ExtractInt(objStr, "defaultPaper", 0);
                         int ink = ExtractInt(objStr, "defaultInk", 7);
                         bool bright = ExtractBool(objStr, "bright", true);
@@ -227,10 +313,10 @@ namespace ZXSpectrumSpriteGenerator.Services
             // Se non ci sono mappe nel file (es. file salvato con vecchia versione), crea mappa predefinita
             if (project.Maps.Count == 0)
             {
-                var defMap = project.AddMap("Mappa 1", 16, 12);
+                var defMap = project.AddMap("Mappa 1", 32, 24);
                 // Bordo di test
-                for (int x = 0; x < 16; x++) { defMap.SetTile(x, 0, 1); defMap.SetTile(x, 11, 1); }
-                for (int y = 0; y < 12; y++) { defMap.SetTile(0, y, 1); defMap.SetTile(15, y, 1); }
+                for (int x = 0; x < 32; x++) { defMap.SetTile(x, 0, 1); defMap.SetTile(x, 23, 1); }
+                for (int y = 0; y < 24; y++) { defMap.SetTile(0, y, 1); defMap.SetTile(31, y, 1); }
             }
 
             project.SelectedMapIndex = Math.Max(0, Math.Min(project.Maps.Count - 1, selMapIdx));

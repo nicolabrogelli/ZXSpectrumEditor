@@ -55,12 +55,59 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             }
         }
 
+        private bool _isTilesMode = false;
+
+        public bool IsTilesMode
+        {
+            get => _isTilesMode;
+            set
+            {
+                if (_isTilesMode != value)
+                {
+                    _isTilesMode = value;
+                    ClampScroll();
+                    Invalidate();
+                }
+            }
+        }
+
+        private int ItemCount => _project == null ? 0 : (_isTilesMode ? _project.Tiles.Count : _project.Sprites.Count);
+
+        private Sprite GetItem(int index)
+        {
+            if (_project == null) return null;
+            if (_isTilesMode)
+            {
+                if (index >= 0 && index < _project.Tiles.Count)
+                    return _project.Tiles[index];
+            }
+            else
+            {
+                if (index >= 0 && index < _project.Sprites.Count)
+                    return _project.Sprites[index];
+            }
+            return null;
+        }
+
+        private int CurrentSelectedIndex
+        {
+            get => _project == null ? -1 : (_isTilesMode ? _project.SelectedTileIndex : _project.SelectedIndex);
+            set
+            {
+                if (_project != null)
+                {
+                    if (_isTilesMode) _project.SelectedTileIndex = value;
+                    else _project.SelectedIndex = value;
+                }
+            }
+        }
+
         public int TotalContentWidth
         {
             get
             {
-                if (_project == null || _project.Sprites.Count == 0) return 0;
-                return _spacing + _project.Sprites.Count * (_itemWidth + _spacing);
+                if (_project == null || ItemCount == 0) return 0;
+                return _spacing + ItemCount * (_itemWidth + _spacing);
             }
         }
 
@@ -126,7 +173,7 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
 
         public void EnsureVisible(int index)
         {
-            if (_project == null || index < 0 || index >= _project.Sprites.Count) return;
+            if (_project == null || index < 0 || index >= ItemCount) return;
             int cardLeft = _spacing + index * (_itemWidth + _spacing);
             int cardRight = cardLeft + _itemWidth;
 
@@ -145,7 +192,7 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
 
         public void CenterSprite(int index)
         {
-            if (_project == null || index < 0 || index >= _project.Sprites.Count) return;
+            if (_project == null || index < 0 || index >= ItemCount) return;
             int cardCenter = _spacing + index * (_itemWidth + _spacing) + _itemWidth / 2;
             int targetOffset = cardCenter - ClientSize.Width / 2;
             ScrollOffsetX = targetOffset;
@@ -163,22 +210,24 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            if (_project == null || _project.Sprites.Count == 0)
+            if (_project == null || ItemCount == 0)
             {
                 using (var brush = new SolidBrush(Color.Gray))
                 {
-                    g.DrawString("Nessuno sprite presente nel progetto.", Font, brush, 10, 30);
+                    string emptyMsg = _isTilesMode ? "Nessun tile presente nel tileset." : "Nessuno sprite presente nel progetto.";
+                    g.DrawString(emptyMsg, Font, brush, 10, 30);
                 }
                 return;
             }
 
             int x = _spacing - _scrollOffsetX;
-            string currentGroup = _project.CurrentSprite?.GroupName;
+            string currentGroup = _isTilesMode ? "Tileset" : _project.CurrentSprite?.GroupName;
 
-            for (int i = 0; i < _project.Sprites.Count; i++)
+            for (int i = 0; i < ItemCount; i++)
             {
-                var sprite = _project.Sprites[i];
-                bool isSelected = (i == _project.SelectedIndex);
+                var sprite = GetItem(i);
+                if (sprite == null) continue;
+                bool isSelected = (i == CurrentSelectedIndex);
                 bool isSameGroup = (!string.IsNullOrEmpty(currentGroup) && sprite.GroupName == currentGroup);
                 Rectangle cardRect = new Rectangle(x, 5, _itemWidth, _itemHeight);
 
@@ -330,17 +379,17 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
 
         private void SelectSpriteAtPoint(Point pt)
         {
-            if (_project == null || _project.Sprites.Count == 0) return;
+            if (_project == null || ItemCount == 0) return;
 
             int x = _spacing - _scrollOffsetX;
-            for (int i = 0; i < _project.Sprites.Count; i++)
+            for (int i = 0; i < ItemCount; i++)
             {
                 Rectangle cardRect = new Rectangle(x, 5, _itemWidth, _itemHeight);
                 if (cardRect.Contains(pt))
                 {
-                    if (_project.SelectedIndex != i)
+                    if (CurrentSelectedIndex != i)
                     {
-                        _project.SelectedIndex = i;
+                        CurrentSelectedIndex = i;
                         Invalidate();
                         SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
                     }
@@ -372,14 +421,14 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            if (_project == null || _project.Sprites.Count == 0) return;
+            if (_project == null || ItemCount == 0) return;
 
             if (e.KeyCode == Keys.Left)
             {
-                if (_project.SelectedIndex > 0)
+                if (CurrentSelectedIndex > 0)
                 {
-                    _project.SelectedIndex--;
-                    EnsureVisible(_project.SelectedIndex);
+                    CurrentSelectedIndex--;
+                    EnsureVisible(CurrentSelectedIndex);
                     Invalidate();
                     SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -387,10 +436,10 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             }
             else if (e.KeyCode == Keys.Right)
             {
-                if (_project.SelectedIndex < _project.Sprites.Count - 1)
+                if (CurrentSelectedIndex < ItemCount - 1)
                 {
-                    _project.SelectedIndex++;
-                    EnsureVisible(_project.SelectedIndex);
+                    CurrentSelectedIndex++;
+                    EnsureVisible(CurrentSelectedIndex);
                     Invalidate();
                     SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -398,7 +447,7 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             }
             else if (e.KeyCode == Keys.Home)
             {
-                _project.SelectedIndex = 0;
+                CurrentSelectedIndex = 0;
                 EnsureVisible(0);
                 Invalidate();
                 SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
@@ -406,8 +455,8 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             }
             else if (e.KeyCode == Keys.End)
             {
-                _project.SelectedIndex = _project.Sprites.Count - 1;
-                EnsureVisible(_project.SelectedIndex);
+                CurrentSelectedIndex = ItemCount - 1;
+                EnsureVisible(CurrentSelectedIndex);
                 Invalidate();
                 SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
                 e.Handled = true;

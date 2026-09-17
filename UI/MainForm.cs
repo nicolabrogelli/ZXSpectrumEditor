@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -120,6 +120,10 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             _project = project;
             _filmstrip.Project = _project;
+            if (_tileEditorView != null)
+            {
+                _tileEditorView.Project = _project;
+            }
             if (_mapEditorView != null)
             {
                 _mapEditorView.Project = _project;
@@ -367,6 +371,19 @@ namespace ZXSpectrumSpriteGenerator.UI
             _txtQuickAsm.Text = SpriteExporter.ExportToAssembly(_project, opt).Trim();
         }
 
+        public void SwitchToTileEditor(int tileIndex = -1)
+        {
+            if (_mainTabs != null && _tabTiles != null)
+            {
+                _mainTabs.SelectedTab = _tabTiles;
+                if (tileIndex >= 0 && _project != null && tileIndex < _project.Tiles.Count)
+                {
+                    _project.SelectedTileIndex = tileIndex;
+                    _tileEditorView.SelectTile(tileIndex);
+                }
+            }
+        }
+
         public void SwitchToMapEditor()
         {
             if (_mainTabs != null && _tabMaps != null)
@@ -415,18 +432,25 @@ namespace ZXSpectrumSpriteGenerator.UI
         private void MainTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool isMapTab = (_mainTabs.SelectedTab == _tabMaps);
-            if (_mTrans != null) _mTrans.Enabled = !isMapTab;
-            if (_mPreset != null) _mPreset.Enabled = !isMapTab;
-            if (_mSpriteClear != null) _mSpriteClear.Enabled = !isMapTab;
-            if (_mSpriteInvert != null) _mSpriteInvert.Enabled = !isMapTab;
-            if (_mSpriteAddEnemies != null) _mSpriteAddEnemies.Enabled = !isMapTab;
-            if (_mSpritePasteNemico != null) _mSpritePasteNemico.Enabled = !isMapTab;
-            if (_statusStrip != null) _statusStrip.Visible = !isMapTab;
+            bool isTileTab = (_mainTabs.SelectedTab == _tabTiles);
+            bool isSpriteTab = (_mainTabs.SelectedTab == _tabSprites);
+            if (_mTrans != null) _mTrans.Enabled = isSpriteTab;
+            if (_mPreset != null) _mPreset.Enabled = isSpriteTab;
+            if (_mSpriteClear != null) _mSpriteClear.Enabled = isSpriteTab;
+            if (_mSpriteInvert != null) _mSpriteInvert.Enabled = isSpriteTab;
+            if (_mSpriteAddEnemies != null) _mSpriteAddEnemies.Enabled = isSpriteTab;
+            if (_mSpritePasteNemico != null) _mSpritePasteNemico.Enabled = isSpriteTab;
+            if (_statusStrip != null) _statusStrip.Visible = isSpriteTab;
 
             if (isMapTab)
             {
                 _mapEditorView.Project = _project;
                 _mapEditorView.RefreshView();
+            }
+            else if (isTileTab)
+            {
+                _tileEditorView.Project = _project;
+                _tileEditorView.RefreshView();
             }
             else if (_mainTabs.SelectedTab == _tabSprites)
             {
@@ -575,6 +599,8 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             if (_mainTabs?.SelectedTab == _tabMaps)
                 _mapEditorView.ActionUndo();
+            else if (_mainTabs?.SelectedTab == _tabTiles)
+                _tileEditorView.ActionUndo();
             else
                 ActionUndo();
         }
@@ -583,6 +609,8 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             if (_mainTabs?.SelectedTab == _tabMaps)
                 _mapEditorView.ActionRedo();
+            else if (_mainTabs?.SelectedTab == _tabTiles)
+                _tileEditorView.ActionRedo();
             else
                 ActionRedo();
         }
@@ -594,6 +622,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private void ActionQuickCopyAsm_Click(object sender, EventArgs e) => ActionQuickCopyAsm();
 
         private void SwitchToSpriteEditor_Click(object sender, EventArgs e) => SwitchToSpriteEditor();
+        private void SwitchToTileEditor_Click(object sender, EventArgs e) => SwitchToTileEditor();
         private void SwitchToMapEditor_Click(object sender, EventArgs e) => SwitchToMapEditor();
 
         private void ActionFlipH_Click(object sender, EventArgs e) => ActionFlipH();
@@ -686,6 +715,11 @@ namespace ZXSpectrumSpriteGenerator.UI
 
         private void MapEditorView_ProjectModified(object sender, EventArgs e) => SetModified(true);
         private void MapEditorView_RequestSwitchToSprites(object sender, EventArgs e) => SwitchToSpriteEditor();
+        private void MapEditorView_RequestSwitchToTiles(object sender, int tileIndex) => SwitchToTileEditor(tileIndex);
+
+        private void TileEditorView_ProjectModified(object sender, EventArgs e) => SetModified(true);
+        private void TileEditorView_RequestSwitchToMaps(object sender, EventArgs e) => SwitchToMapEditor();
+        private void TileEditorView_RequestSwitchToSprites(object sender, EventArgs e) => SwitchToSpriteEditor();
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -703,6 +737,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 if (_mainTabs?.SelectedTab == _tabMaps)
                     _mapEditorView.ActionUndo();
+            else if (_mainTabs?.SelectedTab == _tabTiles)
+                _tileEditorView.ActionUndo();
                 else
                     ActionUndo();
                 e.Handled = true;
@@ -711,6 +747,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 if (_mainTabs?.SelectedTab == _tabMaps)
                     _mapEditorView.ActionRedo();
+            else if (_mainTabs?.SelectedTab == _tabTiles)
+                _tileEditorView.ActionRedo();
                 else
                     ActionRedo();
                 e.Handled = true;

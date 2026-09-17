@@ -218,5 +218,259 @@ namespace ZXSpectrumSpriteGenerator.Services
                 return sprite;
             }
         }
+
+        /// <summary>
+        /// Tenta di estrarre indicazioni su colore Ink, Paper e Bright da commenti presenti nel testo.
+        /// Riconosce formati come:
+        /// ; Ink: 2, Paper: 0
+        /// ; Colore Ink: 5, Colore Paper: 1
+        /// ; INK 4, PAPER 2
+        /// </summary>
+        public static bool TryExtractColorsFromText(string text, out int ink, out int paper, out bool? bright)
+        {
+            ink = -1;
+            paper = -1;
+            bright = null;
+
+            if (string.IsNullOrWhiteSpace(text)) return false;
+
+            var inkMatch = Regex.Match(text, @"\b(?:ink|colore\s*ink)[:=\s]+(\d+)", RegexOptions.IgnoreCase);
+            if (inkMatch.Success && int.TryParse(inkMatch.Groups[1].Value, out int ci))
+            {
+                ink = Math.Max(0, Math.Min(7, ci));
+            }
+
+            var paperMatch = Regex.Match(text, @"\b(?:paper|colore\s*paper)[:=\s]+(\d+)", RegexOptions.IgnoreCase);
+            if (paperMatch.Success && int.TryParse(paperMatch.Groups[1].Value, out int cp))
+            {
+                paper = Math.Max(0, Math.Min(7, cp));
+            }
+
+            var brightMatch = Regex.Match(text, @"\b(?:bright)[:=\s]+(true|false|1|0)", RegexOptions.IgnoreCase);
+            if (brightMatch.Success)
+            {
+                string bVal = brightMatch.Groups[1].Value.ToLower();
+                bright = (bVal == "true" || bVal == "1");
+            }
+
+            return ink >= 0 || paper >= 0 || bright.HasValue;
+        }
+
+        /// <summary>
+        /// Importa tile 8x8 pixel da sorgente Assembly Z80 o testo, rispettando i colori Ink, Paper, Bright
+        /// specificati nei commenti di ciascun tile (es. "; Tile 1: Muro (Ink: 2, Paper: 0)"),
+        /// negli attributi ZX a 9 byte o usando i colori predefiniti scelti dall'utente.
+        /// </summary>
+        public static List<Tile> ImportTilesFromText(
+            string text,
+            string defaultPrefix = "Tile",
+            int defaultInk = 7,
+            int defaultPaper = 0,
+            bool defaultBright = true)
+        {
+            List<Tile> tiles = new List<Tile>();
+            if (string.IsNullOrWhiteSpace(text)) return tiles;
+
+            var lines = text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+            // Verifica se l'intero testo è formato da blocchi puri di 9 byte (8 byte bitmap + 1 attributo)
+            List<byte> allRawBytes = ParseBytesFromText(text);
+            bool globalIs9Bytes = allRawBytes.Count > 0 && (allRawBytes.Count % 9 == 0) && (allRawBytes.Count % 8 != 0);
+
+            if (globalIs9Bytes && !Regex.IsMatch(text, @"\b(?:ink|paper)\b", RegexOptions.IgnoreCase))
+            {
+                int count = allRawBytes.Count / 9;
+                for (int i = 0; i < count; i++)
+                {
+                    byte[] chunk = new byte[8];
+                    allRawBytes.CopyTo(i * 9, chunk, 0, 8);
+                    byte attr = allRawBytes[i * 9 + 8];
+                    int ink = attr & 0x07;
+                    int paper = (attr >> 3) & 0x07;
+                    bool bright = (attr & 0x40) != 0;
+
+                    var t = new Tile($"{defaultPrefix}{i + 1}", chunk)
+                    {
+                        InkColor = ink,
+                        PaperColor = paper,
+                        Bright = bright
+                    };
+                    tiles.Add(t);
+                }
+                return tiles;
+            }
+
+            int baseInk = defaultInk;
+            int basePaper = defaultPaper;
+            bool baseBright = defaultBright;
+
+            // Se ci sono commenti globali in cima al testo (prima di qualsiasi riga di dati)
+            int currentInk = baseInk;
+            int currentPaper = basePaper;
+            bool currentBright = baseBright;
+            string currentTileName = null;
+            bool hasPerTileColor = false;
+            List<byte> currentTileBytes = new List<byte>();
+            int tileCounter = 1;
+
+            for (int l = 0; l < lines.Length; l++)
+            {
+                string line = lines[l];
+                string trimmed = line.Trim();
+                if (string.IsNullOrWhiteSpace(trimmed)) continue;
+
+                // Estrai commenti prima di rimuoverli
+                string comment = null;
+                int commentIdx = line.IndexOf(';');
+                if (commentIdx >= 0) comment = line.Substring(commentIdx);
+                else
+                {
+                    commentIdx = line.IndexOf("//", StringComparison.Ordinal);
+                    if (commentIdx >= 0) comment = line.Substring(commentIdx);
+                    else
+                    {
+                        commentIdx = line.IndexOf("REM", StringComparison.OrdinalIgnoreCase);
+                        if (commentIdx >= 0) comment = line.Substring(commentIdx);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    bool isPerTileComment = Regex.IsMatch(comment, @"\bTile\s*\d*[:\s]", RegexOptions.IgnoreCase);
+
+                    var inkMatch = Regex.Match(comment, @"\b(?:ink|colore\s*ink)[:=\s]+(\d+)", RegexOptions.IgnoreCase);
+                    if (inkMatch.Success && int.TryParse(inkMatch.Groups[1].Value, out int ci))
+                    {
+                        currentInk = Math.Max(0, Math.Min(7, ci));
+                        if (isPerTileComment) hasPerTileColor = true;
+                        else baseInk = currentInk;
+                    }
+
+                    var paperMatch = Regex.Match(comment, @"\b(?:paper|colore\s*paper)[:=\s]+(\d+)", RegexOptions.IgnoreCase);
+                    if (paperMatch.Success && int.TryParse(paperMatch.Groups[1].Value, out int cp))
+                    {
+                        currentPaper = Math.Max(0, Math.Min(7, cp));
+                        if (isPerTileComment) hasPerTileColor = true;
+                        else basePaper = currentPaper;
+                    }
+
+                    var brightMatch = Regex.Match(comment, @"\b(?:bright)[:=\s]+(true|false|1|0)", RegexOptions.IgnoreCase);
+                    if (brightMatch.Success)
+                    {
+                        string bVal = brightMatch.Groups[1].Value.ToLower();
+                        currentBright = (bVal == "true" || bVal == "1");
+                        if (!isPerTileComment) baseBright = currentBright;
+                    }
+
+                    // Cerca eventuale nome nel commento: es. "; Tile 1: Muro (Ink: 2...)"
+                    var nameMatch = Regex.Match(comment, @";\s*Tile\s*\d*[:\s]+([A-Za-z0-9_ ]+?)(?:\s*\(|$)", RegexOptions.IgnoreCase);
+                    if (nameMatch.Success)
+                    {
+                        string n = nameMatch.Groups[1].Value.Trim();
+                        if (!string.IsNullOrEmpty(n) && !n.StartsWith("="))
+                        {
+                            currentTileName = n;
+                        }
+                    }
+                }
+
+                // Estrai eventuale etichetta (es. "tile_1_muro:" o "muro:")
+                var labelMatch = Regex.Match(line, @"^\s*([A-Za-z0-9_]+):");
+                if (labelMatch.Success)
+                {
+                    string label = labelMatch.Groups[1].Value;
+                    if (string.IsNullOrEmpty(currentTileName) && !label.Equals("tileset", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentTileName = label;
+                    }
+                }
+
+                // Rimuovi commenti, etichette e direttive per ottenere solo i byte di questa riga
+                string cleaned = line;
+                if (commentIdx >= 0) cleaned = cleaned.Substring(0, commentIdx);
+                cleaned = Regex.Replace(cleaned, @"^[A-Za-z0-9_]+:\s*", "");
+                cleaned = Regex.Replace(cleaned, @"\b(db|defb|DEFB|\.byte|BYTE|DATA)\b", " ", RegexOptions.IgnoreCase);
+                cleaned = Regex.Replace(cleaned, @"^\s*\d+\s+", "");
+
+                string[] tokens = cleaned.Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var token in tokens)
+                {
+                    if (TryParseByte(token, out byte b))
+                    {
+                        currentTileBytes.Add(b);
+                    }
+                }
+
+                // Se abbiamo accumulato almeno 8 byte per un tile
+                while (currentTileBytes.Count >= 8)
+                {
+                    int ink = currentInk;
+                    int paper = currentPaper;
+                    bool bright = currentBright;
+
+                    // Se ci sono esattamente 9 byte accumulati per questa riga/definizione (es. 8 byte bitmap + 1 attributo)
+                    if (currentTileBytes.Count == 9 && !hasPerTileColor)
+                    {
+                        byte attr = currentTileBytes[8];
+                        ink = attr & 0x07;
+                        paper = (attr >> 3) & 0x07;
+                        bright = (attr & 0x40) != 0;
+                        currentTileBytes.RemoveAt(8);
+                    }
+
+                    byte[] tileData = new byte[8];
+                    for (int i = 0; i < 8; i++) tileData[i] = currentTileBytes[i];
+                    currentTileBytes.RemoveRange(0, 8);
+
+                    string name = !string.IsNullOrWhiteSpace(currentTileName)
+                        ? currentTileName
+                        : $"{defaultPrefix}{tileCounter}";
+
+                    var tile = new Tile(name, tileData)
+                    {
+                        InkColor = ink,
+                        PaperColor = paper,
+                        Bright = bright
+                    };
+                    tiles.Add(tile);
+                    tileCounter++;
+
+                    // Se abbiamo consumato tutti i byte correnti, prepariamo lo stato per il prossimo tile
+                    if (currentTileBytes.Count == 0)
+                    {
+                        currentTileName = null;
+                        if (hasPerTileColor)
+                        {
+                            currentInk = baseInk;
+                            currentPaper = basePaper;
+                            currentBright = baseBright;
+                            hasPerTileColor = false;
+                        }
+                    }
+                }
+            }
+
+            // Dati parziali residui alla fine (es. meno di 8 byte rimasti)
+            if (currentTileBytes.Count > 0)
+            {
+                byte[] tileData = new byte[8];
+                for (int i = 0; i < currentTileBytes.Count && i < 8; i++)
+                    tileData[i] = currentTileBytes[i];
+
+                string name = !string.IsNullOrWhiteSpace(currentTileName)
+                    ? currentTileName
+                    : $"{defaultPrefix}{tileCounter}";
+
+                var tile = new Tile(name, tileData)
+                {
+                    InkColor = currentInk,
+                    PaperColor = currentPaper,
+                    Bright = currentBright
+                };
+                tiles.Add(tile);
+            }
+
+            return tiles;
+        }
     }
 }

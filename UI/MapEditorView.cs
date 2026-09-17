@@ -20,6 +20,7 @@ namespace ZXSpectrumSpriteGenerator.UI
 
         public event EventHandler ProjectModified;
         public event EventHandler RequestSwitchToSprites;
+        public event EventHandler<int> RequestSwitchToTiles;
 
         public MapEditorView()
         {
@@ -32,6 +33,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             set
             {
                 _project = value;
+                if (_project != null && _project.Maps.Count == 0)
+                {
+                    _project.AddMap("Mappa 1", 32, 24);
+                }
                 _canvas.Project = _project;
                 _canvas.Map = _project?.CurrentMap;
                 UpdateMapListCombo();
@@ -63,6 +68,32 @@ namespace ZXSpectrumSpriteGenerator.UI
         private void BtnExport_Click(object sender, EventArgs e) => ActionExportMap();
         private void BtnPng_Click(object sender, EventArgs e) => ActionExportPng();
         private void BtnBackToSprites_Click(object sender, EventArgs e) => RequestSwitchToSprites?.Invoke(this, EventArgs.Empty);
+
+        private void BtnGoToTiles_Click(object sender, EventArgs e)
+        {
+            int targetIdx = Math.Max(0, _canvas.ActiveTileId - 1);
+            RequestSwitchToTiles?.Invoke(this, targetIdx);
+        }
+
+        private void BtnAddTile_Click(object sender, EventArgs e)
+        {
+            if (_project == null) return;
+            using (var dlg = new AddTilesDialog(_project))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK && dlg.NewlyAddedTiles.Count > 0)
+                {
+                    foreach (var t in dlg.NewlyAddedTiles)
+                    {
+                        _project.Tiles.Add(t);
+                    }
+                    _project.SelectedTileIndex = _project.Tiles.Count - 1;
+                    _canvas.ActiveTileId = _project.Tiles.Count;
+                    RefreshTilesetPalette();
+                    _canvas.Invalidate();
+                    ProjectModified?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
 
         private void BtnToolPencil_Click(object sender, EventArgs e) => SetTool(MapDrawingTool.Pencil, _btnToolPencil);
         private void BtnToolEraser_Click(object sender, EventArgs e) => SetTool(MapDrawingTool.Eraser, _btnToolEraser);
@@ -160,13 +191,13 @@ namespace ZXSpectrumSpriteGenerator.UI
             _pnlTileset.Controls.Add(cardEmpty);
             y += cardH + 4;
 
-            // Card per ogni sprite del progetto
-            for (int i = 0; i < _project.Sprites.Count; i++)
+            // Card per ogni tile 8x8 del progetto (NON sprite!)
+            for (int i = 0; i < _project.Tiles.Count; i++)
             {
                 int tileId = i + 1;
-                var sprite = _project.Sprites[i];
-                string label = $"{tileId}: {sprite.Name}";
-                Bitmap thumb = sprite.RenderToBitmap(1);
+                var tile = _project.Tiles[i];
+                string label = $"{tileId}: {tile.Name}";
+                Bitmap thumb = tile.RenderToBitmap(1);
 
                 Panel card = CreateTileCard(tileId, label, thumb, y, cardW, cardH);
                 _pnlTileset.Controls.Add(card);
@@ -219,9 +250,21 @@ namespace ZXSpectrumSpriteGenerator.UI
                 UpdateActiveTileDisplay();
             };
 
+            Action openInEditor = () =>
+            {
+                if (tileId > 0)
+                {
+                    RequestSwitchToTiles?.Invoke(this, tileId - 1);
+                }
+            };
+
             card.Click += (s, e) => selectCard();
             pic.Click += (s, e) => selectCard();
             lbl.Click += (s, e) => selectCard();
+
+            card.DoubleClick += (s, e) => openInEditor();
+            pic.DoubleClick += (s, e) => openInEditor();
+            lbl.DoubleClick += (s, e) => openInEditor();
 
             card.Controls.AddRange(new Control[] { pic, lbl });
             return card;
@@ -263,11 +306,11 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _picActiveTile.BackColor = Color.Black;
                 _lblActiveTileName.Text = "Tile #0: [Vuoto / Sfondo]";
             }
-            else if (_project != null && (tileId - 1) < _project.Sprites.Count)
+            else if (_project != null && (tileId - 1) < _project.Tiles.Count)
             {
-                var sprite = _project.Sprites[tileId - 1];
-                _picActiveTile.Image = sprite.RenderToBitmap(2);
-                _lblActiveTileName.Text = $"Tile #{tileId}: {sprite.Name}";
+                var tile = _project.Tiles[tileId - 1];
+                _picActiveTile.Image = tile.RenderToBitmap(2);
+                _lblActiveTileName.Text = $"Tile #{tileId}: {tile.Name}";
             }
             else
             {
@@ -295,8 +338,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             int pxH = h * map.TileHeight;
             int totalBytes = w * h;
 
-            string screenTag = (w == 16 && h == 12) ? " (Schermo ZX)" : "";
-            _lblDimensions.Text = $"Dimensioni: {w}x{h} celle";
+            string screenTag = (w == 32 && h == 24) ? " (Schermo ZX)" : "";
+            _lblDimensions.Text = $"Dimensioni: {w}x{h} celle (8x8 px)";
             _lblPixels.Text = $"Pixel: {pxW}x{pxH} px{screenTag}";
             _lblMemory.Text = $"Memoria Z80: {totalBytes} byte ({totalBytes} celle)";
         }
@@ -314,7 +357,7 @@ namespace ZXSpectrumSpriteGenerator.UI
 
         private void Canvas_HoverCoordinatesChanged(object sender, MapHoverEventArgs e)
         {
-            string tInfo = e.TileId == 0 ? "Vuoto" : $"Sprite #{e.TileId}";
+            string tInfo = e.TileId == 0 ? "Vuoto" : (_project != null && (e.TileId - 1) < _project.Tiles.Count ? $"Tile #{e.TileId} ({_project.Tiles[e.TileId - 1].Name})" : $"Tile #{e.TileId}");
             _lblHoverCoords.Text = $"Cella: ({e.TileX}, {e.TileY}) | Pixel: ({e.PixelX}, {e.PixelY}) | [{tInfo}]";
         }
 
@@ -349,13 +392,13 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Label lblN = new Label { Text = "Nome Mappa:", Left = 20, Top = 20, AutoSize = true };
                 TextBox txtName = new TextBox { Left = 20, Top = 42, Width = 320, Text = $"Mappa {_project.Maps.Count + 1}", BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
 
-                Label lblW = new Label { Text = "Larghezza (celle tile):", Left = 20, Top = 80, AutoSize = true };
-                NumericUpDown numW = new NumericUpDown { Left = 20, Top = 102, Width = 145, Minimum = 1, Maximum = 128, Value = 16, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
+                Label lblW = new Label { Text = "Larghezza (celle tile 8x8):", Left = 20, Top = 80, AutoSize = true };
+                NumericUpDown numW = new NumericUpDown { Left = 20, Top = 102, Width = 145, Minimum = 1, Maximum = 128, Value = 32, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
 
-                Label lblH = new Label { Text = "Altezza (celle tile):", Left = 185, Top = 80, AutoSize = true };
-                NumericUpDown numH = new NumericUpDown { Left = 185, Top = 102, Width = 155, Minimum = 1, Maximum = 64, Value = 12, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
+                Label lblH = new Label { Text = "Altezza (celle tile 8x8):", Left = 185, Top = 80, AutoSize = true };
+                NumericUpDown numH = new NumericUpDown { Left = 185, Top = 102, Width = 155, Minimum = 1, Maximum = 64, Value = 24, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
 
-                Label lblPreset = new Label { Text = "Preset: 16x12 = Schermo Singolo ZX (256x192 px)", Left = 20, Top = 135, AutoSize = true, ForeColor = Color.FromArgb(0, 200, 255), Font = new Font("Segoe UI", 7.8f) };
+                Label lblPreset = new Label { Text = "Preset: 32x24 = Schermo Singolo ZX (256x192 px con tile 8x8)", Left = 20, Top = 135, AutoSize = true, ForeColor = Color.FromArgb(0, 200, 255), Font = new Font("Segoe UI", 7.8f) };
 
                 Button btnOk = new Button { Text = "Crea Mappa", Left = 140, Top = 170, Width = 100, Height = 32, BackColor = Color.FromArgb(0, 122, 204), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.OK };
                 Button btnCancel = new Button { Text = "Annulla", Left = 250, Top = 170, Width = 90, Height = 32, BackColor = Color.FromArgb(60, 60, 70), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.Cancel };
@@ -461,13 +504,13 @@ namespace ZXSpectrumSpriteGenerator.UI
                 dlg.BackColor = Color.FromArgb(32, 32, 38);
                 dlg.ForeColor = Color.White;
 
-                Label lblW = new Label { Text = "Larghezza (celle tile):", Left = 20, Top = 20, AutoSize = true };
+                Label lblW = new Label { Text = "Larghezza (celle tile 8x8):", Left = 20, Top = 20, AutoSize = true };
                 NumericUpDown numW = new NumericUpDown { Left = 20, Top = 44, Width = 130, Minimum = 1, Maximum = 128, Value = map.Width, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
 
-                Label lblH = new Label { Text = "Altezza (celle tile):", Left = 170, Top = 20, AutoSize = true };
+                Label lblH = new Label { Text = "Altezza (celle tile 8x8):", Left = 170, Top = 20, AutoSize = true };
                 NumericUpDown numH = new NumericUpDown { Left = 170, Top = 44, Width = 135, Minimum = 1, Maximum = 64, Value = map.Height, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.White };
 
-                Label lblHint = new Label { Text = "I dati esistenti verranno preservati.", Left = 20, Top = 82, AutoSize = true, ForeColor = Color.LightGray, Font = new Font("Segoe UI", 7.8f) };
+                Label lblHint = new Label { Text = "Tile: 8x8 px. I dati esistenti verranno preservati.", Left = 20, Top = 82, AutoSize = true, ForeColor = Color.LightGray, Font = new Font("Segoe UI", 7.8f) };
 
                 Button btnOk = new Button { Text = "Applica", Left = 115, Top = 120, Width = 90, Height = 32, BackColor = Color.FromArgb(0, 122, 204), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.OK };
                 Button btnCancel = new Button { Text = "Annulla", Left = 215, Top = 120, Width = 90, Height = 32, BackColor = Color.FromArgb(60, 60, 70), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.Cancel };

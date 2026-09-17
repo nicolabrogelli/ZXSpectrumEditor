@@ -141,7 +141,7 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             Size = new Size(w, h);
         }
 
-        private int TilePixelSize => (_map != null ? _map.TileWidth : 16) * _scale;
+        private int TilePixelSize => (_map != null ? _map.TileWidth : 8) * _scale;
 
         private Point ScreenToTile(Point pt)
         {
@@ -192,12 +192,13 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
                 for (int x = 0; x < _map.Width; x++)
                 {
                     int tileId = _map.GetTile(x, y);
-                    if (tileId > 0 && _project != null && (tileId - 1) < _project.Sprites.Count)
+                    if (tileId > 0 && _project != null && (tileId - 1) < _project.Tiles.Count)
                     {
-                        var sprite = _project.Sprites[tileId - 1];
-                        using (Bitmap spriteBmp = sprite.RenderToBitmap(_scale))
+                        var tile = _project.Tiles[tileId - 1];
+                        using (Bitmap tileBmp = tile.RenderToBitmap(_scale))
                         {
-                            g.DrawImage(spriteBmp, x * step, y * step);
+                            Rectangle destRect = new Rectangle(x * step, y * step, step, step);
+                            g.DrawImage(tileBmp, destRect, 0, 0, tileBmp.Width, tileBmp.Height, GraphicsUnit.Pixel);
                         }
                     }
                 }
@@ -209,17 +210,20 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
                 using (Pen gridPen = new Pen(Color.FromArgb(45, 255, 255, 255), 1f))
                 using (Pen screenPen = new Pen(Color.FromArgb(120, 0, 220, 255), 1.5f))
                 {
+                    int screenTileW = Math.Max(1, 256 / (_map.TileWidth > 0 ? _map.TileWidth : 8));
+                    int screenTileH = Math.Max(1, 192 / (_map.TileHeight > 0 ? _map.TileHeight : 8));
+
                     for (int x = 0; x <= _map.Width; x++)
                     {
-                        // Evidenzia bordo schermo standard ZX Spectrum (ogni 16 tile)
-                        bool isScreenEdge = (x > 0 && x % 16 == 0);
+                        // Evidenzia bordo schermo standard ZX Spectrum (ogni 32 tile da 8px = 256px)
+                        bool isScreenEdge = (x > 0 && x % screenTileW == 0);
                         g.DrawLine(isScreenEdge ? screenPen : gridPen, x * step, 0, x * step, totalH);
                     }
 
                     for (int y = 0; y <= _map.Height; y++)
                     {
-                        // Evidenzia bordo schermo standard ZX Spectrum (ogni 12 tile)
-                        bool isScreenEdge = (y > 0 && y % 12 == 0);
+                        // Evidenzia bordo schermo standard ZX Spectrum (ogni 24 tile da 8px = 192px)
+                        bool isScreenEdge = (y > 0 && y % screenTileH == 0);
                         g.DrawLine(isScreenEdge ? screenPen : gridPen, 0, y * step, totalW, y * step);
                     }
                 }

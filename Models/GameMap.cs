@@ -12,10 +12,10 @@ namespace ZXSpectrumSpriteGenerator.Models
     public class GameMap
     {
         public string Name { get; set; } = "Mappa 1";
-        public int Width { get; set; } = 16;  // Larghezza in tile (default 16 per schermo 256px ZX Spectrum con tile 16x16)
-        public int Height { get; set; } = 12; // Altezza in tile (default 12 per schermo 192px ZX Spectrum con tile 16x16)
-        public int TileWidth { get; set; } = 16;
-        public int TileHeight { get; set; } = 16;
+        public int Width { get; set; } = 32;  // Larghezza in tile (default 32 per schermo 256px ZX Spectrum con tile 8x8)
+        public int Height { get; set; } = 24; // Altezza in tile (default 24 per schermo 192px ZX Spectrum con tile 8x8)
+        public int TileWidth { get; set; } = 8;
+        public int TileHeight { get; set; } = 8;
 
         // Colori predefiniti ZX Spectrum per lo sfondo della mappa
         public int DefaultPaper { get; set; } = 0; // Black
@@ -29,11 +29,13 @@ namespace ZXSpectrumSpriteGenerator.Models
         private readonly Stack<int[,]> _undoStack = new Stack<int[,]>();
         private readonly Stack<int[,]> _redoStack = new Stack<int[,]>();
 
-        public GameMap(string name = "Mappa 1", int width = 16, int height = 12)
+        public GameMap(string name = "Mappa 1", int width = 32, int height = 24)
         {
             Name = name;
             Width = Math.Max(1, width);
             Height = Math.Max(1, height);
+            TileWidth = 8;
+            TileHeight = 8;
             Tiles = new int[Width, Height];
         }
 

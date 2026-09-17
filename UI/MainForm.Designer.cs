@@ -1,4 +1,4 @@
-namespace ZXSpectrumSpriteGenerator.UI
+﻿namespace ZXSpectrumSpriteGenerator.UI
 {
     partial class MainForm
     {
@@ -43,6 +43,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._mCopyAsm = new System.Windows.Forms.ToolStripMenuItem();
             this._mView = new System.Windows.Forms.ToolStripMenuItem();
             this._mViewSprites = new System.Windows.Forms.ToolStripMenuItem();
+            this._mViewTiles = new System.Windows.Forms.ToolStripMenuItem();
             this._mViewMaps = new System.Windows.Forms.ToolStripMenuItem();
             this._mTrans = new System.Windows.Forms.ToolStripMenuItem();
             this._mFlipH = new System.Windows.Forms.ToolStripMenuItem();
@@ -165,7 +166,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._sepToolbar7 = new System.Windows.Forms.ToolStripSeparator();
             this._btnQuickExport = new System.Windows.Forms.ToolStripButton();
             this._sepToolbar8 = new System.Windows.Forms.ToolStripSeparator();
+            this._btnGoToTiles = new System.Windows.Forms.ToolStripButton();
             this._btnGoToMaps = new System.Windows.Forms.ToolStripButton();
+            this._tabTiles = new System.Windows.Forms.TabPage();
+            this._tileEditorView = new ZXSpectrumSpriteGenerator.UI.TileEditorView();
             this._tabMaps = new System.Windows.Forms.TabPage();
             this._animTimer = new System.Windows.Forms.Timer(this.components);
             this._toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -186,6 +190,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             ((System.ComponentModel.ISupportInitialize)(this._picPreview4x)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._picPreview1x)).BeginInit();
             this._mainToolbar.SuspendLayout();
+            this._tabTiles.SuspendLayout();
             this._tabMaps.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -387,6 +392,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._mView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._mViewSprites,
+            this._mViewTiles,
             this._mViewMaps});
             this._mView.Name = "_mView";
             this._mView.Size = new System.Drawing.Size(103, 29);
@@ -395,10 +401,18 @@ namespace ZXSpectrumSpriteGenerator.UI
             // _mViewSprites
             // 
             this._mViewSprites.Name = "_mViewSprites";
-            this._mViewSprites.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this._mViewSprites.ShortcutKeys = System.Windows.Forms.Keys.F2;
             this._mViewSprites.Size = new System.Drawing.Size(354, 34);
             this._mViewSprites.Text = "👾 &Editor Sprite";
             this._mViewSprites.Click += new System.EventHandler(this.SwitchToSpriteEditor_Click);
+            // 
+            // _mViewTiles
+            // 
+            this._mViewTiles.Name = "_mViewTiles";
+            this._mViewTiles.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this._mViewTiles.Size = new System.Drawing.Size(354, 34);
+            this._mViewTiles.Text = "🧱 &Editor Tileset 8x8 (F3)";
+            this._mViewTiles.Click += new System.EventHandler(this.SwitchToTileEditor_Click);
             // 
             // _mViewMaps
             // 
@@ -709,10 +723,11 @@ namespace ZXSpectrumSpriteGenerator.UI
             // _mainTabs
             // 
             this._mainTabs.Controls.Add(this._tabSprites);
+            this._mainTabs.Controls.Add(this._tabTiles);
             this._mainTabs.Controls.Add(this._tabMaps);
             this._mainTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this._mainTabs.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this._mainTabs.ItemSize = new System.Drawing.Size(220, 32);
+            this._mainTabs.ItemSize = new System.Drawing.Size(230, 32);
             this._mainTabs.Location = new System.Drawing.Point(0, 33);
             this._mainTabs.Name = "_mainTabs";
             this._mainTabs.SelectedIndex = 0;
@@ -733,7 +748,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabSprites.Name = "_tabSprites";
             this._tabSprites.Size = new System.Drawing.Size(1076, 636);
             this._tabSprites.TabIndex = 0;
-            this._tabSprites.Text = "👾 Editor Sprite & Nemici";
+            this._tabSprites.Text = "👾 Editor Sprite (F2)";
             // 
             // _centerPanel
             // 
@@ -1352,6 +1367,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._sepToolbar7,
             this._btnQuickExport,
             this._sepToolbar8,
+            this._btnGoToTiles,
             this._btnGoToMaps});
             this._mainToolbar.Location = new System.Drawing.Point(0, 0);
             this._mainToolbar.Name = "_mainToolbar";
@@ -1616,6 +1632,19 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._sepToolbar8.Name = "_sepToolbar8";
             this._sepToolbar8.Size = new System.Drawing.Size(6, 25);
             // 
+            // 
+            // _btnGoToTiles
+            // 
+            this._btnGoToTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(90)))), ((int)(((byte)(140)))));
+            this._btnGoToTiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this._btnGoToTiles.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this._btnGoToTiles.ForeColor = System.Drawing.Color.White;
+            this._btnGoToTiles.Name = "_btnGoToTiles";
+            this._btnGoToTiles.Size = new System.Drawing.Size(155, 27);
+            this._btnGoToTiles.Text = "🧱 Editor Tiles (F3)";
+            this._btnGoToTiles.ToolTipText = "Passa all'Editor dei Tile 8x8 (Tasto rapido: F3)";
+            this._btnGoToTiles.Click += new System.EventHandler(this.SwitchToTileEditor_Click);
+            // 
             // _btnGoToMaps
             // 
             this._btnGoToMaps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(110)))), ((int)(((byte)(180)))));
@@ -1628,6 +1657,32 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnGoToMaps.ToolTipText = "Passa all\'Editor Mappe di Gioco (Tasto rapido: F4)";
             this._btnGoToMaps.Click += new System.EventHandler(this.SwitchToMapEditor_Click);
             // 
+            // 
+            // _tabTiles
+            // 
+            this._tabTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
+            this._tabTiles.Controls.Add(this._tileEditorView);
+            this._tabTiles.Location = new System.Drawing.Point(4, 36);
+            this._tabTiles.Name = "_tabTiles";
+            this._tabTiles.Size = new System.Drawing.Size(1076, 636);
+            this._tabTiles.TabIndex = 1;
+            this._tabTiles.Text = "🧱 Editor Tileset (F3)";
+            // 
+            // _tileEditorView
+            // 
+            this._tileEditorView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
+            this._tileEditorView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._tileEditorView.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this._tileEditorView.ForeColor = System.Drawing.Color.White;
+            this._tileEditorView.Location = new System.Drawing.Point(0, 0);
+            this._tileEditorView.Name = "_tileEditorView";
+            this._tileEditorView.Project = null;
+            this._tileEditorView.Size = new System.Drawing.Size(1076, 636);
+            this._tileEditorView.TabIndex = 0;
+            this._tileEditorView.ProjectModified += new System.EventHandler(this.TileEditorView_ProjectModified);
+            this._tileEditorView.RequestSwitchToMaps += new System.EventHandler(this.TileEditorView_RequestSwitchToMaps);
+            this._tileEditorView.RequestSwitchToSprites += new System.EventHandler(this.TileEditorView_RequestSwitchToSprites);
+            // 
             // _tabMaps
             // 
             this._tabMaps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
@@ -1635,7 +1690,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabMaps.Location = new System.Drawing.Point(4, 36);
             this._tabMaps.Name = "_tabMaps";
             this._tabMaps.Size = new System.Drawing.Size(1076, 636);
-            this._tabMaps.TabIndex = 1;
+            this._tabMaps.TabIndex = 2;
             this._tabMaps.Text = "🗺️ Editor Mappe di Gioco";
             // 
             // _animTimer
@@ -1686,6 +1741,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._mapEditorView.TabIndex = 0;
             this._mapEditorView.ProjectModified += new System.EventHandler(this.MapEditorView_ProjectModified);
             this._mapEditorView.RequestSwitchToSprites += new System.EventHandler(this.MapEditorView_RequestSwitchToSprites);
+            this._mapEditorView.RequestSwitchToTiles += new System.EventHandler<int>(this.MapEditorView_RequestSwitchToTiles);
             // 
             // MainForm
             // 
@@ -1728,6 +1784,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             ((System.ComponentModel.ISupportInitialize)(this._picPreview1x)).EndInit();
             this._mainToolbar.ResumeLayout(false);
             this._mainToolbar.PerformLayout();
+            this._tabTiles.ResumeLayout(false);
             this._tabMaps.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1886,6 +1943,10 @@ namespace ZXSpectrumSpriteGenerator.UI
         private ZXSpectrumSpriteGenerator.UI.Controls.SpriteFilmstrip _filmstrip;
         private System.Windows.Forms.Panel _centerPanel;
         private ZXSpectrumSpriteGenerator.UI.Controls.SpriteCanvas _canvas;
+        private System.Windows.Forms.ToolStripMenuItem _mViewTiles;
+        private System.Windows.Forms.ToolStripButton _btnGoToTiles;
+        private System.Windows.Forms.TabPage _tabTiles;
+        private ZXSpectrumSpriteGenerator.UI.TileEditorView _tileEditorView;
         private System.Windows.Forms.TabPage _tabMaps;
         private ZXSpectrumSpriteGenerator.UI.MapEditorView _mapEditorView;
         private System.Windows.Forms.Timer _animTimer;

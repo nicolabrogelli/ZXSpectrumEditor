@@ -25,7 +25,7 @@ namespace ZXSpectrumSpriteGenerator.Services
             sb.AppendLine("; ===========================================================");
             sb.AppendLine("; SINCLAIR ZX SPECTRUM - ESPORTAZIONE MAPPE DI GIOCO (TILEMAP)");
             sb.AppendLine("; Generato da ZX Spectrum Sprite Generator & Studio");
-            sb.AppendLine("; Tile 0 = Sfondo/Vuoto, Tile 1..N = Indice Sprite");
+            sb.AppendLine("; Tile 0 = Sfondo/Vuoto, Tile 1..N = Indice Tile (8x8)");
             sb.AppendLine("; ===========================================================");
             sb.AppendLine();
 
@@ -40,6 +40,31 @@ namespace ZXSpectrumSpriteGenerator.Services
             else if (map != null)
             {
                 ExportSingleMapAsm(sb, map, dirStr);
+            }
+
+            // Esportazione dei dati grafici 8x8 dei Tile (Tileset)
+            if (project != null && project.Tiles.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("; ===========================================================");
+                sb.AppendLine("; TILESET (8x8 PIXEL) - DEFINIZIONI GRAFICHE DEI TILE");
+                sb.AppendLine($"; Totale tile: {project.Tiles.Count}");
+                sb.AppendLine("; ===========================================================");
+                for (int t = 0; t < project.Tiles.Count; t++)
+                {
+                    var tile = project.Tiles[t];
+                    string tName = SanitizeIdentifier(tile.Name);
+                    sb.AppendLine($"; Tile {t + 1}: {tile.Name} (Ink: {tile.InkColor}, Paper: {tile.PaperColor})");
+                    sb.AppendLine($"tile_{t + 1}_{tName}:");
+                    var hexData = tile.GetBytesRowByRow();
+                    sb.Append($"    {dirStr} ");
+                    for (int b = 0; b < hexData.Length; b++)
+                    {
+                        sb.Append(hexData[b]);
+                        if (b < hexData.Length - 1) sb.Append(",");
+                    }
+                    sb.AppendLine();
+                }
             }
 
             return sb.ToString();
@@ -175,12 +200,13 @@ namespace ZXSpectrumSpriteGenerator.Services
                     for (int x = 0; x < map.Width; x++)
                     {
                         int tileId = map.GetTile(x, y);
-                        if (tileId > 0 && project != null && (tileId - 1) < project.Sprites.Count)
+                        if (tileId > 0 && project != null && (tileId - 1) < project.Tiles.Count)
                         {
-                            var sprite = project.Sprites[tileId - 1];
-                            using (Bitmap spriteBmp = sprite.RenderToBitmap(scale))
+                            var tile = project.Tiles[tileId - 1];
+                            using (Bitmap tileBmp = tile.RenderToBitmap(scale))
                             {
-                                g.DrawImage(spriteBmp, x * step, y * step);
+                                Rectangle destRect = new Rectangle(x * step, y * step, step, step);
+                                g.DrawImage(tileBmp, destRect, 0, 0, tileBmp.Width, tileBmp.Height, GraphicsUnit.Pixel);
                             }
                         }
 

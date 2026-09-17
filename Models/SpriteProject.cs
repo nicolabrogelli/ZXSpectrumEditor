@@ -15,6 +15,10 @@ namespace ZXSpectrumSpriteGenerator.Models
         public List<Sprite> Sprites { get; private set; } = new List<Sprite>();
         public int SelectedIndex { get; set; } = 0;
 
+        // Gestione Tileset Mappa (Tile 8x8)
+        public List<Tile> Tiles { get; private set; } = new List<Tile>();
+        public int SelectedTileIndex { get; set; } = 0;
+
         // Gestione Mappe di Gioco (Tilemaps)
         public List<GameMap> Maps { get; private set; } = new List<GameMap>();
         public int SelectedMapIndex { get; set; } = 0;
@@ -54,6 +58,16 @@ namespace ZXSpectrumSpriteGenerator.Models
             }
         }
 
+        public Tile CurrentTile
+        {
+            get
+            {
+                if (SelectedTileIndex >= 0 && SelectedTileIndex < Tiles.Count)
+                    return Tiles[SelectedTileIndex];
+                return Tiles.Count > 0 ? Tiles[0] : null;
+            }
+        }
+
         public GameMap CurrentMap
         {
             get
@@ -88,25 +102,43 @@ namespace ZXSpectrumSpriteGenerator.Models
 
             project.SelectedIndex = 0;
 
-            // Crea mappa iniziale di esempio (Schermo 16x12 tile per ZX Spectrum 256x192 px)
-            var defaultMap = project.AddMap("Schermo 1 - Ingresso", 16, 12);
-            // Muri perimetrali
-            for (int x = 0; x < 16; x++)
+            // Inizializza Tileset predefinito (Tile 8x8 per la mappa)
+            project.Tiles.Add(new Tile("Muro_Mattoni", TilePresets.BrickWall) { InkColor = 7, PaperColor = 0, Bright = true });
+            project.Tiles.Add(new Tile("Piattaforma", TilePresets.Platform) { InkColor = 5, PaperColor = 0, Bright = true });
+            project.Tiles.Add(new Tile("Scala", TilePresets.Ladder) { InkColor = 6, PaperColor = 0, Bright = true });
+            project.Tiles.Add(new Tile("Blocco_Pietra", TilePresets.StoneBlock) { InkColor = 7, PaperColor = 0, Bright = false });
+            project.Tiles.Add(new Tile("Spuntoni", TilePresets.Spikes) { InkColor = 2, PaperColor = 0, Bright = true });
+            project.Tiles.Add(new Tile("Gemma", TilePresets.Gem) { InkColor = 6, PaperColor = 0, Bright = true });
+            project.SelectedTileIndex = 0;
+
+            // Crea mappa iniziale di esempio (Schermo 32x24 tile per ZX Spectrum 256x192 px con tile 8x8)
+            var defaultMap = project.AddMap("Schermo 1 - Ingresso", 32, 24);
+            // Muri perimetrali (Tile 1: Muro_Mattoni)
+            for (int x = 0; x < 32; x++)
             {
                 defaultMap.SetTile(x, 0, 1);
-                defaultMap.SetTile(x, 11, 1);
+                defaultMap.SetTile(x, 23, 1);
             }
-            for (int y = 0; y < 12; y++)
+            for (int y = 0; y < 24; y++)
             {
                 defaultMap.SetTile(0, y, 1);
-                defaultMap.SetTile(15, y, 1);
+                defaultMap.SetTile(31, y, 1);
             }
-            // Piattaforme ed elementi stanza
-            for (int x = 3; x <= 6; x++) defaultMap.SetTile(x, 8, 3);
-            defaultMap.SetTile(4, 7, 2); // Nemico sulla piattaforma 1
+            // Piattaforme (Tile 2: Piattaforma)
+            for (int x = 4; x <= 12; x++) defaultMap.SetTile(x, 16, 2);
+            for (int x = 18; x <= 26; x++) defaultMap.SetTile(x, 11, 2);
+            for (int x = 8; x <= 16; x++) defaultMap.SetTile(x, 7, 2);
 
-            for (int x = 9; x <= 12; x++) defaultMap.SetTile(x, 5, 3);
-            defaultMap.SetTile(10, 4, 4); // Nemico sulla piattaforma 2
+            // Scale (Tile 3: Scala)
+            for (int y = 11; y <= 15; y++) defaultMap.SetTile(14, y, 3);
+
+            // Spuntoni sul fondo (Tile 5: Spuntoni)
+            for (int x = 14; x <= 17; x++) defaultMap.SetTile(x, 22, 5);
+
+            // Gemme / Pick-up (Tile 6: Gemma)
+            defaultMap.SetTile(8, 15, 6);
+            defaultMap.SetTile(22, 10, 6);
+            defaultMap.SetTile(12, 6, 6);
 
             project.SelectedMapIndex = 0;
             return project;
@@ -169,11 +201,72 @@ namespace ZXSpectrumSpriteGenerator.Models
             return true;
         }
 
+        // Metodi Gestione Tileset Mappa (Tile 8x8)
+        public Tile AddTile(string name = null, byte[] data = null)
+        {
+            string tName = name ?? $"Tile_{Tiles.Count + 1}";
+            var tile = new Tile(tName, data);
+            if (CurrentTile != null && data == null)
+            {
+                tile.InkColor = CurrentTile.InkColor;
+                tile.PaperColor = CurrentTile.PaperColor;
+                tile.Bright = CurrentTile.Bright;
+            }
+            Tiles.Add(tile);
+            SelectedTileIndex = Tiles.Count - 1;
+            return tile;
+        }
+
+        public Tile DuplicateCurrentTile()
+        {
+            if (CurrentTile == null) return null;
+            var clone = CurrentTile.Clone();
+            clone.Name = CurrentTile.Name + "_copia";
+            Tiles.Insert(SelectedTileIndex + 1, clone);
+            SelectedTileIndex++;
+            return clone;
+        }
+
+        public bool RemoveCurrentTile()
+        {
+            if (Tiles.Count <= 1) return false;
+            Tiles.RemoveAt(SelectedTileIndex);
+            if (SelectedTileIndex >= Tiles.Count)
+            {
+                SelectedTileIndex = Tiles.Count - 1;
+            }
+            return true;
+        }
+
+        public bool MoveCurrentTileUp()
+        {
+            if (SelectedTileIndex <= 0) return false;
+            var item = Tiles[SelectedTileIndex];
+            Tiles.RemoveAt(SelectedTileIndex);
+            SelectedTileIndex--;
+            Tiles.Insert(SelectedTileIndex, item);
+            return true;
+        }
+
+        public bool MoveCurrentTileDown()
+        {
+            if (SelectedTileIndex >= Tiles.Count - 1) return false;
+            var item = Tiles[SelectedTileIndex];
+            Tiles.RemoveAt(SelectedTileIndex);
+            SelectedTileIndex++;
+            Tiles.Insert(SelectedTileIndex, item);
+            return true;
+        }
+
         // Metodi Gestione Mappe di Gioco
-        public GameMap AddMap(string name = null, int width = 16, int height = 12)
+        public GameMap AddMap(string name = null, int width = 32, int height = 24)
         {
             string mName = name ?? $"Mappa {Maps.Count + 1}";
-            var map = new GameMap(mName, width, height);
+            var map = new GameMap(mName, width, height)
+            {
+                TileWidth = 8,
+                TileHeight = 8
+            };
             Maps.Add(map);
             SelectedMapIndex = Maps.Count - 1;
             return map;

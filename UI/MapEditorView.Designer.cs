@@ -37,6 +37,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblZoom = new System.Windows.Forms.ToolStripLabel();
             this._btnZoomIn = new System.Windows.Forms.ToolStripButton();
             this._tsMgmt = new System.Windows.Forms.ToolStrip();
+            this._btnGoToTiles = new System.Windows.Forms.ToolStripButton();
             this._btnBackToSprites = new System.Windows.Forms.ToolStripButton();
             this._sepMgmt1 = new System.Windows.Forms.ToolStripSeparator();
             this._lblM = new System.Windows.Forms.ToolStripLabel();
@@ -61,6 +62,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblSpecTitle = new System.Windows.Forms.Label();
             this._pnlTileset = new System.Windows.Forms.Panel();
             this._lblPalTitle = new System.Windows.Forms.Label();
+            this._btnAddTile = new System.Windows.Forms.Button();
+            this._btnGoToTileEditor = new System.Windows.Forms.Button();
             this._previewBox = new System.Windows.Forms.Panel();
             this._lblActiveTileName = new System.Windows.Forms.Label();
             this._picActiveTile = new System.Windows.Forms.PictureBox();
@@ -257,6 +260,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tsMgmt.ForeColor = System.Drawing.Color.White;
             this._tsMgmt.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this._tsMgmt.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._btnGoToTiles,
             this._btnBackToSprites,
             this._sepMgmt1,
             this._lblM,
@@ -275,6 +279,18 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tsMgmt.Size = new System.Drawing.Size(950, 34);
             this._tsMgmt.TabIndex = 0;
             // 
+            // _btnGoToTiles
+            // 
+            this._btnGoToTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(90)))), ((int)(((byte)(140)))));
+            this._btnGoToTiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this._btnGoToTiles.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this._btnGoToTiles.ForeColor = System.Drawing.Color.White;
+            this._btnGoToTiles.Name = "_btnGoToTiles";
+            this._btnGoToTiles.Size = new System.Drawing.Size(145, 31);
+            this._btnGoToTiles.Text = "🧱 Editor Tiles (F3)";
+            this._btnGoToTiles.ToolTipText = "Apri l'Editor dedicato dei Tile 8x8 (Tasto rapido: F3)";
+            this._btnGoToTiles.Click += new System.EventHandler(this.BtnGoToTiles_Click);
+            // 
             // _btnBackToSprites
             // 
             this._btnBackToSprites.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(50)))), ((int)(((byte)(95)))));
@@ -282,9 +298,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnBackToSprites.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnBackToSprites.ForeColor = System.Drawing.Color.White;
             this._btnBackToSprites.Name = "_btnBackToSprites";
-            this._btnBackToSprites.Size = new System.Drawing.Size(147, 31);
-            this._btnBackToSprites.Text = "👾 Torna agli Sprite (F3)";
-            this._btnBackToSprites.ToolTipText = "Torna all\'Editor di Disegno Sprite e Nemici (Tasto rapido: F3)";
+            this._btnBackToSprites.Size = new System.Drawing.Size(120, 31);
+            this._btnBackToSprites.Text = "👾 Sprite (F2)";
+            this._btnBackToSprites.ToolTipText = "Torna all'Editor di Disegno Sprite e Nemici (Tasto rapido: F2)";
             this._btnBackToSprites.Click += new System.EventHandler(this.BtnBackToSprites_Click);
             // 
             // _sepMgmt1
@@ -398,6 +414,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._rightPanel.Controls.Add(this._lblDimensions);
             this._rightPanel.Controls.Add(this._lblSpecTitle);
             this._rightPanel.Controls.Add(this._pnlTileset);
+            this._rightPanel.Controls.Add(this._btnAddTile);
+            this._rightPanel.Controls.Add(this._btnGoToTileEditor);
             this._rightPanel.Controls.Add(this._lblPalTitle);
             this._rightPanel.Controls.Add(this._previewBox);
             this._rightPanel.Controls.Add(this._lblTileTitle);
@@ -464,7 +482,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblMemory.Name = "_lblMemory";
             this._lblMemory.Size = new System.Drawing.Size(127, 15);
             this._lblMemory.TabIndex = 7;
-            this._lblMemory.Text = "Memoria Z80: 192 byte";
+            this._lblMemory.Text = "Memoria Z80: 768 byte";
             // 
             // _lblPixels
             // 
@@ -484,7 +502,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblDimensions.Name = "_lblDimensions";
             this._lblDimensions.Size = new System.Drawing.Size(127, 15);
             this._lblDimensions.TabIndex = 5;
-            this._lblDimensions.Text = "Dimensioni: 16x12 celle";
+            this._lblDimensions.Text = "Dimensioni: 32x24 celle (8x8)";
             // 
             // _lblSpecTitle
             // 
@@ -502,10 +520,38 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._pnlTileset.AutoScroll = true;
             this._pnlTileset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(22)))));
             this._pnlTileset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._pnlTileset.Location = new System.Drawing.Point(10, 122);
+            this._pnlTileset.Location = new System.Drawing.Point(10, 154);
             this._pnlTileset.Name = "_pnlTileset";
-            this._pnlTileset.Size = new System.Drawing.Size(260, 180);
+            this._pnlTileset.Size = new System.Drawing.Size(260, 148);
             this._pnlTileset.TabIndex = 3;
+            // 
+            // _btnAddTile
+            // 
+            this._btnAddTile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this._btnAddTile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnAddTile.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this._btnAddTile.ForeColor = System.Drawing.Color.White;
+            this._btnAddTile.Location = new System.Drawing.Point(10, 122);
+            this._btnAddTile.Name = "_btnAddTile";
+            this._btnAddTile.Size = new System.Drawing.Size(126, 26);
+            this._btnAddTile.TabIndex = 12;
+            this._btnAddTile.Text = "➕ Agg. Tile...";
+            this._btnAddTile.UseVisualStyleBackColor = false;
+            this._btnAddTile.Click += new System.EventHandler(this.BtnAddTile_Click);
+            // 
+            // _btnGoToTileEditor
+            // 
+            this._btnGoToTileEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(75)))), ((int)(((byte)(115)))));
+            this._btnGoToTileEditor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnGoToTileEditor.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this._btnGoToTileEditor.ForeColor = System.Drawing.Color.White;
+            this._btnGoToTileEditor.Location = new System.Drawing.Point(140, 122);
+            this._btnGoToTileEditor.Name = "_btnGoToTileEditor";
+            this._btnGoToTileEditor.Size = new System.Drawing.Size(130, 26);
+            this._btnGoToTileEditor.TabIndex = 13;
+            this._btnGoToTileEditor.Text = "🧱 Editor (F3)";
+            this._btnGoToTileEditor.UseVisualStyleBackColor = false;
+            this._btnGoToTileEditor.Click += new System.EventHandler(this.BtnGoToTiles_Click);
             // 
             // _lblPalTitle
             // 
@@ -514,9 +560,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPalTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
             this._lblPalTitle.Location = new System.Drawing.Point(10, 100);
             this._lblPalTitle.Name = "_lblPalTitle";
-            this._lblPalTitle.Size = new System.Drawing.Size(207, 15);
+            this._lblPalTitle.Size = new System.Drawing.Size(150, 15);
             this._lblPalTitle.TabIndex = 2;
-            this._lblPalTitle.Text = "PALETTE TILESET (SPRITE PROGETTO)";
+            this._lblPalTitle.Text = "PALETTE TILESET (8x8)";
             // 
             // _previewBox
             // 
@@ -618,6 +664,7 @@ namespace ZXSpectrumSpriteGenerator.UI
 
         private System.Windows.Forms.Panel _topBar;
         private System.Windows.Forms.ToolStrip _tsMgmt;
+        private System.Windows.Forms.ToolStripButton _btnGoToTiles;
         private System.Windows.Forms.ToolStripButton _btnBackToSprites;
         private System.Windows.Forms.ToolStripSeparator _sepMgmt1;
         private System.Windows.Forms.ToolStripLabel _lblM;
@@ -655,6 +702,8 @@ namespace ZXSpectrumSpriteGenerator.UI
         private System.Windows.Forms.PictureBox _picActiveTile;
         private System.Windows.Forms.Label _lblActiveTileName;
         private System.Windows.Forms.Label _lblPalTitle;
+        private System.Windows.Forms.Button _btnAddTile;
+        private System.Windows.Forms.Button _btnGoToTileEditor;
         private System.Windows.Forms.Panel _pnlTileset;
         private System.Windows.Forms.Label _lblSpecTitle;
         private System.Windows.Forms.Label _lblDimensions;
