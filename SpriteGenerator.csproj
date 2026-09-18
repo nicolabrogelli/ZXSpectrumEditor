@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A3D69804-9E7B-4B45-B139-E43E51FCE5D9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,7 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -65,15 +65,11 @@
     <Compile Include="UI\TileEditorView.Designer.cs">
       <DependentUpon>TileEditorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\SpriteCanvas.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="UI\Controls\SpriteCanvas.cs" />
     <Compile Include="UI\Controls\SpriteFilmstrip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\MapCanvas.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="UI\Controls\MapCanvas.cs" />
     <Compile Include="UI\ImportExportDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +96,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UI\AddTilesDialog.resx">
+      <DependentUpon>AddTilesDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\ImportExportDialog.resx">
       <DependentUpon>ImportExportDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -111,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TileEditorView.resx">
+      <DependentUpon>TileEditorView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -66,7 +66,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabControl.Location = new System.Drawing.Point(0, 0);
             this._tabControl.Name = "_tabControl";
             this._tabControl.SelectedIndex = 0;
-            this._tabControl.Size = new System.Drawing.Size(704, 481);
+            this._tabControl.Size = new System.Drawing.Size(705, 507);
             this._tabControl.TabIndex = 0;
             // 
             // _tabPresets
@@ -81,10 +81,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabPresets.Controls.Add(this._lblPresetDesc);
             this._tabPresets.Controls.Add(this._cmbPresets);
             this._tabPresets.Controls.Add(this._lblPresetChoose);
-            this._tabPresets.Location = new System.Drawing.Point(4, 24);
+            this._tabPresets.Location = new System.Drawing.Point(4, 34);
             this._tabPresets.Name = "_tabPresets";
             this._tabPresets.Padding = new System.Windows.Forms.Padding(3);
-            this._tabPresets.Size = new System.Drawing.Size(696, 453);
+            this._tabPresets.Size = new System.Drawing.Size(697, 469);
             this._tabPresets.TabIndex = 0;
             this._tabPresets.Text = "Libreria Nemici (Preset)";
             // 
@@ -132,7 +132,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetPreviewTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetPreviewTitle.Location = new System.Drawing.Point(20, 160);
             this._lblPresetPreviewTitle.Name = "_lblPresetPreviewTitle";
-            this._lblPresetPreviewTitle.Size = new System.Drawing.Size(161, 15);
+            this._lblPresetPreviewTitle.Size = new System.Drawing.Size(243, 25);
             this._lblPresetPreviewTitle.TabIndex = 5;
             this._lblPresetPreviewTitle.Text = "Anteprima frame dello sprite:";
             // 
@@ -140,7 +140,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._txtPresetPrefix.Location = new System.Drawing.Point(125, 122);
             this._txtPresetPrefix.Name = "_txtPresetPrefix";
-            this._txtPresetPrefix.Size = new System.Drawing.Size(200, 23);
+            this._txtPresetPrefix.Size = new System.Drawing.Size(200, 31);
             this._txtPresetPrefix.TabIndex = 4;
             this._txtPresetPrefix.Text = "Nemico_1";
             // 
@@ -150,7 +150,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetPrefixTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetPrefixTitle.Location = new System.Drawing.Point(20, 125);
             this._lblPresetPrefixTitle.Name = "_lblPresetPrefixTitle";
-            this._lblPresetPrefixTitle.Size = new System.Drawing.Size(85, 15);
+            this._lblPresetPrefixTitle.Size = new System.Drawing.Size(132, 25);
             this._lblPresetPrefixTitle.TabIndex = 3;
             this._lblPresetPrefixTitle.Text = "Prefisso Nome:";
             // 
@@ -169,7 +169,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPresets.FormattingEnabled = true;
             this._cmbPresets.Location = new System.Drawing.Point(20, 45);
             this._cmbPresets.Name = "_cmbPresets";
-            this._cmbPresets.Size = new System.Drawing.Size(450, 23);
+            this._cmbPresets.Size = new System.Drawing.Size(450, 33);
             this._cmbPresets.TabIndex = 1;
             this._cmbPresets.SelectedIndexChanged += new System.EventHandler(this.CmbPresets_SelectedIndexChanged);
             // 
@@ -179,7 +179,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetChoose.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetChoose.Location = new System.Drawing.Point(20, 20);
             this._lblPresetChoose.Name = "_lblPresetChoose";
-            this._lblPresetChoose.Size = new System.Drawing.Size(122, 15);
+            this._lblPresetChoose.Size = new System.Drawing.Size(182, 25);
             this._lblPresetChoose.TabIndex = 0;
             this._lblPresetChoose.Text = "Scegli tipo di nemico:";
             // 
@@ -199,10 +199,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabEmpty.Controls.Add(this._lblEmptyCountTitle);
             this._tabEmpty.Controls.Add(this._txtEmptyPrefix);
             this._tabEmpty.Controls.Add(this._lblEmptyPrefixTitle);
-            this._tabEmpty.Location = new System.Drawing.Point(4, 24);
+            this._tabEmpty.Location = new System.Drawing.Point(4, 34);
             this._tabEmpty.Name = "_tabEmpty";
             this._tabEmpty.Padding = new System.Windows.Forms.Padding(3);
-            this._tabEmpty.Size = new System.Drawing.Size(696, 453);
+            this._tabEmpty.Size = new System.Drawing.Size(697, 469);
             this._tabEmpty.TabIndex = 1;
             this._tabEmpty.Text = "Nuovo Set Nemico (N Frame)";
             // 
@@ -212,7 +212,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnAddEmpty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._btnAddEmpty.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this._btnAddEmpty.ForeColor = System.Drawing.Color.White;
-            this._btnAddEmpty.Location = new System.Drawing.Point(20, 301);
+            this._btnAddEmpty.Location = new System.Drawing.Point(8, 329);
             this._btnAddEmpty.Name = "_btnAddEmpty";
             this._btnAddEmpty.Size = new System.Drawing.Size(280, 38);
             this._btnAddEmpty.TabIndex = 12;
@@ -228,7 +228,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._chkEmptyBright.ForeColor = System.Drawing.Color.White;
             this._chkEmptyBright.Location = new System.Drawing.Point(200, 246);
             this._chkEmptyBright.Name = "_chkEmptyBright";
-            this._chkEmptyBright.Size = new System.Drawing.Size(155, 19);
+            this._chkEmptyBright.Size = new System.Drawing.Size(222, 29);
             this._chkEmptyBright.TabIndex = 11;
             this._chkEmptyBright.Text = "Luminosità Alta (Bright)";
             this._chkEmptyBright.UseVisualStyleBackColor = true;
@@ -239,7 +239,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbEmptyPaper.FormattingEnabled = true;
             this._cmbEmptyPaper.Location = new System.Drawing.Point(200, 208);
             this._cmbEmptyPaper.Name = "_cmbEmptyPaper";
-            this._cmbEmptyPaper.Size = new System.Drawing.Size(150, 23);
+            this._cmbEmptyPaper.Size = new System.Drawing.Size(150, 33);
             this._cmbEmptyPaper.TabIndex = 10;
             // 
             // _lblEmptyPaperTitle
@@ -248,7 +248,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyPaperTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyPaperTitle.Location = new System.Drawing.Point(20, 211);
             this._lblEmptyPaperTitle.Name = "_lblEmptyPaperTitle";
-            this._lblEmptyPaperTitle.Size = new System.Drawing.Size(127, 15);
+            this._lblEmptyPaperTitle.Size = new System.Drawing.Size(191, 25);
             this._lblEmptyPaperTitle.TabIndex = 9;
             this._lblEmptyPaperTitle.Text = "Colore Sfondo (Paper):";
             // 
@@ -258,7 +258,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbEmptyInk.FormattingEnabled = true;
             this._cmbEmptyInk.Location = new System.Drawing.Point(200, 173);
             this._cmbEmptyInk.Name = "_cmbEmptyInk";
-            this._cmbEmptyInk.Size = new System.Drawing.Size(150, 23);
+            this._cmbEmptyInk.Size = new System.Drawing.Size(150, 33);
             this._cmbEmptyInk.TabIndex = 8;
             // 
             // _lblEmptyInkTitle
@@ -267,7 +267,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyInkTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyInkTitle.Location = new System.Drawing.Point(20, 176);
             this._lblEmptyInkTitle.Name = "_lblEmptyInkTitle";
-            this._lblEmptyInkTitle.Size = new System.Drawing.Size(107, 15);
+            this._lblEmptyInkTitle.Size = new System.Drawing.Size(157, 25);
             this._lblEmptyInkTitle.TabIndex = 7;
             this._lblEmptyInkTitle.Text = "Colore Tratto (Ink):";
             // 
@@ -277,7 +277,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._rbNumbered.ForeColor = System.Drawing.Color.White;
             this._rbNumbered.Location = new System.Drawing.Point(200, 131);
             this._rbNumbered.Name = "_rbNumbered";
-            this._rbNumbered.Size = new System.Drawing.Size(206, 19);
+            this._rbNumbered.Size = new System.Drawing.Size(305, 29);
             this._rbNumbered.TabIndex = 6;
             this._rbNumbered.Text = "Sequenziale numerico (_0, _1, _2...)";
             this._rbNumbered.UseVisualStyleBackColor = true;
@@ -289,7 +289,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._rbDirections.ForeColor = System.Drawing.Color.White;
             this._rbDirections.Location = new System.Drawing.Point(200, 103);
             this._rbDirections.Name = "_rbDirections";
-            this._rbDirections.Size = new System.Drawing.Size(243, 19);
+            this._rbDirections.Size = new System.Drawing.Size(332, 29);
             this._rbDirections.TabIndex = 5;
             this._rbDirections.TabStop = true;
             this._rbDirections.Text = "4 Direzioni (_Nord, _Est, _Sud, _Ovest)";
@@ -301,7 +301,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyNamingTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyNamingTitle.Location = new System.Drawing.Point(20, 105);
             this._lblEmptyNamingTitle.Name = "_lblEmptyNamingTitle";
-            this._lblEmptyNamingTitle.Size = new System.Drawing.Size(78, 15);
+            this._lblEmptyNamingTitle.Size = new System.Drawing.Size(125, 25);
             this._lblEmptyNamingTitle.TabIndex = 4;
             this._lblEmptyNamingTitle.Text = "Suffisso nomi:";
             // 
@@ -319,7 +319,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             0,
             0});
             this._numFrameCount.Name = "_numFrameCount";
-            this._numFrameCount.Size = new System.Drawing.Size(80, 23);
+            this._numFrameCount.Size = new System.Drawing.Size(80, 31);
             this._numFrameCount.TabIndex = 3;
             this._numFrameCount.Value = new decimal(new int[] {
             4,
@@ -333,7 +333,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyCountTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyCountTitle.Location = new System.Drawing.Point(20, 65);
             this._lblEmptyCountTitle.Name = "_lblEmptyCountTitle";
-            this._lblEmptyCountTitle.Size = new System.Drawing.Size(134, 15);
+            this._lblEmptyCountTitle.Size = new System.Drawing.Size(203, 25);
             this._lblEmptyCountTitle.TabIndex = 2;
             this._lblEmptyCountTitle.Text = "Numero di sprite/frame:";
             // 
@@ -341,7 +341,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._txtEmptyPrefix.Location = new System.Drawing.Point(200, 22);
             this._txtEmptyPrefix.Name = "_txtEmptyPrefix";
-            this._txtEmptyPrefix.Size = new System.Drawing.Size(220, 23);
+            this._txtEmptyPrefix.Size = new System.Drawing.Size(220, 31);
             this._txtEmptyPrefix.TabIndex = 1;
             this._txtEmptyPrefix.Text = "Nemico_1";
             // 
@@ -351,7 +351,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyPrefixTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyPrefixTitle.Location = new System.Drawing.Point(20, 25);
             this._lblEmptyPrefixTitle.Name = "_lblEmptyPrefixTitle";
-            this._lblEmptyPrefixTitle.Size = new System.Drawing.Size(136, 15);
+            this._lblEmptyPrefixTitle.Size = new System.Drawing.Size(199, 25);
             this._lblEmptyPrefixTitle.TabIndex = 0;
             this._lblEmptyPrefixTitle.Text = "Nome base del nemico:";
             // 
@@ -365,10 +365,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabPaste.Controls.Add(this._txtPasteCode);
             this._tabPaste.Controls.Add(this._btnPasteFromClipboard);
             this._tabPaste.Controls.Add(this._lblPasteInfo);
-            this._tabPaste.Location = new System.Drawing.Point(4, 24);
+            this._tabPaste.Location = new System.Drawing.Point(4, 34);
             this._tabPaste.Name = "_tabPaste";
             this._tabPaste.Padding = new System.Windows.Forms.Padding(3);
-            this._tabPaste.Size = new System.Drawing.Size(696, 453);
+            this._tabPaste.Size = new System.Drawing.Size(696, 443);
             this._tabPaste.TabIndex = 2;
             this._tabPaste.Text = "Incolla Dati Assembly";
             // 
@@ -392,7 +392,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPasteStats.ForeColor = System.Drawing.Color.Yellow;
             this._lblPasteStats.Location = new System.Drawing.Point(20, 360);
             this._lblPasteStats.Name = "_lblPasteStats";
-            this._lblPasteStats.Size = new System.Drawing.Size(269, 15);
+            this._lblPasteStats.Size = new System.Drawing.Size(399, 25);
             this._lblPasteStats.TabIndex = 5;
             this._lblPasteStats.Text = "Dati rilevati: 0 byte | Sprite completi (16x16 px): 0";
             // 
@@ -400,7 +400,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._txtPastePrefix.Location = new System.Drawing.Point(120, 327);
             this._txtPastePrefix.Name = "_txtPastePrefix";
-            this._txtPastePrefix.Size = new System.Drawing.Size(200, 23);
+            this._txtPastePrefix.Size = new System.Drawing.Size(200, 31);
             this._txtPastePrefix.TabIndex = 4;
             this._txtPastePrefix.Text = "Nemico_1";
             // 
@@ -410,7 +410,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPastePrefixTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblPastePrefixTitle.Location = new System.Drawing.Point(20, 330);
             this._lblPastePrefixTitle.Name = "_lblPastePrefixTitle";
-            this._lblPastePrefixTitle.Size = new System.Drawing.Size(85, 15);
+            this._lblPastePrefixTitle.Size = new System.Drawing.Size(132, 25);
             this._lblPastePrefixTitle.TabIndex = 3;
             this._lblPastePrefixTitle.Text = "Prefisso Nome:";
             // 
@@ -446,17 +446,18 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPasteInfo.ForeColor = System.Drawing.Color.LightGray;
             this._lblPasteInfo.Location = new System.Drawing.Point(20, 15);
             this._lblPasteInfo.Name = "_lblPasteInfo";
-            this._lblPasteInfo.Size = new System.Drawing.Size(489, 15);
+            this._lblPasteInfo.Size = new System.Drawing.Size(743, 25);
             this._lblPasteInfo.TabIndex = 0;
-            this._lblPasteInfo.Text = "Incolla qui le direttive \'db\' o \'defb\' contenenti i dati dei nemici (es. da listati Z80 o altri sprite):";
+            this._lblPasteInfo.Text = "Incolla qui le direttive \'db\' o \'defb\' contenenti i dati dei nemici (es. da lista" +
+    "ti Z80 o altri sprite):";
             // 
             // AddEnemiesDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(38)))));
             this.CancelButton = this._btnPresetCancel;
-            this.ClientSize = new System.Drawing.Size(704, 481);
+            this.ClientSize = new System.Drawing.Size(705, 507);
             this.Controls.Add(this._tabControl);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ForeColor = System.Drawing.Color.White;
@@ -465,7 +466,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this.MinimizeBox = false;
             this.Name = "AddEnemiesDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Aggiungi Sprite Nemici al Progetto";
+            this.Text = "Aggiungi Sprite al Progetto";
             this._tabControl.ResumeLayout(false);
             this._tabPresets.ResumeLayout(false);
             this._tabPresets.PerformLayout();

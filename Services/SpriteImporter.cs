@@ -226,11 +226,12 @@ namespace ZXSpectrumSpriteGenerator.Services
         /// ; Colore Ink: 5, Colore Paper: 1
         /// ; INK 4, PAPER 2
         /// </summary>
-        public static bool TryExtractColorsFromText(string text, out int ink, out int paper, out bool? bright)
+        public static bool TryExtractColorsFromText(string text, out int ink, out int paper, out bool? bright, out bool? flash)
         {
             ink = -1;
             paper = -1;
             bright = null;
+            flash = null;
 
             if (string.IsNullOrWhiteSpace(text)) return false;
 
@@ -253,7 +254,19 @@ namespace ZXSpectrumSpriteGenerator.Services
                 bright = (bVal == "true" || bVal == "1");
             }
 
-            return ink >= 0 || paper >= 0 || bright.HasValue;
+            var flashMatch = Regex.Match(text, @"\b(?:flash)[:=\s]+(true|false|1|0)", RegexOptions.IgnoreCase);
+            if (flashMatch.Success)
+            {
+                string fVal = flashMatch.Groups[1].Value.ToLower();
+                flash = (fVal == "true" || fVal == "1");
+            }
+
+            return ink >= 0 || paper >= 0 || bright.HasValue || flash.HasValue;
+        }
+
+        public static bool TryExtractColorsFromText(string text, out int ink, out int paper, out bool? bright)
+        {
+            return TryExtractColorsFromText(text, out ink, out paper, out bright, out _);
         }
 
         /// <summary>
@@ -266,7 +279,8 @@ namespace ZXSpectrumSpriteGenerator.Services
             string defaultPrefix = "Tile",
             int defaultInk = 7,
             int defaultPaper = 0,
-            bool defaultBright = true)
+            bool defaultBright = true,
+            bool defaultFlash = false)
         {
             List<Tile> tiles = new List<Tile>();
             if (string.IsNullOrWhiteSpace(text)) return tiles;
@@ -283,17 +297,19 @@ namespace ZXSpectrumSpriteGenerator.Services
                 for (int i = 0; i < count; i++)
                 {
                     byte[] chunk = new byte[8];
-                    allRawBytes.CopyTo(i * 9, chunk, 0, 8);
+                    allRawBytes.CopyTo(i * 9 +1, chunk, 0, 8);
                     byte attr = allRawBytes[i * 9 + 8];
                     int ink = attr & 0x07;
                     int paper = (attr >> 3) & 0x07;
                     bool bright = (attr & 0x40) != 0;
+                    bool flash = (attr & 0x80) != 0;
 
                     var t = new Tile($"{defaultPrefix}{i + 1}", chunk)
                     {
                         InkColor = ink,
                         PaperColor = paper,
-                        Bright = bright
+                        Bright = bright,
+                        Flash = flash
                     };
                     tiles.Add(t);
                 }
@@ -303,11 +319,13 @@ namespace ZXSpectrumSpriteGenerator.Services
             int baseInk = defaultInk;
             int basePaper = defaultPaper;
             bool baseBright = defaultBright;
+            bool baseFlash = defaultFlash;
 
             // Se ci sono commenti globali in cima al testo (prima di qualsiasi riga di dati)
             int currentInk = baseInk;
             int currentPaper = basePaper;
             bool currentBright = baseBright;
+            bool currentFlash = baseFlash;
             string currentTileName = null;
             bool hasPerTileColor = false;
             List<byte> currentTileBytes = new List<byte>();
@@ -362,6 +380,14 @@ namespace ZXSpectrumSpriteGenerator.Services
                         if (!isPerTileComment) baseBright = currentBright;
                     }
 
+                    var flashMatch = Regex.Match(comment, @"\b(?:flash)[:=\s]+(true|false|1|0)", RegexOptions.IgnoreCase);
+                    if (flashMatch.Success)
+                    {
+                        string fVal = flashMatch.Groups[1].Value.ToLower();
+                        currentFlash = (fVal == "true" || fVal == "1");
+                        if (!isPerTileComment) baseFlash = currentFlash;
+                    }
+
                     // Cerca eventuale nome nel commento: es. "; Tile 1: Muro (Ink: 2...)"
                     var nameMatch = Regex.Match(comment, @";\s*Tile\s*\d*[:\s]+([A-Za-z0-9_ ]+?)(?:\s*\(|$)", RegexOptions.IgnoreCase);
                     if (nameMatch.Success)
@@ -407,6 +433,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                     int ink = currentInk;
                     int paper = currentPaper;
                     bool bright = currentBright;
+                    bool flash = currentFlash;
 
                     // Se ci sono esattamente 9 byte accumulati per questa riga/definizione (es. 8 byte bitmap + 1 attributo)
                     if (currentTileBytes.Count == 9 && !hasPerTileColor)
@@ -415,6 +442,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                         ink = attr & 0x07;
                         paper = (attr >> 3) & 0x07;
                         bright = (attr & 0x40) != 0;
+                        flash = (attr & 0x80) != 0;
                         currentTileBytes.RemoveAt(8);
                     }
 
@@ -430,7 +458,8 @@ namespace ZXSpectrumSpriteGenerator.Services
                     {
                         InkColor = ink,
                         PaperColor = paper,
-                        Bright = bright
+                        Bright = bright,
+                        Flash = flash
                     };
                     tiles.Add(tile);
                     tileCounter++;
@@ -444,6 +473,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                             currentInk = baseInk;
                             currentPaper = basePaper;
                             currentBright = baseBright;
+                            currentFlash = baseFlash;
                             hasPerTileColor = false;
                         }
                     }
@@ -465,7 +495,8 @@ namespace ZXSpectrumSpriteGenerator.Services
                 {
                     InkColor = currentInk,
                     PaperColor = currentPaper,
-                    Bright = currentBright
+                    Bright = currentBright,
+                    Flash = currentFlash
                 };
                 tiles.Add(tile);
             }

@@ -154,6 +154,7 @@ namespace ZXSpectrumSpriteGenerator.Models
                 s.InkColor = CurrentSprite.InkColor;
                 s.PaperColor = CurrentSprite.PaperColor;
                 s.Bright = CurrentSprite.Bright;
+                s.Flash = CurrentSprite.Flash;
             }
             Sprites.Add(s);
             SelectedIndex = Sprites.Count - 1;
@@ -211,6 +212,7 @@ namespace ZXSpectrumSpriteGenerator.Models
                 tile.InkColor = CurrentTile.InkColor;
                 tile.PaperColor = CurrentTile.PaperColor;
                 tile.Bright = CurrentTile.Bright;
+                tile.Flash = CurrentTile.Flash;
             }
             Tiles.Add(tile);
             SelectedTileIndex = Tiles.Count - 1;

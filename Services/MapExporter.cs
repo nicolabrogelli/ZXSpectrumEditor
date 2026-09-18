@@ -54,7 +54,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                 {
                     var tile = project.Tiles[t];
                     string tName = SanitizeIdentifier(tile.Name);
-                    sb.AppendLine($"; Tile {t + 1}: {tile.Name} (Ink: {tile.InkColor}, Paper: {tile.PaperColor})");
+                    sb.AppendLine($"; Tile {t + 1}: {tile.Name} (Ink: {tile.InkColor}, Paper: {tile.PaperColor}, Bright: {(tile.Bright ? "1" : "0")}, Flash: {(tile.Flash ? "1" : "0")})");
                     sb.AppendLine($"tile_{t + 1}_{tName}:");
                     var hexData = tile.GetBytesRowByRow();
                     sb.Append($"    {dirStr} ");

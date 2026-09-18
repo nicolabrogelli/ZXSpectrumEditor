@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -44,6 +45,8 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             Height = 105;
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SpriteProject Project
         {
             get => _project;

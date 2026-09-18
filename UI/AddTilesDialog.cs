@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -26,6 +27,13 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             _project = project;
             InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime || DesignMode)
+                return;
             InitRuntimeData();
         }
 
@@ -38,6 +46,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             _cmbEmptyPaper.Items.Clear();
             _cmbPasteInk.Items.Clear();
             _cmbPastePaper.Items.Clear();
+          
 
             for (int i = 0; i < 8; i++)
             {
@@ -126,7 +135,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 InkColor = ink,
                 PaperColor = paper,
-                Bright = bright
+                Bright = bright,
+                Flash = p.Flash
             };
 
             // Disegna anteprima 1x (8x8)
@@ -191,12 +201,14 @@ namespace ZXSpectrumSpriteGenerator.UI
             int ink = _cmbPresetInk.SelectedIndex >= 0 ? _cmbPresetInk.SelectedIndex : p.DefaultInk;
             int paper = _cmbPresetPaper.SelectedIndex >= 0 ? _cmbPresetPaper.SelectedIndex : p.DefaultPaper;
             bool bright = _chkPresetBright.Checked;
+            bool flash = _chkPresetFlash.Checked;
 
             Tile tile = new Tile(tName, p.Data)
             {
                 InkColor = ink,
                 PaperColor = paper,
-                Bright = bright
+                Bright = bright,
+                Flash = flash //p.Flash
             };
 
             NewlyAddedTiles.Add(tile);
@@ -212,7 +224,8 @@ namespace ZXSpectrumSpriteGenerator.UI
                 {
                     InkColor = p.DefaultInk,
                     PaperColor = p.DefaultPaper,
-                    Bright = p.Bright
+                    Bright = p.Bright,
+                    Flash = p.Flash
                 };
                 NewlyAddedTiles.Add(tile);
             }
@@ -230,6 +243,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             int ink = _cmbEmptyInk.SelectedIndex >= 0 ? _cmbEmptyInk.SelectedIndex : 7;
             int paper = _cmbEmptyPaper.SelectedIndex >= 0 ? _cmbEmptyPaper.SelectedIndex : 0;
             bool bright = _chkEmptyBright.Checked;
+            bool flash = _chkEmptyFlash.Checked;
 
             for (int i = 0; i < count; i++)
             {
@@ -238,7 +252,9 @@ namespace ZXSpectrumSpriteGenerator.UI
                 {
                     InkColor = ink,
                     PaperColor = paper,
-                    Bright = bright
+                    Bright = bright,
+                    Flash = flash
+
                 };
                 NewlyAddedTiles.Add(t);
             }

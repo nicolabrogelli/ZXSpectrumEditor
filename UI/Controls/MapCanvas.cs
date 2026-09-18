@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -62,6 +63,8 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             UpdateControlSize();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SpriteProject Project
         {
             get => _project;
@@ -72,6 +75,8 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public GameMap Map
         {
             get => _map;

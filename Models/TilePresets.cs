@@ -10,9 +10,11 @@ namespace ZXSpectrumSpriteGenerator.Models
         public int DefaultInk { get; set; } = 7;
         public int DefaultPaper { get; set; } = 0;
         public bool Bright { get; set; } = true;
+        public bool Flash { get; set; } = false;
+
         public byte[] Data { get; set; }
 
-        public TilePreset(string id, string displayName, string description, int ink, int paper, bool bright, byte[] data)
+        public TilePreset(string id, string displayName, string description, int ink, int paper, bool bright, byte[] data, bool flash = false)
         {
             Id = id;
             DisplayName = displayName;
@@ -20,6 +22,7 @@ namespace ZXSpectrumSpriteGenerator.Models
             DefaultInk = ink;
             DefaultPaper = paper;
             Bright = bright;
+            Flash = flash;
             Data = data;
         }
     }

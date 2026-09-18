@@ -1,4 +1,4 @@
-﻿namespace ZXSpectrumSpriteGenerator.UI
+namespace ZXSpectrumSpriteGenerator.UI
 {
     partial class MainForm
     {
@@ -169,12 +169,13 @@
             this._btnGoToTiles = new System.Windows.Forms.ToolStripButton();
             this._btnGoToMaps = new System.Windows.Forms.ToolStripButton();
             this._tabTiles = new System.Windows.Forms.TabPage();
-            this._tileEditorView = new ZXSpectrumSpriteGenerator.UI.TileEditorView();
             this._tabMaps = new System.Windows.Forms.TabPage();
             this._animTimer = new System.Windows.Forms.Timer(this.components);
             this._toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this._chkFlash = new System.Windows.Forms.CheckBox();
             this._canvas = new ZXSpectrumSpriteGenerator.UI.Controls.SpriteCanvas();
             this._filmstrip = new ZXSpectrumSpriteGenerator.UI.Controls.SpriteFilmstrip();
+            this._tileEditorView = new ZXSpectrumSpriteGenerator.UI.TileEditorView();
             this._mapEditorView = new ZXSpectrumSpriteGenerator.UI.MapEditorView();
             this._menuStrip.SuspendLayout();
             this._statusStrip.SuspendLayout();
@@ -211,7 +212,7 @@
             this._menuStrip.Location = new System.Drawing.Point(0, 0);
             this._menuStrip.Name = "_menuStrip";
             this._menuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this._menuStrip.Size = new System.Drawing.Size(1084, 33);
+            this._menuStrip.Size = new System.Drawing.Size(1303, 36);
             this._menuStrip.TabIndex = 0;
             // 
             // _mFile
@@ -228,7 +229,7 @@
             this._mFileSep2,
             this._mExit});
             this._mFile.Name = "_mFile";
-            this._mFile.Size = new System.Drawing.Size(54, 29);
+            this._mFile.Size = new System.Drawing.Size(54, 32);
             this._mFile.Text = "&File";
             // 
             // _mNew
@@ -317,7 +318,7 @@
             this._mEditSep3,
             this._mCopyAsm});
             this._mEdit.Name = "_mEdit";
-            this._mEdit.Size = new System.Drawing.Size(97, 29);
+            this._mEdit.Size = new System.Drawing.Size(97, 32);
             this._mEdit.Text = "&Modifica";
             // 
             // _mUndo
@@ -395,7 +396,7 @@
             this._mViewTiles,
             this._mViewMaps});
             this._mView.Name = "_mView";
-            this._mView.Size = new System.Drawing.Size(103, 29);
+            this._mView.Size = new System.Drawing.Size(103, 32);
             this._mView.Text = "&Visualizza";
             // 
             // _mViewSprites
@@ -436,7 +437,7 @@
             this._mShiftLeft,
             this._mShiftRight});
             this._mTrans.Name = "_mTrans";
-            this._mTrans.Size = new System.Drawing.Size(106, 29);
+            this._mTrans.Size = new System.Drawing.Size(106, 32);
             this._mTrans.Text = "&Trasforma";
             // 
             // _mFlipH
@@ -514,7 +515,7 @@
             this._mPresetEnemy,
             this._mPresetWalker});
             this._mPreset.Name = "_mPreset";
-            this._mPreset.Size = new System.Drawing.Size(76, 29);
+            this._mPreset.Size = new System.Drawing.Size(76, 32);
             this._mPreset.Text = "&Preset";
             // 
             // _mAddEnemiesPreset
@@ -565,7 +566,7 @@
             this._mExpMap,
             this._mExpPng});
             this._mMaps.Name = "_mMaps";
-            this._mMaps.Size = new System.Drawing.Size(84, 29);
+            this._mMaps.Size = new System.Drawing.Size(84, 32);
             this._mMaps.Text = "&Mappe";
             this._mMaps.Visible = false;
             // 
@@ -654,7 +655,7 @@
             this._mHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._mAbout});
             this._mHelp.Name = "_mHelp";
-            this._mHelp.Size = new System.Drawing.Size(71, 29);
+            this._mHelp.Size = new System.Drawing.Size(71, 32);
             this._mHelp.Text = "&Aiuto";
             // 
             // _mAbout
@@ -675,9 +676,9 @@
             this._lblDimensions,
             this._lblTotalBytes,
             this._lblTool});
-            this._statusStrip.Location = new System.Drawing.Point(0, 709);
+            this._statusStrip.Location = new System.Drawing.Point(0, 865);
             this._statusStrip.Name = "_statusStrip";
-            this._statusStrip.Size = new System.Drawing.Size(1084, 32);
+            this._statusStrip.Size = new System.Drawing.Size(1303, 32);
             this._statusStrip.TabIndex = 1;
             // 
             // _lblCoords
@@ -715,7 +716,7 @@
             // _lblTool
             // 
             this._lblTool.Name = "_lblTool";
-            this._lblTool.Size = new System.Drawing.Size(589, 25);
+            this._lblTool.Size = new System.Drawing.Size(808, 25);
             this._lblTool.Spring = true;
             this._lblTool.Text = "Strumento: Matita";
             this._lblTool.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -728,10 +729,10 @@
             this._mainTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this._mainTabs.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this._mainTabs.ItemSize = new System.Drawing.Size(230, 32);
-            this._mainTabs.Location = new System.Drawing.Point(0, 33);
+            this._mainTabs.Location = new System.Drawing.Point(0, 36);
             this._mainTabs.Name = "_mainTabs";
             this._mainTabs.SelectedIndex = 0;
-            this._mainTabs.Size = new System.Drawing.Size(1084, 676);
+            this._mainTabs.Size = new System.Drawing.Size(1303, 829);
             this._mainTabs.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this._mainTabs.TabIndex = 2;
             this._mainTabs.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.MainTabs_DrawItem);
@@ -746,7 +747,7 @@
             this._tabSprites.Controls.Add(this._mainToolbar);
             this._tabSprites.Location = new System.Drawing.Point(4, 36);
             this._tabSprites.Name = "_tabSprites";
-            this._tabSprites.Size = new System.Drawing.Size(1076, 636);
+            this._tabSprites.Size = new System.Drawing.Size(1295, 789);
             this._tabSprites.TabIndex = 0;
             this._tabSprites.Text = "👾 Editor Sprite (F2)";
             // 
@@ -758,7 +759,7 @@
             this._centerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this._centerPanel.Location = new System.Drawing.Point(0, 42);
             this._centerPanel.Name = "_centerPanel";
-            this._centerPanel.Size = new System.Drawing.Size(796, 426);
+            this._centerPanel.Size = new System.Drawing.Size(1015, 579);
             this._centerPanel.TabIndex = 3;
             this._centerPanel.Resize += new System.EventHandler(this.CenterPanel_Resize);
             // 
@@ -769,9 +770,9 @@
             this._bottomPanel.Controls.Add(this._filmstripNavBar);
             this._bottomPanel.Controls.Add(this._filmstripControlBar);
             this._bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this._bottomPanel.Location = new System.Drawing.Point(0, 468);
+            this._bottomPanel.Location = new System.Drawing.Point(0, 621);
             this._bottomPanel.Name = "_bottomPanel";
-            this._bottomPanel.Size = new System.Drawing.Size(796, 168);
+            this._bottomPanel.Size = new System.Drawing.Size(1015, 168);
             this._bottomPanel.TabIndex = 2;
             // 
             // _filmstripNavBar
@@ -786,7 +787,7 @@
             this._filmstripNavBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this._filmstripNavBar.Location = new System.Drawing.Point(0, 142);
             this._filmstripNavBar.Name = "_filmstripNavBar";
-            this._filmstripNavBar.Size = new System.Drawing.Size(796, 26);
+            this._filmstripNavBar.Size = new System.Drawing.Size(1015, 26);
             this._filmstripNavBar.TabIndex = 1;
             this._filmstripNavBar.Resize += new System.EventHandler(this.FilmstripNavBar_Resize);
             // 
@@ -880,7 +881,7 @@
             this._filmstripControlBar.Dock = System.Windows.Forms.DockStyle.Top;
             this._filmstripControlBar.Location = new System.Drawing.Point(0, 0);
             this._filmstripControlBar.Name = "_filmstripControlBar";
-            this._filmstripControlBar.Size = new System.Drawing.Size(796, 34);
+            this._filmstripControlBar.Size = new System.Drawing.Size(1015, 34);
             this._filmstripControlBar.TabIndex = 0;
             // 
             // _cmbJumpEnemy
@@ -1020,6 +1021,7 @@
             // 
             this._rightPanel.AutoScroll = true;
             this._rightPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(33)))));
+            this._rightPanel.Controls.Add(this._chkFlash);
             this._rightPanel.Controls.Add(this._btnCopyQuick);
             this._rightPanel.Controls.Add(this._txtQuickAsm);
             this._rightPanel.Controls.Add(this._lblQuickAsmTitle);
@@ -1042,10 +1044,10 @@
             this._rightPanel.Controls.Add(this._txtCurrentSpriteName);
             this._rightPanel.Controls.Add(this._lblSpriteNameTitle);
             this._rightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this._rightPanel.Location = new System.Drawing.Point(796, 42);
+            this._rightPanel.Location = new System.Drawing.Point(1015, 42);
             this._rightPanel.Name = "_rightPanel";
             this._rightPanel.Padding = new System.Windows.Forms.Padding(10);
-            this._rightPanel.Size = new System.Drawing.Size(280, 594);
+            this._rightPanel.Size = new System.Drawing.Size(280, 747);
             this._rightPanel.TabIndex = 1;
             // 
             // _btnCopyQuick
@@ -1053,7 +1055,7 @@
             this._btnCopyQuick.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(80)))));
             this._btnCopyQuick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._btnCopyQuick.ForeColor = System.Drawing.Color.White;
-            this._btnCopyQuick.Location = new System.Drawing.Point(10, 551);
+            this._btnCopyQuick.Location = new System.Drawing.Point(10, 589);
             this._btnCopyQuick.Name = "_btnCopyQuick";
             this._btnCopyQuick.Size = new System.Drawing.Size(240, 28);
             this._btnCopyQuick.TabIndex = 20;
@@ -1066,7 +1068,7 @@
             this._txtQuickAsm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
             this._txtQuickAsm.Font = new System.Drawing.Font("Consolas", 8F);
             this._txtQuickAsm.ForeColor = System.Drawing.Color.LightGreen;
-            this._txtQuickAsm.Location = new System.Drawing.Point(10, 459);
+            this._txtQuickAsm.Location = new System.Drawing.Point(10, 497);
             this._txtQuickAsm.Multiline = true;
             this._txtQuickAsm.Name = "_txtQuickAsm";
             this._txtQuickAsm.ReadOnly = true;
@@ -1079,7 +1081,7 @@
             this._lblQuickAsmTitle.AutoSize = true;
             this._lblQuickAsmTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._lblQuickAsmTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this._lblQuickAsmTitle.Location = new System.Drawing.Point(10, 435);
+            this._lblQuickAsmTitle.Location = new System.Drawing.Point(10, 473);
             this._lblQuickAsmTitle.Name = "_lblQuickAsmTitle";
             this._lblQuickAsmTitle.Size = new System.Drawing.Size(219, 23);
             this._lblQuickAsmTitle.TabIndex = 18;
@@ -1089,7 +1091,7 @@
             // 
             this._lblFps.AutoSize = true;
             this._lblFps.ForeColor = System.Drawing.Color.White;
-            this._lblFps.Location = new System.Drawing.Point(210, 400);
+            this._lblFps.Location = new System.Drawing.Point(210, 438);
             this._lblFps.Name = "_lblFps";
             this._lblFps.Size = new System.Drawing.Size(52, 25);
             this._lblFps.TabIndex = 17;
@@ -1097,7 +1099,7 @@
             // 
             // _tbAnimFps
             // 
-            this._tbAnimFps.Location = new System.Drawing.Point(95, 397);
+            this._tbAnimFps.Location = new System.Drawing.Point(95, 435);
             this._tbAnimFps.Maximum = 20;
             this._tbAnimFps.Minimum = 1;
             this._tbAnimFps.Name = "_tbAnimFps";
@@ -1111,7 +1113,7 @@
             // 
             this._lblSpeed.AutoSize = true;
             this._lblSpeed.ForeColor = System.Drawing.Color.LightGray;
-            this._lblSpeed.Location = new System.Drawing.Point(10, 400);
+            this._lblSpeed.Location = new System.Drawing.Point(10, 438);
             this._lblSpeed.Name = "_lblSpeed";
             this._lblSpeed.Size = new System.Drawing.Size(111, 25);
             this._lblSpeed.TabIndex = 15;
@@ -1121,7 +1123,7 @@
             // 
             this._lblAnimFrame.AutoSize = true;
             this._lblAnimFrame.ForeColor = System.Drawing.Color.Yellow;
-            this._lblAnimFrame.Location = new System.Drawing.Point(158, 368);
+            this._lblAnimFrame.Location = new System.Drawing.Point(158, 406);
             this._lblAnimFrame.Name = "_lblAnimFrame";
             this._lblAnimFrame.Size = new System.Drawing.Size(97, 25);
             this._lblAnimFrame.TabIndex = 14;
@@ -1132,7 +1134,7 @@
             this._btnPlayAnim.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(130)))), ((int)(((byte)(80)))));
             this._btnPlayAnim.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._btnPlayAnim.ForeColor = System.Drawing.Color.White;
-            this._btnPlayAnim.Location = new System.Drawing.Point(10, 363);
+            this._btnPlayAnim.Location = new System.Drawing.Point(10, 401);
             this._btnPlayAnim.Name = "_btnPlayAnim";
             this._btnPlayAnim.Size = new System.Drawing.Size(140, 28);
             this._btnPlayAnim.TabIndex = 13;
@@ -1147,7 +1149,7 @@
             this._cmbAnimScope.Items.AddRange(new object[] {
             "Sprite Selezionato (solo questo set)",
             "Tutti i frame del progetto"});
-            this._cmbAnimScope.Location = new System.Drawing.Point(60, 333);
+            this._cmbAnimScope.Location = new System.Drawing.Point(60, 371);
             this._cmbAnimScope.Name = "_cmbAnimScope";
             this._cmbAnimScope.Size = new System.Drawing.Size(190, 33);
             this._cmbAnimScope.TabIndex = 12;
@@ -1157,7 +1159,7 @@
             // 
             this._lblScope.AutoSize = true;
             this._lblScope.ForeColor = System.Drawing.Color.LightGray;
-            this._lblScope.Location = new System.Drawing.Point(10, 336);
+            this._lblScope.Location = new System.Drawing.Point(10, 374);
             this._lblScope.Name = "_lblScope";
             this._lblScope.Size = new System.Drawing.Size(64, 25);
             this._lblScope.TabIndex = 11;
@@ -1168,7 +1170,7 @@
             this._lblAnimTitle.AutoSize = true;
             this._lblAnimTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._lblAnimTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this._lblAnimTitle.Location = new System.Drawing.Point(10, 311);
+            this._lblAnimTitle.Location = new System.Drawing.Point(10, 349);
             this._lblAnimTitle.Name = "_lblAnimTitle";
             this._lblAnimTitle.Size = new System.Drawing.Size(183, 23);
             this._lblAnimTitle.TabIndex = 10;
@@ -1182,7 +1184,7 @@
             this._prevBox.Controls.Add(this._lbl4x);
             this._prevBox.Controls.Add(this._picPreview1x);
             this._prevBox.Controls.Add(this._lbl1x);
-            this._prevBox.Location = new System.Drawing.Point(10, 201);
+            this._prevBox.Location = new System.Drawing.Point(10, 239);
             this._prevBox.Name = "_prevBox";
             this._prevBox.Size = new System.Drawing.Size(240, 100);
             this._prevBox.TabIndex = 9;
@@ -1234,7 +1236,7 @@
             this._lblPrevTitle.AutoSize = true;
             this._lblPrevTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._lblPrevTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this._lblPrevTitle.Location = new System.Drawing.Point(10, 177);
+            this._lblPrevTitle.Location = new System.Drawing.Point(10, 215);
             this._lblPrevTitle.Name = "_lblPrevTitle";
             this._lblPrevTitle.Size = new System.Drawing.Size(196, 23);
             this._lblPrevTitle.TabIndex = 8;
@@ -1373,7 +1375,7 @@
             this._mainToolbar.Name = "_mainToolbar";
             this._mainToolbar.Padding = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this._mainToolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this._mainToolbar.Size = new System.Drawing.Size(1076, 42);
+            this._mainToolbar.Size = new System.Drawing.Size(1295, 42);
             this._mainToolbar.TabIndex = 0;
             // 
             // _btnNew
@@ -1487,7 +1489,7 @@
             // _sepToolbar3
             // 
             this._sepToolbar3.Name = "_sepToolbar3";
-            this._sepToolbar3.Size = new System.Drawing.Size(6, 25);
+            this._sepToolbar3.Size = new System.Drawing.Size(6, 34);
             // 
             // _btnFlipH
             // 
@@ -1632,7 +1634,6 @@
             this._sepToolbar8.Name = "_sepToolbar8";
             this._sepToolbar8.Size = new System.Drawing.Size(6, 25);
             // 
-            // 
             // _btnGoToTiles
             // 
             this._btnGoToTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(90)))), ((int)(((byte)(140)))));
@@ -1640,9 +1641,9 @@
             this._btnGoToTiles.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnGoToTiles.ForeColor = System.Drawing.Color.White;
             this._btnGoToTiles.Name = "_btnGoToTiles";
-            this._btnGoToTiles.Size = new System.Drawing.Size(155, 27);
+            this._btnGoToTiles.Size = new System.Drawing.Size(169, 27);
             this._btnGoToTiles.Text = "🧱 Editor Tiles (F3)";
-            this._btnGoToTiles.ToolTipText = "Passa all'Editor dei Tile 8x8 (Tasto rapido: F3)";
+            this._btnGoToTiles.ToolTipText = "Passa all\'Editor dei Tile 8x8 (Tasto rapido: F3)";
             this._btnGoToTiles.Click += new System.EventHandler(this.SwitchToTileEditor_Click);
             // 
             // _btnGoToMaps
@@ -1657,31 +1658,15 @@
             this._btnGoToMaps.ToolTipText = "Passa all\'Editor Mappe di Gioco (Tasto rapido: F4)";
             this._btnGoToMaps.Click += new System.EventHandler(this.SwitchToMapEditor_Click);
             // 
-            // 
             // _tabTiles
             // 
             this._tabTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
             this._tabTiles.Controls.Add(this._tileEditorView);
             this._tabTiles.Location = new System.Drawing.Point(4, 36);
             this._tabTiles.Name = "_tabTiles";
-            this._tabTiles.Size = new System.Drawing.Size(1076, 636);
+            this._tabTiles.Size = new System.Drawing.Size(1295, 792);
             this._tabTiles.TabIndex = 1;
             this._tabTiles.Text = "🧱 Editor Tileset (F3)";
-            // 
-            // _tileEditorView
-            // 
-            this._tileEditorView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
-            this._tileEditorView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._tileEditorView.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this._tileEditorView.ForeColor = System.Drawing.Color.White;
-            this._tileEditorView.Location = new System.Drawing.Point(0, 0);
-            this._tileEditorView.Name = "_tileEditorView";
-            this._tileEditorView.Project = null;
-            this._tileEditorView.Size = new System.Drawing.Size(1076, 636);
-            this._tileEditorView.TabIndex = 0;
-            this._tileEditorView.ProjectModified += new System.EventHandler(this.TileEditorView_ProjectModified);
-            this._tileEditorView.RequestSwitchToMaps += new System.EventHandler(this.TileEditorView_RequestSwitchToMaps);
-            this._tileEditorView.RequestSwitchToSprites += new System.EventHandler(this.TileEditorView_RequestSwitchToSprites);
             // 
             // _tabMaps
             // 
@@ -1689,7 +1674,7 @@
             this._tabMaps.Controls.Add(this._mapEditorView);
             this._tabMaps.Location = new System.Drawing.Point(4, 36);
             this._tabMaps.Name = "_tabMaps";
-            this._tabMaps.Size = new System.Drawing.Size(1076, 636);
+            this._tabMaps.Size = new System.Drawing.Size(1295, 792);
             this._tabMaps.TabIndex = 2;
             this._tabMaps.Text = "🗺️ Editor Mappe di Gioco";
             // 
@@ -1697,6 +1682,18 @@
             // 
             this._animTimer.Interval = 250;
             this._animTimer.Tick += new System.EventHandler(this.AnimTimer_Tick);
+            // 
+            // _chkFlash
+            // 
+            this._chkFlash.AutoSize = true;
+            this._chkFlash.ForeColor = System.Drawing.Color.White;
+            this._chkFlash.Location = new System.Drawing.Point(10, 177);
+            this._chkFlash.Name = "_chkFlash";
+            this._chkFlash.Size = new System.Drawing.Size(78, 29);
+            this._chkFlash.TabIndex = 21;
+            this._chkFlash.Text = "Flash";
+            this._chkFlash.UseVisualStyleBackColor = true;
+            this._chkFlash.CheckedChanged += new System.EventHandler(this.ChkFlash_CheckedChanged);
             // 
             // _canvas
             // 
@@ -1718,15 +1715,29 @@
             // 
             this._filmstrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(28)))));
             this._filmstrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._filmstrip.IsTilesMode = false;
             this._filmstrip.Location = new System.Drawing.Point(0, 34);
             this._filmstrip.Name = "_filmstrip";
-            this._filmstrip.Project = null;
             this._filmstrip.ScrollOffsetX = 0;
-            this._filmstrip.Size = new System.Drawing.Size(796, 108);
+            this._filmstrip.Size = new System.Drawing.Size(1015, 108);
             this._filmstrip.TabIndex = 2;
             this._filmstrip.SelectedIndexChanged += new System.EventHandler(this.Filmstrip_SelectedIndexChanged);
             this._filmstrip.ScrollChanged += new System.EventHandler(this.Filmstrip_ScrollChanged);
             this._filmstrip.Resize += new System.EventHandler(this.Filmstrip_Resize);
+            // 
+            // _tileEditorView
+            // 
+            this._tileEditorView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(24)))));
+            this._tileEditorView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._tileEditorView.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this._tileEditorView.ForeColor = System.Drawing.Color.White;
+            this._tileEditorView.Location = new System.Drawing.Point(0, 0);
+            this._tileEditorView.Name = "_tileEditorView";
+            this._tileEditorView.Size = new System.Drawing.Size(1295, 792);
+            this._tileEditorView.TabIndex = 0;
+            this._tileEditorView.ProjectModified += new System.EventHandler(this.TileEditorView_ProjectModified);
+            this._tileEditorView.RequestSwitchToMaps += new System.EventHandler(this.TileEditorView_RequestSwitchToMaps);
+            this._tileEditorView.RequestSwitchToSprites += new System.EventHandler(this.TileEditorView_RequestSwitchToSprites);
             // 
             // _mapEditorView
             // 
@@ -1736,8 +1747,7 @@
             this._mapEditorView.ForeColor = System.Drawing.Color.White;
             this._mapEditorView.Location = new System.Drawing.Point(0, 0);
             this._mapEditorView.Name = "_mapEditorView";
-            this._mapEditorView.Project = null;
-            this._mapEditorView.Size = new System.Drawing.Size(1076, 636);
+            this._mapEditorView.Size = new System.Drawing.Size(1295, 792);
             this._mapEditorView.TabIndex = 0;
             this._mapEditorView.ProjectModified += new System.EventHandler(this.MapEditorView_ProjectModified);
             this._mapEditorView.RequestSwitchToSprites += new System.EventHandler(this.MapEditorView_RequestSwitchToSprites);
@@ -1748,7 +1758,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(35)))));
-            this.ClientSize = new System.Drawing.Size(1084, 741);
+            this.ClientSize = new System.Drawing.Size(1303, 897);
             this.Controls.Add(this._mainTabs);
             this.Controls.Add(this._statusStrip);
             this.Controls.Add(this._menuStrip);
@@ -1951,5 +1961,6 @@
         private ZXSpectrumSpriteGenerator.UI.MapEditorView _mapEditorView;
         private System.Windows.Forms.Timer _animTimer;
         private System.Windows.Forms.ToolTip _toolTip;
+        private System.Windows.Forms.CheckBox _chkFlash;
     }
 }

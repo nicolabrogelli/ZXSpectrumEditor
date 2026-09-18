@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Text;
@@ -30,16 +31,23 @@ namespace ZXSpectrumSpriteGenerator.UI
         public TileEditorView()
         {
             InitializeComponent();
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
             InitColorPickers();
             CenterCanvas();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SpriteProject Project
         {
             get => _project;
             set
             {
                 _project = value;
+                if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                    return;
+
                 if (_project != null && _project.Tiles.Count == 0)
                 {
                     // Inizializza con i preset di base se vuoto
@@ -56,6 +64,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Tile CurrentTile => _project?.CurrentTile;
 
         private void InitColorPickers()
@@ -192,6 +202,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             _pnlPreviewBox.Invalidate();
             _pnlPatternPreview.Invalidate();
             _filmstrip.Invalidate();
+            UpdateTileInfo();
             ProjectModified?.Invoke(this, EventArgs.Empty);
         }
 
@@ -200,6 +211,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (CurrentTile == null) return;
 
             _chkBright.Checked = CurrentTile.Bright;
+            _chkFlash.Checked = CurrentTile.Flash;
 
             for (int i = 0; i < _inkButtons.Count; i++)
             {
@@ -235,7 +247,7 @@ namespace ZXSpectrumSpriteGenerator.UI
 
             int idx = _project != null ? _project.SelectedTileIndex + 1 : 1;
             int total = _project != null ? _project.Tiles.Count : 1;
-            _lblInfo.Text = $"Tile #{idx} di {total}\r\nDimensione: 8x8 pixel\r\nMemoria video: 8 byte (1 char)";
+            _lblInfo.Text = $"Tile #{idx} di {total}\r\nDimensione: 8x8 pixel\r\nMemoria video: 8 byte (1 char)\r\nColore: Ink={tile.InkColor}, Paper={tile.PaperColor}\r\nAttributi: Bright={(tile.Bright ? "ON" : "OFF")}, Flash={(tile.Flash ? "ON" : "OFF")}";
 
             // Genera codice assembly rapido
             byte[] bytes = tile.GetBytesRowByRow();
@@ -305,7 +317,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // Pipetta rapida
             if (CurrentTile != null)
             {
-                MessageBox.Show($"Tile corrente: Ink={CurrentTile.InkColor} ({ZxSpectrumPalette.ColorNames[CurrentTile.InkColor]}), Paper={CurrentTile.PaperColor} ({ZxSpectrumPalette.ColorNames[CurrentTile.PaperColor]}), Bright={CurrentTile.Bright}", "Proprietà Colore Tile", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Tile corrente: Ink={CurrentTile.InkColor} ({ZxSpectrumPalette.ColorNames[CurrentTile.InkColor]}), Paper={CurrentTile.PaperColor} ({ZxSpectrumPalette.ColorNames[CurrentTile.PaperColor]}), Bright={CurrentTile.Bright}, Flash={CurrentTile.Flash}", "Proprietà Colore Tile", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -453,9 +465,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             int defInk = CurrentTile != null ? CurrentTile.InkColor : 7;
             int defPaper = CurrentTile != null ? CurrentTile.PaperColor : 0;
             bool defBright = CurrentTile != null ? CurrentTile.Bright : true;
+            bool defFlash = CurrentTile != null ? CurrentTile.Flash : false;
 
             int tileIndex = _project.Tiles.Count + 1;
-            var tiles = SpriteImporter.ImportTilesFromText(text, $"Tile_{tileIndex}_", defInk, defPaper, defBright);
+            var tiles = SpriteImporter.ImportTilesFromText(text, $"Tile_{tileIndex}_", defInk, defPaper, defBright, defFlash);
             if (tiles.Count == 0)
             {
                 MessageBox.Show("Nessun dato byte valido trovato negli appunti.\nCopia dichiarazioni 'db', 'defb' o liste di byte separati da virgole.", "Formato Non Riconosciuto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -592,6 +605,19 @@ namespace ZXSpectrumSpriteGenerator.UI
                 for (int rx = 0; rx <= 8; rx++)
                     g.DrawLine(borderPen, 12 + rx * step, 12, 12 + rx * step, 12 + 2 * step);
             }
+        }
+
+        private void _chkFlash_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CurrentTile == null) return;
+            
+            CurrentTile.Flash = _chkFlash.Checked;
+            _canvas.Invalidate();
+            _pnlPreviewBox.Invalidate();
+            _pnlPatternPreview.Invalidate();
+            _filmstrip.Invalidate();
+            UpdateTileInfo();
+            ProjectModified?.Invoke(this, EventArgs.Empty);
         }
     }
 }

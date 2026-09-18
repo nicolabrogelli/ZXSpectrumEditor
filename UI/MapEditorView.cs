@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -27,12 +28,17 @@ namespace ZXSpectrumSpriteGenerator.UI
             InitializeComponent();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SpriteProject Project
         {
             get => _project;
             set
             {
                 _project = value;
+                if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                    return;
+
                 if (_project != null && _project.Maps.Count == 0)
                 {
                     _project.AddMap("Mappa 1", 32, 24);

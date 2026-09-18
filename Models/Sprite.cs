@@ -20,6 +20,9 @@ namespace ZXSpectrumSpriteGenerator.Models
         public int InkColor { get; set; } = 7;     // White
         public int PaperColor { get; set; } = 0;   // Black
         public bool Bright { get; set; } = true;
+        public bool Flash { get; set; } = false;
+
+        public byte GetAttributeByte() => ZxSpectrumPalette.MakeAttribute(InkColor, PaperColor, Bright, Flash);
 
         public Sprite(int width = 16, int height = 16, string name = "Sprite")
         {
@@ -270,7 +273,8 @@ namespace ZXSpectrumSpriteGenerator.Models
                 GroupName = GroupName,
                 InkColor = InkColor,
                 PaperColor = PaperColor,
-                Bright = Bright
+                Bright = Bright,
+                Flash = Flash
             };
 
             for (int y = 0; y < Height; y++)

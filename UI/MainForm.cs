@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -22,6 +23,15 @@ namespace ZXSpectrumSpriteGenerator.UI
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime || DesignMode)
+                return;
+
             InitRuntimeControls();
             LoadProject(SpriteProject.CreateDefault());
             _isModified = false;
@@ -157,6 +167,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _cmbInk.SelectedIndex = Math.Max(0, Math.Min(7, sprite.InkColor));
                 _cmbPaper.SelectedIndex = Math.Max(0, Math.Min(7, sprite.PaperColor));
                 _chkBright.Checked = sprite.Bright;
+                _chkFlash.Checked = sprite.Flash;
 
                 int bytes = (sprite.Width / 8) * sprite.Height;
                 int charW = sprite.Width / 8;
@@ -558,6 +569,18 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _project.CurrentSprite.Bright = _chkBright.Checked;
                 _canvas.Invalidate();
                 UpdatePreviews();
+                SetModified(true);
+            }
+        }
+
+        private void ChkFlash_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_project?.CurrentSprite != null)
+            {
+                _project.CurrentSprite.Flash = _chkFlash.Checked;
+                _canvas.Invalidate();
+                UpdatePreviews();
+                SetModified(true);
             }
         }
 

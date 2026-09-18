@@ -59,6 +59,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                 sb.AppendLine($"      \"inkColor\": {s.InkColor},");
                 sb.AppendLine($"      \"paperColor\": {s.PaperColor},");
                 sb.AppendLine($"      \"bright\": {(s.Bright ? "true" : "false")},");
+                sb.AppendLine($"      \"flash\": {(s.Flash ? "true" : "false")},");
 
                 byte[] data = s.GetBytesRowByRow();
                 string hex = ByteArrayToHex(data);
@@ -84,6 +85,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                 sb.AppendLine($"      \"inkColor\": {tile.InkColor},");
                 sb.AppendLine($"      \"paperColor\": {tile.PaperColor},");
                 sb.AppendLine($"      \"bright\": {(tile.Bright ? "true" : "false")},");
+                sb.AppendLine($"      \"flash\": {(tile.Flash ? "true" : "false")},");
 
                 byte[] data = tile.GetBytesRowByRow();
                 string hex = ByteArrayToHex(data);
@@ -190,6 +192,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                 int ink = ExtractInt(objStr, "inkColor", 7);
                 int paper = ExtractInt(objStr, "paperColor", 0);
                 bool bright = ExtractBool(objStr, "bright", true);
+                bool flash = ExtractBool(objStr, "flash", false);
                 string hex = ExtractString(objStr, "dataHex");
 
                 var sprite = new Sprite(sW, sH, sName)
@@ -197,7 +200,8 @@ namespace ZXSpectrumSpriteGenerator.Services
                     GroupName = group,
                     InkColor = ink,
                     PaperColor = paper,
-                    Bright = bright
+                    Bright = bright,
+                    Flash = flash
                 };
 
                 if (!string.IsNullOrEmpty(hex))
@@ -235,13 +239,15 @@ namespace ZXSpectrumSpriteGenerator.Services
                         int ink = ExtractInt(objStr, "inkColor", 7);
                         int paper = ExtractInt(objStr, "paperColor", 0);
                         bool bright = ExtractBool(objStr, "bright", true);
+                        bool flash = ExtractBool(objStr, "flash", false);
                         string hex = ExtractString(objStr, "dataHex");
 
                         var tile = new Tile(tName)
                         {
                             InkColor = ink,
                             PaperColor = paper,
-                            Bright = bright
+                            Bright = bright,
+                            Flash = flash
                         };
 
                         if (!string.IsNullOrEmpty(hex))

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using ZXSpectrumSpriteGenerator.Models;
@@ -24,6 +25,13 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             _project = project;
             InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime || DesignMode)
+                return;
             InitRuntimeData();
         }
 

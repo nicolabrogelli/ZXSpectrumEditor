@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using ZXSpectrumSpriteGenerator.Models;
@@ -10,6 +11,7 @@ namespace ZXSpectrumSpriteGenerator.UI
     public partial class ImportExportDialog : Form
     {
         private readonly SpriteProject _project;
+        private readonly bool _openImportTab;
         public bool ProjectWasModified { get; private set; } = false;
 
         public ImportExportDialog() : this(null, false)
@@ -19,7 +21,16 @@ namespace ZXSpectrumSpriteGenerator.UI
         public ImportExportDialog(SpriteProject project, bool openImportTab = false)
         {
             _project = project;
+            _openImportTab = openImportTab;
             InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime || DesignMode)
+                return;
+
             if (_project != null)
             {
                 _numImportW.Value = _project.DefaultWidth;
@@ -30,7 +41,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (_cmbDirective.Items.Count > 0) _cmbDirective.SelectedIndex = 0;
             if (_cmbMaskMode.Items.Count > 0) _cmbMaskMode.SelectedIndex = 0;
 
-            if (openImportTab)
+            if (_openImportTab)
             {
                 _tabCont.SelectedTab = _tabImport;
             }

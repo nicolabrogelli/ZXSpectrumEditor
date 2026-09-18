@@ -10,6 +10,7 @@ namespace ZXSpectrumSpriteGenerator.Models
     {
         public const int TileSize = 8;
 
+
         public Tile(string name = "Tile") : base(TileSize, TileSize, name)
         {
             GroupName = "Tileset";
@@ -31,7 +32,8 @@ namespace ZXSpectrumSpriteGenerator.Models
                 GroupName = GroupName,
                 InkColor = InkColor,
                 PaperColor = PaperColor,
-                Bright = Bright
+                Bright = Bright,
+                Flash = Flash
             };
 
             for (int y = 0; y < TileSize; y++)
