@@ -298,11 +298,11 @@ namespace ZXSpectrumSpriteGenerator.Services
                 {
                     byte[] chunk = new byte[8];
                     allRawBytes.CopyTo(i * 9 +1, chunk, 0, 8);
-                    byte attr = allRawBytes[i * 9 + 8];
-                    int ink = attr & 0x07;
-                    int paper = (attr >> 3) & 0x07;
-                    bool bright = (attr & 0x40) != 0;
-                    bool flash = (attr & 0x80) != 0;
+                    byte attr = allRawBytes[i*9]; // allRawBytes[i * 9 + 8];
+                    int ink = attr & 0x07;                 // Bit 2,1,0
+                    int paper = (attr >> 3) & 0x07;        // Bit 5,4,3
+                    bool bright = (attr & 0x40) != 0;      // Bit 6
+                    bool flash = (attr & 0x80) != 0;       // Bit 7
 
                     var t = new Tile($"{defaultPrefix}{i + 1}", chunk)
                     {
