@@ -41,8 +41,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnBackToSprites = new System.Windows.Forms.ToolStripButton();
             this._sepMgmt1 = new System.Windows.Forms.ToolStripSeparator();
             this._lblM = new System.Windows.Forms.ToolStripLabel();
-            this._cmbMaps = new System.Windows.Forms.ComboBox();
-            this._hostCombo = new System.Windows.Forms.ToolStripControlHost(this._cmbMaps);
+            this._cmbMaps = new System.Windows.Forms.ToolStripComboBox();
             this._btnNewMap = new System.Windows.Forms.ToolStripButton();
             this._btnCloneMap = new System.Windows.Forms.ToolStripButton();
             this._btnDeleteMap = new System.Windows.Forms.ToolStripButton();
@@ -61,9 +60,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblDimensions = new System.Windows.Forms.Label();
             this._lblSpecTitle = new System.Windows.Forms.Label();
             this._pnlTileset = new System.Windows.Forms.Panel();
-            this._lblPalTitle = new System.Windows.Forms.Label();
             this._btnAddTile = new System.Windows.Forms.Button();
             this._btnGoToTileEditor = new System.Windows.Forms.Button();
+            this._lblPalTitle = new System.Windows.Forms.Label();
             this._previewBox = new System.Windows.Forms.Panel();
             this._lblActiveTileName = new System.Windows.Forms.Label();
             this._picActiveTile = new System.Windows.Forms.PictureBox();
@@ -87,7 +86,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._topBar.Dock = System.Windows.Forms.DockStyle.Top;
             this._topBar.Location = new System.Drawing.Point(0, 0);
             this._topBar.Name = "_topBar";
-            this._topBar.Size = new System.Drawing.Size(950, 68);
+            this._topBar.Size = new System.Drawing.Size(982, 68);
             this._topBar.TabIndex = 0;
             // 
             // _tsTools
@@ -114,10 +113,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnZoomOut,
             this._lblZoom,
             this._btnZoomIn});
-            this._tsTools.Location = new System.Drawing.Point(0, 34);
+            this._tsTools.Location = new System.Drawing.Point(0, 43);
             this._tsTools.Name = "_tsTools";
             this._tsTools.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this._tsTools.Size = new System.Drawing.Size(950, 34);
+            this._tsTools.Size = new System.Drawing.Size(982, 25);
             this._tsTools.TabIndex = 1;
             // 
             // _lblTools
@@ -125,7 +124,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblTools.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._lblTools.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this._lblTools.Name = "_lblTools";
-            this._lblTools.Size = new System.Drawing.Size(64, 31);
+            this._lblTools.Size = new System.Drawing.Size(70, 22);
             this._lblTools.Text = "Strumenti: ";
             // 
             // _btnToolPencil
@@ -134,7 +133,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnToolPencil.CheckState = System.Windows.Forms.CheckState.Checked;
             this._btnToolPencil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnToolPencil.Name = "_btnToolPencil";
-            this._btnToolPencil.Size = new System.Drawing.Size(56, 31);
+            this._btnToolPencil.Size = new System.Drawing.Size(60, 22);
             this._btnToolPencil.Text = "✏️ Matita";
             this._btnToolPencil.Click += new System.EventHandler(this.BtnToolPencil_Click);
             // 
@@ -142,7 +141,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnToolEraser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnToolEraser.Name = "_btnToolEraser";
-            this._btnToolEraser.Size = new System.Drawing.Size(63, 31);
+            this._btnToolEraser.Size = new System.Drawing.Size(69, 22);
             this._btnToolEraser.Text = "🧹 Gomma";
             this._btnToolEraser.Click += new System.EventHandler(this.BtnToolEraser_Click);
             // 
@@ -150,7 +149,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnToolFill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnToolFill.Name = "_btnToolFill";
-            this._btnToolFill.Size = new System.Drawing.Size(73, 31);
+            this._btnToolFill.Size = new System.Drawing.Size(79, 22);
             this._btnToolFill.Text = "🪣 Secchiello";
             this._btnToolFill.Click += new System.EventHandler(this.BtnToolFill_Click);
             // 
@@ -158,7 +157,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnToolRect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnToolRect.Name = "_btnToolRect";
-            this._btnToolRect.Size = new System.Drawing.Size(78, 31);
+            this._btnToolRect.Size = new System.Drawing.Size(82, 22);
             this._btnToolRect.Text = "⬜ Rettangolo";
             this._btnToolRect.Click += new System.EventHandler(this.BtnToolRect_Click);
             // 
@@ -166,7 +165,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnToolRectFill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnToolRectFill.Name = "_btnToolRectFill";
-            this._btnToolRectFill.Size = new System.Drawing.Size(79, 31);
+            this._btnToolRectFill.Size = new System.Drawing.Size(83, 22);
             this._btnToolRectFill.Text = "⬛ Rett. Pieno";
             this._btnToolRectFill.Click += new System.EventHandler(this.BtnToolRectFill_Click);
             // 
@@ -174,7 +173,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnToolPicker.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnToolPicker.Name = "_btnToolPicker";
-            this._btnToolPicker.Size = new System.Drawing.Size(59, 31);
+            this._btnToolPicker.Size = new System.Drawing.Size(63, 22);
             this._btnToolPicker.Text = "💧 Pipetta";
             this._btnToolPicker.Click += new System.EventHandler(this.BtnToolPicker_Click);
             // 
@@ -182,7 +181,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnClear.Name = "_btnClear";
-            this._btnClear.Size = new System.Drawing.Size(46, 31);
+            this._btnClear.Size = new System.Drawing.Size(45, 22);
             this._btnClear.Text = "Pulisci";
             this._btnClear.ToolTipText = "Cancella l\'intera mappa con tile vuoto";
             this._btnClear.Click += new System.EventHandler(this.BtnClear_Click);
@@ -190,13 +189,13 @@ namespace ZXSpectrumSpriteGenerator.UI
             // _sepTools1
             // 
             this._sepTools1.Name = "_sepTools1";
-            this._sepTools1.Size = new System.Drawing.Size(6, 34);
+            this._sepTools1.Size = new System.Drawing.Size(6, 25);
             // 
             // _btnUndo
             // 
             this._btnUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnUndo.Name = "_btnUndo";
-            this._btnUndo.Size = new System.Drawing.Size(61, 31);
+            this._btnUndo.Size = new System.Drawing.Size(65, 22);
             this._btnUndo.Text = "↶ Annulla";
             this._btnUndo.ToolTipText = "Annulla ultima modifica mappa";
             this._btnUndo.Click += new System.EventHandler(this.BtnUndo_Click);
@@ -205,7 +204,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnRedo.Name = "_btnRedo";
-            this._btnRedo.Size = new System.Drawing.Size(53, 31);
+            this._btnRedo.Size = new System.Drawing.Size(54, 22);
             this._btnRedo.Text = "↷ Ripeti";
             this._btnRedo.ToolTipText = "Ripeti modifica mappa";
             this._btnRedo.Click += new System.EventHandler(this.BtnRedo_Click);
@@ -213,7 +212,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // _sepTools2
             // 
             this._sepTools2.Name = "_sepTools2";
-            this._sepTools2.Size = new System.Drawing.Size(6, 34);
+            this._sepTools2.Size = new System.Drawing.Size(6, 25);
             // 
             // _btnGrid
             // 
@@ -221,20 +220,20 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnGrid.CheckState = System.Windows.Forms.CheckState.Checked;
             this._btnGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnGrid.Name = "_btnGrid";
-            this._btnGrid.Size = new System.Drawing.Size(67, 31);
+            this._btnGrid.Size = new System.Drawing.Size(66, 22);
             this._btnGrid.Text = "Griglia Tile";
             this._btnGrid.Click += new System.EventHandler(this.BtnGrid_Click);
             // 
             // _sepTools3
             // 
             this._sepTools3.Name = "_sepTools3";
-            this._sepTools3.Size = new System.Drawing.Size(6, 34);
+            this._sepTools3.Size = new System.Drawing.Size(6, 25);
             // 
             // _btnZoomOut
             // 
             this._btnZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnZoomOut.Name = "_btnZoomOut";
-            this._btnZoomOut.Size = new System.Drawing.Size(53, 31);
+            this._btnZoomOut.Size = new System.Drawing.Size(51, 22);
             this._btnZoomOut.Text = "Zoom -";
             this._btnZoomOut.Click += new System.EventHandler(this.BtnZoomOut_Click);
             // 
@@ -242,21 +241,20 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._lblZoom.ForeColor = System.Drawing.Color.LightGray;
             this._lblZoom.Name = "_lblZoom";
-            this._lblZoom.Size = new System.Drawing.Size(19, 31);
+            this._lblZoom.Size = new System.Drawing.Size(19, 22);
             this._lblZoom.Text = "2x";
             // 
             // _btnZoomIn
             // 
             this._btnZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnZoomIn.Name = "_btnZoomIn";
-            this._btnZoomIn.Size = new System.Drawing.Size(56, 31);
+            this._btnZoomIn.Size = new System.Drawing.Size(54, 22);
             this._btnZoomIn.Text = "Zoom +";
             this._btnZoomIn.Click += new System.EventHandler(this.BtnZoomIn_Click);
             // 
             // _tsMgmt
             // 
             this._tsMgmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(33)))));
-            this._tsMgmt.Dock = System.Windows.Forms.DockStyle.Top;
             this._tsMgmt.ForeColor = System.Drawing.Color.White;
             this._tsMgmt.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this._tsMgmt.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -264,7 +262,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnBackToSprites,
             this._sepMgmt1,
             this._lblM,
-            this._hostCombo,
+            this._cmbMaps,
             this._btnNewMap,
             this._btnCloneMap,
             this._btnDeleteMap,
@@ -276,7 +274,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tsMgmt.Location = new System.Drawing.Point(0, 0);
             this._tsMgmt.Name = "_tsMgmt";
             this._tsMgmt.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this._tsMgmt.Size = new System.Drawing.Size(950, 34);
+            this._tsMgmt.Size = new System.Drawing.Size(982, 25);
             this._tsMgmt.TabIndex = 0;
             // 
             // _btnGoToTiles
@@ -286,9 +284,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnGoToTiles.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnGoToTiles.ForeColor = System.Drawing.Color.White;
             this._btnGoToTiles.Name = "_btnGoToTiles";
-            this._btnGoToTiles.Size = new System.Drawing.Size(145, 31);
+            this._btnGoToTiles.Size = new System.Drawing.Size(112, 22);
             this._btnGoToTiles.Text = "🧱 Editor Tiles (F3)";
-            this._btnGoToTiles.ToolTipText = "Apri l'Editor dedicato dei Tile 8x8 (Tasto rapido: F3)";
+            this._btnGoToTiles.ToolTipText = "Apri l\'Editor dedicato dei Tile 8x8 (Tasto rapido: F3)";
             this._btnGoToTiles.Click += new System.EventHandler(this.BtnGoToTiles_Click);
             // 
             // _btnBackToSprites
@@ -298,37 +296,33 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnBackToSprites.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnBackToSprites.ForeColor = System.Drawing.Color.White;
             this._btnBackToSprites.Name = "_btnBackToSprites";
-            this._btnBackToSprites.Size = new System.Drawing.Size(120, 31);
+            this._btnBackToSprites.Size = new System.Drawing.Size(85, 22);
             this._btnBackToSprites.Text = "👾 Sprite (F2)";
-            this._btnBackToSprites.ToolTipText = "Torna all'Editor di Disegno Sprite e Nemici (Tasto rapido: F2)";
+            this._btnBackToSprites.ToolTipText = "Torna all\'Editor di Disegno Sprite e Nemici (Tasto rapido: F2)";
             this._btnBackToSprites.Click += new System.EventHandler(this.BtnBackToSprites_Click);
             // 
             // _sepMgmt1
             // 
             this._sepMgmt1.Name = "_sepMgmt1";
-            this._sepMgmt1.Size = new System.Drawing.Size(6, 34);
+            this._sepMgmt1.Size = new System.Drawing.Size(6, 25);
             // 
             // _lblM
             // 
             this._lblM.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this._lblM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
             this._lblM.Name = "_lblM";
-            this._lblM.Size = new System.Drawing.Size(65, 31);
+            this._lblM.Size = new System.Drawing.Size(66, 22);
             this._lblM.Text = "🗺️ Mappa: ";
             // 
             // _cmbMaps
             // 
             this._cmbMaps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(25)))));
             this._cmbMaps.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._cmbMaps.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._cmbMaps.ForeColor = System.Drawing.Color.White;
             this._cmbMaps.Name = "_cmbMaps";
-            this._cmbMaps.Size = new System.Drawing.Size(180, 23);
+            this._cmbMaps.Size = new System.Drawing.Size(180, 25);
             this._cmbMaps.SelectedIndexChanged += new System.EventHandler(this.CmbMaps_SelectedIndexChanged);
-            // 
-            // _hostCombo
-            // 
-            this._hostCombo.Name = "_hostCombo";
-            this._hostCombo.Size = new System.Drawing.Size(184, 31);
             // 
             // _btnNewMap
             // 
@@ -337,7 +331,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnNewMap.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnNewMap.ForeColor = System.Drawing.Color.White;
             this._btnNewMap.Name = "_btnNewMap";
-            this._btnNewMap.Size = new System.Drawing.Size(111, 31);
+            this._btnNewMap.Size = new System.Drawing.Size(112, 22);
             this._btnNewMap.Text = "➕ Nuova Mappa...";
             this._btnNewMap.Click += new System.EventHandler(this.BtnNewMap_Click);
             // 
@@ -345,7 +339,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnCloneMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnCloneMap.Name = "_btnCloneMap";
-            this._btnCloneMap.Size = new System.Drawing.Size(67, 31);
+            this._btnCloneMap.Size = new System.Drawing.Size(66, 22);
             this._btnCloneMap.Text = "📋 Duplica";
             this._btnCloneMap.ToolTipText = "Duplica la mappa corrente";
             this._btnCloneMap.Click += new System.EventHandler(this.BtnCloneMap_Click);
@@ -354,7 +348,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnDeleteMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnDeleteMap.Name = "_btnDeleteMap";
-            this._btnDeleteMap.Size = new System.Drawing.Size(64, 31);
+            this._btnDeleteMap.Size = new System.Drawing.Size(65, 22);
             this._btnDeleteMap.Text = "🗑️ Elimina";
             this._btnDeleteMap.ToolTipText = "Elimina la mappa corrente";
             this._btnDeleteMap.Click += new System.EventHandler(this.BtnDeleteMap_Click);
@@ -363,7 +357,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnRenameMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnRenameMap.Name = "_btnRenameMap";
-            this._btnRenameMap.Size = new System.Drawing.Size(76, 31);
+            this._btnRenameMap.Size = new System.Drawing.Size(77, 22);
             this._btnRenameMap.Text = "✏️ Rinomina";
             this._btnRenameMap.ToolTipText = "Rinomina la mappa corrente";
             this._btnRenameMap.Click += new System.EventHandler(this.BtnRenameMap_Click);
@@ -372,7 +366,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnResizeMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnResizeMap.Name = "_btnResizeMap";
-            this._btnResizeMap.Size = new System.Drawing.Size(92, 31);
+            this._btnResizeMap.Size = new System.Drawing.Size(95, 22);
             this._btnResizeMap.Text = "📐 Dimensioni...";
             this._btnResizeMap.ToolTipText = "Modifica dimensioni mappa in celle tile";
             this._btnResizeMap.Click += new System.EventHandler(this.BtnResizeMap_Click);
@@ -380,7 +374,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // _sepMgmt2
             // 
             this._sepMgmt2.Name = "_sepMgmt2";
-            this._sepMgmt2.Size = new System.Drawing.Size(6, 34);
+            this._sepMgmt2.Size = new System.Drawing.Size(6, 25);
             // 
             // _btnExport
             // 
@@ -389,7 +383,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnExport.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnExport.ForeColor = System.Drawing.Color.White;
             this._btnExport.Name = "_btnExport";
-            this._btnExport.Size = new System.Drawing.Size(147, 31);
+            this._btnExport.Size = new System.Drawing.Size(143, 19);
             this._btnExport.Text = "⚡ Esporta Dati Mappa...";
             this._btnExport.Click += new System.EventHandler(this.BtnExport_Click);
             // 
@@ -397,7 +391,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._btnPng.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._btnPng.Name = "_btnPng";
-            this._btnPng.Size = new System.Drawing.Size(79, 31);
+            this._btnPng.Size = new System.Drawing.Size(89, 19);
             this._btnPng.Text = "📷 Salva PNG...";
             this._btnPng.Click += new System.EventHandler(this.BtnPng_Click);
             // 
@@ -420,10 +414,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._rightPanel.Controls.Add(this._previewBox);
             this._rightPanel.Controls.Add(this._lblTileTitle);
             this._rightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this._rightPanel.Location = new System.Drawing.Point(660, 68);
+            this._rightPanel.Location = new System.Drawing.Point(692, 68);
             this._rightPanel.Name = "_rightPanel";
             this._rightPanel.Padding = new System.Windows.Forms.Padding(10);
-            this._rightPanel.Size = new System.Drawing.Size(290, 582);
+            this._rightPanel.Size = new System.Drawing.Size(290, 686);
             this._rightPanel.TabIndex = 1;
             // 
             // _btnCopyAsm
@@ -432,7 +426,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnCopyAsm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._btnCopyAsm.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._btnCopyAsm.ForeColor = System.Drawing.Color.White;
-            this._btnCopyAsm.Location = new System.Drawing.Point(10, 567);
+            this._btnCopyAsm.Location = new System.Drawing.Point(10, 645);
             this._btnCopyAsm.Name = "_btnCopyAsm";
             this._btnCopyAsm.Size = new System.Drawing.Size(260, 28);
             this._btnCopyAsm.TabIndex = 11;
@@ -445,7 +439,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._txtQuickMapAsm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(20)))));
             this._txtQuickMapAsm.Font = new System.Drawing.Font("Consolas", 8.2F);
             this._txtQuickMapAsm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(255)))), ((int)(((byte)(180)))));
-            this._txtQuickMapAsm.Location = new System.Drawing.Point(10, 439);
+            this._txtQuickMapAsm.Location = new System.Drawing.Point(10, 517);
             this._txtQuickMapAsm.Multiline = true;
             this._txtQuickMapAsm.Name = "_txtQuickMapAsm";
             this._txtQuickMapAsm.ReadOnly = true;
@@ -458,9 +452,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblAsmTitle.AutoSize = true;
             this._lblAsmTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._lblAsmTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
-            this._lblAsmTitle.Location = new System.Drawing.Point(10, 417);
+            this._lblAsmTitle.Location = new System.Drawing.Point(10, 495);
             this._lblAsmTitle.Name = "_lblAsmTitle";
-            this._lblAsmTitle.Size = new System.Drawing.Size(166, 15);
+            this._lblAsmTitle.Size = new System.Drawing.Size(179, 15);
             this._lblAsmTitle.TabIndex = 9;
             this._lblAsmTitle.Text = "DATI ASSEMBLY DEFB (MAPPA)";
             // 
@@ -468,9 +462,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._lblHoverCoords.AutoSize = true;
             this._lblHoverCoords.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
-            this._lblHoverCoords.Location = new System.Drawing.Point(10, 391);
+            this._lblHoverCoords.Location = new System.Drawing.Point(10, 469);
             this._lblHoverCoords.Name = "_lblHoverCoords";
-            this._lblHoverCoords.Size = new System.Drawing.Size(149, 15);
+            this._lblHoverCoords.Size = new System.Drawing.Size(131, 15);
             this._lblHoverCoords.TabIndex = 8;
             this._lblHoverCoords.Text = "Cella: (0, 0) | Pixel: (0, 0)";
             // 
@@ -478,7 +472,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._lblMemory.AutoSize = true;
             this._lblMemory.ForeColor = System.Drawing.Color.LightGray;
-            this._lblMemory.Location = new System.Drawing.Point(10, 372);
+            this._lblMemory.Location = new System.Drawing.Point(10, 450);
             this._lblMemory.Name = "_lblMemory";
             this._lblMemory.Size = new System.Drawing.Size(127, 15);
             this._lblMemory.TabIndex = 7;
@@ -488,9 +482,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._lblPixels.AutoSize = true;
             this._lblPixels.ForeColor = System.Drawing.Color.LightGray;
-            this._lblPixels.Location = new System.Drawing.Point(10, 353);
+            this._lblPixels.Location = new System.Drawing.Point(10, 431);
             this._lblPixels.Name = "_lblPixels";
-            this._lblPixels.Size = new System.Drawing.Size(169, 15);
+            this._lblPixels.Size = new System.Drawing.Size(171, 15);
             this._lblPixels.TabIndex = 6;
             this._lblPixels.Text = "Pixel: 256x192 px (Schermo ZX)";
             // 
@@ -498,9 +492,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             this._lblDimensions.AutoSize = true;
             this._lblDimensions.ForeColor = System.Drawing.Color.LightGray;
-            this._lblDimensions.Location = new System.Drawing.Point(10, 334);
+            this._lblDimensions.Location = new System.Drawing.Point(10, 412);
             this._lblDimensions.Name = "_lblDimensions";
-            this._lblDimensions.Size = new System.Drawing.Size(127, 15);
+            this._lblDimensions.Size = new System.Drawing.Size(159, 15);
             this._lblDimensions.TabIndex = 5;
             this._lblDimensions.Text = "Dimensioni: 32x24 celle (8x8)";
             // 
@@ -509,9 +503,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblSpecTitle.AutoSize = true;
             this._lblSpecTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this._lblSpecTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
-            this._lblSpecTitle.Location = new System.Drawing.Point(10, 312);
+            this._lblSpecTitle.Location = new System.Drawing.Point(10, 390);
             this._lblSpecTitle.Name = "_lblSpecTitle";
-            this._lblSpecTitle.Size = new System.Drawing.Size(117, 15);
+            this._lblSpecTitle.Size = new System.Drawing.Size(113, 15);
             this._lblSpecTitle.TabIndex = 4;
             this._lblSpecTitle.Text = "SPECIFICHE MAPPA";
             // 
@@ -522,8 +516,11 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._pnlTileset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._pnlTileset.Location = new System.Drawing.Point(10, 154);
             this._pnlTileset.Name = "_pnlTileset";
-            this._pnlTileset.Size = new System.Drawing.Size(260, 148);
+            this._pnlTileset.Size = new System.Drawing.Size(260, 223);
             this._pnlTileset.TabIndex = 3;
+            this._pnlTileset.HorizontalScroll.Enabled = false;
+            this._pnlTileset.HorizontalScroll.Visible = false;
+            this._pnlTileset.HorizontalScroll.Maximum = 0;
             // 
             // _btnAddTile
             // 
@@ -560,7 +557,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPalTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
             this._lblPalTitle.Location = new System.Drawing.Point(10, 100);
             this._lblPalTitle.Name = "_lblPalTitle";
-            this._lblPalTitle.Size = new System.Drawing.Size(150, 15);
+            this._lblPalTitle.Size = new System.Drawing.Size(131, 15);
             this._lblPalTitle.TabIndex = 2;
             this._lblPalTitle.Text = "PALETTE TILESET (8x8)";
             // 
@@ -602,7 +599,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblTileTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
             this._lblTileTitle.Location = new System.Drawing.Point(10, 8);
             this._lblTileTitle.Name = "_lblTileTitle";
-            this._lblTileTitle.Size = new System.Drawing.Size(76, 15);
+            this._lblTileTitle.Size = new System.Drawing.Size(75, 15);
             this._lblTileTitle.TabIndex = 0;
             this._lblTileTitle.Text = "TILE ATTIVO";
             // 
@@ -614,14 +611,16 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._centerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this._centerPanel.Location = new System.Drawing.Point(0, 68);
             this._centerPanel.Name = "_centerPanel";
-            this._centerPanel.Size = new System.Drawing.Size(660, 582);
+            this._centerPanel.Size = new System.Drawing.Size(692, 686);
             this._centerPanel.TabIndex = 2;
             this._centerPanel.Resize += new System.EventHandler(this.CenterPanel_Resize);
             // 
             // _canvas
             // 
+            this._canvas.ActiveTileId = 1;
             this._canvas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(18)))));
             this._canvas.CurrentTool = ZXSpectrumSpriteGenerator.UI.Controls.MapDrawingTool.Pencil;
+            this._canvas.Cursor = System.Windows.Forms.Cursors.Cross;
             this._canvas.Location = new System.Drawing.Point(10, 10);
             this._canvas.Name = "_canvas";
             this._canvas.ScaleFactor = 2;
@@ -629,8 +628,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._canvas.Size = new System.Drawing.Size(512, 384);
             this._canvas.TabIndex = 0;
             this._canvas.Text = "mapCanvas";
-            this._canvas.HoverCoordinatesChanged += new System.EventHandler<ZXSpectrumSpriteGenerator.UI.Controls.MapHoverEventArgs>(this.Canvas_HoverCoordinatesChanged);
             this._canvas.MapChanged += new System.EventHandler(this.Canvas_MapChanged);
+            this._canvas.HoverCoordinatesChanged += new System.EventHandler<ZXSpectrumSpriteGenerator.UI.Controls.MapHoverEventArgs>(this.Canvas_HoverCoordinatesChanged);
             this._canvas.TilePicked += new System.EventHandler<int>(this.Canvas_TilePicked);
             // 
             // MapEditorView
@@ -644,7 +643,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ForeColor = System.Drawing.Color.White;
             this.Name = "MapEditorView";
-            this.Size = new System.Drawing.Size(950, 650);
+            this.Size = new System.Drawing.Size(982, 754);
             this._topBar.ResumeLayout(false);
             this._topBar.PerformLayout();
             this._tsTools.ResumeLayout(false);
@@ -668,8 +667,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private System.Windows.Forms.ToolStripButton _btnBackToSprites;
         private System.Windows.Forms.ToolStripSeparator _sepMgmt1;
         private System.Windows.Forms.ToolStripLabel _lblM;
-        private System.Windows.Forms.ComboBox _cmbMaps;
-        private System.Windows.Forms.ToolStripControlHost _hostCombo;
+        private System.Windows.Forms.ToolStripComboBox _cmbMaps;
         private System.Windows.Forms.ToolStripButton _btnNewMap;
         private System.Windows.Forms.ToolStripButton _btnCloneMap;
         private System.Windows.Forms.ToolStripButton _btnDeleteMap;

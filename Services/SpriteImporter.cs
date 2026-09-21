@@ -435,15 +435,15 @@ namespace ZXSpectrumSpriteGenerator.Services
                     bool bright = currentBright;
                     bool flash = currentFlash;
 
-                    // Se ci sono esattamente 9 byte accumulati per questa riga/definizione (es. 8 byte bitmap + 1 attributo)
+                    // Se ci sono esattamente 9 byte accumulati per questa riga/definizione (es. 1 attributo colore + 8 byte bitmap)
                     if (currentTileBytes.Count == 9 && !hasPerTileColor)
                     {
-                        byte attr = currentTileBytes[8];
+                        byte attr = currentTileBytes[0];
                         ink = attr & 0x07;
                         paper = (attr >> 3) & 0x07;
                         bright = (attr & 0x40) != 0;
                         flash = (attr & 0x80) != 0;
-                        currentTileBytes.RemoveAt(8);
+                        currentTileBytes.RemoveAt(0);
                     }
 
                     byte[] tileData = new byte[8];

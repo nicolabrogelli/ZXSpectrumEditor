@@ -19,6 +19,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             this._tabControl = new System.Windows.Forms.TabControl();
             this._tabPresets = new System.Windows.Forms.TabPage();
+            this._chkPresetFlash = new System.Windows.Forms.CheckBox();
             this._btnAddAllPresets = new System.Windows.Forms.Button();
             this._btnPresetCancel = new System.Windows.Forms.Button();
             this._btnAddPreset = new System.Windows.Forms.Button();
@@ -35,6 +36,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPresets = new System.Windows.Forms.ComboBox();
             this._lblPresetChoose = new System.Windows.Forms.Label();
             this._tabEmpty = new System.Windows.Forms.TabPage();
+            this._chkEmptyFlash = new System.Windows.Forms.CheckBox();
             this._btnEmptyCancel = new System.Windows.Forms.Button();
             this._btnAddEmpty = new System.Windows.Forms.Button();
             this._chkEmptyBright = new System.Windows.Forms.CheckBox();
@@ -47,6 +49,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._txtEmptyPrefix = new System.Windows.Forms.TextBox();
             this._lblEmptyPrefixTitle = new System.Windows.Forms.Label();
             this._tabPaste = new System.Windows.Forms.TabPage();
+            this._chkPasteFlash = new System.Windows.Forms.CheckBox();
             this._btnPasteCancel = new System.Windows.Forms.Button();
             this._btnAddPasted = new System.Windows.Forms.Button();
             this._lblPasteStats = new System.Windows.Forms.Label();
@@ -60,9 +63,6 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._txtPasteCode = new System.Windows.Forms.TextBox();
             this._btnPasteFromClipboard = new System.Windows.Forms.Button();
             this._lblPasteInfo = new System.Windows.Forms.Label();
-            this._chkPresetFlash = new System.Windows.Forms.CheckBox();
-            this._chkPasteFlash = new System.Windows.Forms.CheckBox();
-            this._chkEmptyFlash = new System.Windows.Forms.CheckBox();
             this._tabControl.SuspendLayout();
             this._tabPresets.SuspendLayout();
             this._tabEmpty.SuspendLayout();
@@ -101,12 +101,23 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabPresets.Controls.Add(this._lblPresetDesc);
             this._tabPresets.Controls.Add(this._cmbPresets);
             this._tabPresets.Controls.Add(this._lblPresetChoose);
-            this._tabPresets.Location = new System.Drawing.Point(4, 34);
+            this._tabPresets.Location = new System.Drawing.Point(4, 24);
             this._tabPresets.Name = "_tabPresets";
             this._tabPresets.Padding = new System.Windows.Forms.Padding(12);
-            this._tabPresets.Size = new System.Drawing.Size(607, 453);
+            this._tabPresets.Size = new System.Drawing.Size(607, 463);
             this._tabPresets.TabIndex = 0;
             this._tabPresets.Text = "📚 Libreria Preset Tiles (8x8)";
+            // 
+            // _chkPresetFlash
+            // 
+            this._chkPresetFlash.AutoSize = true;
+            this._chkPresetFlash.ForeColor = System.Drawing.Color.White;
+            this._chkPresetFlash.Location = new System.Drawing.Point(340, 325);
+            this._chkPresetFlash.Name = "_chkPresetFlash";
+            this._chkPresetFlash.Size = new System.Drawing.Size(124, 19);
+            this._chkPresetFlash.TabIndex = 15;
+            this._chkPresetFlash.Text = "Flash (Lampeggio)";
+            this._chkPresetFlash.UseVisualStyleBackColor = true;
             // 
             // _btnAddAllPresets
             // 
@@ -156,7 +167,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._chkPresetBright.ForeColor = System.Drawing.Color.White;
             this._chkPresetBright.Location = new System.Drawing.Point(340, 290);
             this._chkPresetBright.Name = "_chkPresetBright";
-            this._chkPresetBright.Size = new System.Drawing.Size(162, 29);
+            this._chkPresetBright.Size = new System.Drawing.Size(112, 19);
             this._chkPresetBright.TabIndex = 11;
             this._chkPresetBright.Text = "Bright (Brillante)";
             this._chkPresetBright.UseVisualStyleBackColor = true;
@@ -169,7 +180,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPresetPaper.ForeColor = System.Drawing.Color.White;
             this._cmbPresetPaper.Location = new System.Drawing.Point(180, 288);
             this._cmbPresetPaper.Name = "_cmbPresetPaper";
-            this._cmbPresetPaper.Size = new System.Drawing.Size(140, 33);
+            this._cmbPresetPaper.Size = new System.Drawing.Size(140, 23);
             this._cmbPresetPaper.TabIndex = 10;
             this._cmbPresetPaper.SelectedIndexChanged += new System.EventHandler(this.PresetColorChanged);
             // 
@@ -179,7 +190,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetPaper.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetPaper.Location = new System.Drawing.Point(180, 270);
             this._lblPresetPaper.Name = "_lblPresetPaper";
-            this._lblPresetPaper.Size = new System.Drawing.Size(117, 25);
+            this._lblPresetPaper.Size = new System.Drawing.Size(78, 15);
             this._lblPresetPaper.TabIndex = 9;
             this._lblPresetPaper.Text = "Colore Paper:";
             // 
@@ -190,7 +201,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPresetInk.ForeColor = System.Drawing.Color.White;
             this._cmbPresetInk.Location = new System.Drawing.Point(16, 288);
             this._cmbPresetInk.Name = "_cmbPresetInk";
-            this._cmbPresetInk.Size = new System.Drawing.Size(140, 33);
+            this._cmbPresetInk.Size = new System.Drawing.Size(140, 23);
             this._cmbPresetInk.TabIndex = 8;
             this._cmbPresetInk.SelectedIndexChanged += new System.EventHandler(this.PresetColorChanged);
             // 
@@ -200,7 +211,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetInk.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetInk.Location = new System.Drawing.Point(16, 270);
             this._lblPresetInk.Name = "_lblPresetInk";
-            this._lblPresetInk.Size = new System.Drawing.Size(97, 25);
+            this._lblPresetInk.Size = new System.Drawing.Size(64, 15);
             this._lblPresetInk.TabIndex = 7;
             this._lblPresetInk.Text = "Colore Ink:";
             // 
@@ -220,7 +231,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetPreviewTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
             this._lblPresetPreviewTitle.Location = new System.Drawing.Point(16, 135);
             this._lblPresetPreviewTitle.Name = "_lblPresetPreviewTitle";
-            this._lblPresetPreviewTitle.Size = new System.Drawing.Size(307, 25);
+            this._lblPresetPreviewTitle.Size = new System.Drawing.Size(206, 15);
             this._lblPresetPreviewTitle.TabIndex = 5;
             this._lblPresetPreviewTitle.Text = "Anteprima Grafica (1x, 4x, 8x e Muro):";
             // 
@@ -230,7 +241,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._txtPresetName.ForeColor = System.Drawing.Color.White;
             this._txtPresetName.Location = new System.Drawing.Point(340, 32);
             this._txtPresetName.Name = "_txtPresetName";
-            this._txtPresetName.Size = new System.Drawing.Size(195, 31);
+            this._txtPresetName.Size = new System.Drawing.Size(195, 23);
             this._txtPresetName.TabIndex = 4;
             // 
             // _lblPresetNameTitle
@@ -239,7 +250,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetNameTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetNameTitle.Location = new System.Drawing.Point(340, 12);
             this._lblPresetNameTitle.Name = "_lblPresetNameTitle";
-            this._lblPresetNameTitle.Size = new System.Drawing.Size(96, 25);
+            this._lblPresetNameTitle.Size = new System.Drawing.Size(64, 15);
             this._lblPresetNameTitle.TabIndex = 3;
             this._lblPresetNameTitle.Text = "Nome Tile:";
             // 
@@ -259,7 +270,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPresets.ForeColor = System.Drawing.Color.White;
             this._cmbPresets.Location = new System.Drawing.Point(16, 32);
             this._cmbPresets.Name = "_cmbPresets";
-            this._cmbPresets.Size = new System.Drawing.Size(305, 33);
+            this._cmbPresets.Size = new System.Drawing.Size(305, 23);
             this._cmbPresets.TabIndex = 1;
             this._cmbPresets.SelectedIndexChanged += new System.EventHandler(this.CmbPresets_SelectedIndexChanged);
             // 
@@ -269,7 +280,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPresetChoose.ForeColor = System.Drawing.Color.LightGray;
             this._lblPresetChoose.Location = new System.Drawing.Point(16, 12);
             this._lblPresetChoose.Name = "_lblPresetChoose";
-            this._lblPresetChoose.Size = new System.Drawing.Size(143, 25);
+            this._lblPresetChoose.Size = new System.Drawing.Size(94, 15);
             this._lblPresetChoose.TabIndex = 0;
             this._lblPresetChoose.Text = "Seleziona Preset:";
             // 
@@ -288,12 +299,23 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabEmpty.Controls.Add(this._lblEmptyCountTitle);
             this._tabEmpty.Controls.Add(this._txtEmptyPrefix);
             this._tabEmpty.Controls.Add(this._lblEmptyPrefixTitle);
-            this._tabEmpty.Location = new System.Drawing.Point(4, 34);
+            this._tabEmpty.Location = new System.Drawing.Point(4, 24);
             this._tabEmpty.Name = "_tabEmpty";
             this._tabEmpty.Padding = new System.Windows.Forms.Padding(12);
-            this._tabEmpty.Size = new System.Drawing.Size(607, 453);
+            this._tabEmpty.Size = new System.Drawing.Size(607, 463);
             this._tabEmpty.TabIndex = 1;
             this._tabEmpty.Text = "⬜ Nuovo Set Tile Vuoti";
+            // 
+            // _chkEmptyFlash
+            // 
+            this._chkEmptyFlash.AutoSize = true;
+            this._chkEmptyFlash.ForeColor = System.Drawing.Color.White;
+            this._chkEmptyFlash.Location = new System.Drawing.Point(25, 275);
+            this._chkEmptyFlash.Name = "_chkEmptyFlash";
+            this._chkEmptyFlash.Size = new System.Drawing.Size(124, 19);
+            this._chkEmptyFlash.TabIndex = 11;
+            this._chkEmptyFlash.Text = "Flash (Lampeggio)";
+            this._chkEmptyFlash.UseVisualStyleBackColor = true;
             // 
             // _btnEmptyCancel
             // 
@@ -330,7 +352,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._chkEmptyBright.ForeColor = System.Drawing.Color.White;
             this._chkEmptyBright.Location = new System.Drawing.Point(25, 240);
             this._chkEmptyBright.Name = "_chkEmptyBright";
-            this._chkEmptyBright.Size = new System.Drawing.Size(274, 29);
+            this._chkEmptyBright.Size = new System.Drawing.Size(187, 19);
             this._chkEmptyBright.TabIndex = 8;
             this._chkEmptyBright.Text = "Bright (Alta Luminosità Colori)";
             this._chkEmptyBright.UseVisualStyleBackColor = true;
@@ -342,7 +364,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbEmptyPaper.ForeColor = System.Drawing.Color.White;
             this._cmbEmptyPaper.Location = new System.Drawing.Point(250, 185);
             this._cmbEmptyPaper.Name = "_cmbEmptyPaper";
-            this._cmbEmptyPaper.Size = new System.Drawing.Size(190, 33);
+            this._cmbEmptyPaper.Size = new System.Drawing.Size(190, 23);
             this._cmbEmptyPaper.TabIndex = 7;
             // 
             // _lblEmptyPaperTitle
@@ -351,7 +373,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyPaperTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyPaperTitle.Location = new System.Drawing.Point(250, 165);
             this._lblEmptyPaperTitle.Name = "_lblEmptyPaperTitle";
-            this._lblEmptyPaperTitle.Size = new System.Drawing.Size(117, 25);
+            this._lblEmptyPaperTitle.Size = new System.Drawing.Size(78, 15);
             this._lblEmptyPaperTitle.TabIndex = 6;
             this._lblEmptyPaperTitle.Text = "Colore Paper:";
             // 
@@ -362,7 +384,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbEmptyInk.ForeColor = System.Drawing.Color.White;
             this._cmbEmptyInk.Location = new System.Drawing.Point(25, 185);
             this._cmbEmptyInk.Name = "_cmbEmptyInk";
-            this._cmbEmptyInk.Size = new System.Drawing.Size(190, 33);
+            this._cmbEmptyInk.Size = new System.Drawing.Size(190, 23);
             this._cmbEmptyInk.TabIndex = 5;
             // 
             // _lblEmptyInkTitle
@@ -371,7 +393,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyInkTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyInkTitle.Location = new System.Drawing.Point(25, 165);
             this._lblEmptyInkTitle.Name = "_lblEmptyInkTitle";
-            this._lblEmptyInkTitle.Size = new System.Drawing.Size(97, 25);
+            this._lblEmptyInkTitle.Size = new System.Drawing.Size(64, 15);
             this._lblEmptyInkTitle.TabIndex = 4;
             this._lblEmptyInkTitle.Text = "Colore Ink:";
             // 
@@ -391,7 +413,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             0,
             0});
             this._numTileCount.Name = "_numTileCount";
-            this._numTileCount.Size = new System.Drawing.Size(120, 31);
+            this._numTileCount.Size = new System.Drawing.Size(120, 23);
             this._numTileCount.TabIndex = 3;
             this._numTileCount.Value = new decimal(new int[] {
             4,
@@ -405,7 +427,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyCountTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyCountTitle.Location = new System.Drawing.Point(25, 90);
             this._lblEmptyCountTitle.Name = "_lblEmptyCountTitle";
-            this._lblEmptyCountTitle.Size = new System.Drawing.Size(199, 25);
+            this._lblEmptyCountTitle.Size = new System.Drawing.Size(133, 15);
             this._lblEmptyCountTitle.TabIndex = 2;
             this._lblEmptyCountTitle.Text = "Numero di Tile (8x8 px):";
             // 
@@ -415,7 +437,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._txtEmptyPrefix.ForeColor = System.Drawing.Color.White;
             this._txtEmptyPrefix.Location = new System.Drawing.Point(25, 45);
             this._txtEmptyPrefix.Name = "_txtEmptyPrefix";
-            this._txtEmptyPrefix.Size = new System.Drawing.Size(260, 31);
+            this._txtEmptyPrefix.Size = new System.Drawing.Size(260, 23);
             this._txtEmptyPrefix.TabIndex = 1;
             this._txtEmptyPrefix.Text = "Tile_";
             // 
@@ -425,7 +447,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblEmptyPrefixTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblEmptyPrefixTitle.Location = new System.Drawing.Point(25, 25);
             this._lblEmptyPrefixTitle.Name = "_lblEmptyPrefixTitle";
-            this._lblEmptyPrefixTitle.Size = new System.Drawing.Size(109, 25);
+            this._lblEmptyPrefixTitle.Size = new System.Drawing.Size(72, 15);
             this._lblEmptyPrefixTitle.TabIndex = 0;
             this._lblEmptyPrefixTitle.Text = "Prefisso Tile:";
             // 
@@ -446,12 +468,24 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._tabPaste.Controls.Add(this._txtPasteCode);
             this._tabPaste.Controls.Add(this._btnPasteFromClipboard);
             this._tabPaste.Controls.Add(this._lblPasteInfo);
-            this._tabPaste.Location = new System.Drawing.Point(4, 34);
+            this._tabPaste.Location = new System.Drawing.Point(4, 24);
             this._tabPaste.Name = "_tabPaste";
             this._tabPaste.Padding = new System.Windows.Forms.Padding(12);
-            this._tabPaste.Size = new System.Drawing.Size(607, 453);
+            this._tabPaste.Size = new System.Drawing.Size(607, 463);
             this._tabPaste.TabIndex = 2;
             this._tabPaste.Text = "📋 Incolla Assembly (db/defb)";
+            // 
+            // _chkPasteFlash
+            // 
+            this._chkPasteFlash.AutoSize = true;
+            this._chkPasteFlash.ForeColor = System.Drawing.Color.White;
+            this._chkPasteFlash.Location = new System.Drawing.Point(340, 345);
+            this._chkPasteFlash.Name = "_chkPasteFlash";
+            this._chkPasteFlash.Size = new System.Drawing.Size(124, 19);
+            this._chkPasteFlash.TabIndex = 13;
+            this._chkPasteFlash.Text = "Flash (Lampeggio)";
+            this._chkPasteFlash.UseVisualStyleBackColor = true;
+            this._chkPasteFlash.Visible = false;
             // 
             // _btnPasteCancel
             // 
@@ -486,7 +520,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPasteStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
             this._lblPasteStats.Location = new System.Drawing.Point(16, 310);
             this._lblPasteStats.Name = "_lblPasteStats";
-            this._lblPasteStats.Size = new System.Drawing.Size(251, 25);
+            this._lblPasteStats.Size = new System.Drawing.Size(167, 15);
             this._lblPasteStats.TabIndex = 5;
             this._lblPasteStats.Text = "Dati riconosciuti: 0 byte (0 tile)";
             // 
@@ -496,7 +530,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPasteInk.ForeColor = System.Drawing.Color.LightGray;
             this._lblPasteInk.Location = new System.Drawing.Point(16, 255);
             this._lblPasteInk.Name = "_lblPasteInk";
-            this._lblPasteInk.Size = new System.Drawing.Size(97, 25);
+            this._lblPasteInk.Size = new System.Drawing.Size(64, 15);
             this._lblPasteInk.TabIndex = 8;
             this._lblPasteInk.Text = "Colore Ink:";
             // 
@@ -507,7 +541,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPasteInk.ForeColor = System.Drawing.Color.White;
             this._cmbPasteInk.Location = new System.Drawing.Point(16, 275);
             this._cmbPasteInk.Name = "_cmbPasteInk";
-            this._cmbPasteInk.Size = new System.Drawing.Size(140, 33);
+            this._cmbPasteInk.Size = new System.Drawing.Size(140, 23);
             this._cmbPasteInk.TabIndex = 9;
             // 
             // _lblPastePaper
@@ -516,7 +550,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPastePaper.ForeColor = System.Drawing.Color.LightGray;
             this._lblPastePaper.Location = new System.Drawing.Point(170, 255);
             this._lblPastePaper.Name = "_lblPastePaper";
-            this._lblPastePaper.Size = new System.Drawing.Size(117, 25);
+            this._lblPastePaper.Size = new System.Drawing.Size(78, 15);
             this._lblPastePaper.TabIndex = 10;
             this._lblPastePaper.Text = "Colore Paper:";
             // 
@@ -527,7 +561,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._cmbPastePaper.ForeColor = System.Drawing.Color.White;
             this._cmbPastePaper.Location = new System.Drawing.Point(170, 275);
             this._cmbPastePaper.Name = "_cmbPastePaper";
-            this._cmbPastePaper.Size = new System.Drawing.Size(140, 33);
+            this._cmbPastePaper.Size = new System.Drawing.Size(140, 23);
             this._cmbPastePaper.TabIndex = 11;
             // 
             // _chkPasteBright
@@ -538,10 +572,11 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._chkPasteBright.ForeColor = System.Drawing.Color.White;
             this._chkPasteBright.Location = new System.Drawing.Point(340, 310);
             this._chkPasteBright.Name = "_chkPasteBright";
-            this._chkPasteBright.Size = new System.Drawing.Size(162, 29);
+            this._chkPasteBright.Size = new System.Drawing.Size(112, 19);
             this._chkPasteBright.TabIndex = 12;
             this._chkPasteBright.Text = "Bright (Brillante)";
             this._chkPasteBright.UseVisualStyleBackColor = true;
+            this._chkPasteBright.Visible = false;
             // 
             // _txtPastePrefix
             // 
@@ -549,7 +584,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._txtPastePrefix.ForeColor = System.Drawing.Color.White;
             this._txtPastePrefix.Location = new System.Drawing.Point(340, 275);
             this._txtPastePrefix.Name = "_txtPastePrefix";
-            this._txtPastePrefix.Size = new System.Drawing.Size(195, 31);
+            this._txtPastePrefix.Size = new System.Drawing.Size(195, 23);
             this._txtPastePrefix.TabIndex = 4;
             this._txtPastePrefix.Text = "Tile_Imp_";
             // 
@@ -559,7 +594,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPastePrefixTitle.ForeColor = System.Drawing.Color.LightGray;
             this._lblPastePrefixTitle.Location = new System.Drawing.Point(340, 255);
             this._lblPastePrefixTitle.Name = "_lblPastePrefixTitle";
-            this._lblPastePrefixTitle.Size = new System.Drawing.Size(109, 25);
+            this._lblPastePrefixTitle.Size = new System.Drawing.Size(72, 15);
             this._lblPastePrefixTitle.TabIndex = 3;
             this._lblPastePrefixTitle.Text = "Prefisso Tile:";
             // 
@@ -595,47 +630,14 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblPasteInfo.ForeColor = System.Drawing.Color.LightGray;
             this._lblPasteInfo.Location = new System.Drawing.Point(16, 17);
             this._lblPasteInfo.Name = "_lblPasteInfo";
-            this._lblPasteInfo.Size = new System.Drawing.Size(438, 25);
+            this._lblPasteInfo.Size = new System.Drawing.Size(290, 15);
             this._lblPasteInfo.TabIndex = 0;
             this._lblPasteInfo.Text = "Incolla dati Assembly Z80 (8 byte per ciascun tile 8x8):";
-            // 
-            // _chkPresetFlash
-            // 
-            this._chkPresetFlash.AutoSize = true;
-            this._chkPresetFlash.ForeColor = System.Drawing.Color.White;
-            this._chkPresetFlash.Location = new System.Drawing.Point(340, 325);
-            this._chkPresetFlash.Name = "_chkPresetFlash";
-            this._chkPresetFlash.Size = new System.Drawing.Size(183, 29);
-            this._chkPresetFlash.TabIndex = 15;
-            this._chkPresetFlash.Text = "Flash (Lampeggio)";
-            this._chkPresetFlash.UseVisualStyleBackColor = true;
-            // 
-            // _chkPasteFlash
-            // 
-            this._chkPasteFlash.AutoSize = true;
-            this._chkPasteFlash.ForeColor = System.Drawing.Color.White;
-            this._chkPasteFlash.Location = new System.Drawing.Point(340, 345);
-            this._chkPasteFlash.Name = "_chkPasteFlash";
-            this._chkPasteFlash.Size = new System.Drawing.Size(183, 29);
-            this._chkPasteFlash.TabIndex = 13;
-            this._chkPasteFlash.Text = "Flash (Lampeggio)";
-            this._chkPasteFlash.UseVisualStyleBackColor = true;
-            // 
-            // _chkEmptyFlash
-            // 
-            this._chkEmptyFlash.AutoSize = true;
-            this._chkEmptyFlash.ForeColor = System.Drawing.Color.White;
-            this._chkEmptyFlash.Location = new System.Drawing.Point(25, 275);
-            this._chkEmptyFlash.Name = "_chkEmptyFlash";
-            this._chkEmptyFlash.Size = new System.Drawing.Size(183, 29);
-            this._chkEmptyFlash.TabIndex = 11;
-            this._chkEmptyFlash.Text = "Flash (Lampeggio)";
-            this._chkEmptyFlash.UseVisualStyleBackColor = true;
             // 
             // AddTilesDialog
             // 
             this.AcceptButton = this._btnAddPreset;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(36)))));
             this.CancelButton = this._btnPresetCancel;

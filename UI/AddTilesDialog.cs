@@ -325,8 +325,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             int selInk = _cmbPasteInk.SelectedIndex >= 0 ? _cmbPasteInk.SelectedIndex : 7;
             int selPaper = _cmbPastePaper.SelectedIndex >= 0 ? _cmbPastePaper.SelectedIndex : 0;
             bool selBright = _chkPasteBright.Checked;
+            bool selFlash = _chkPasteFlash.Checked;
 
-            var tiles = SpriteImporter.ImportTilesFromText(_txtPasteCode.Text, prefix, selInk, selPaper, selBright);
+            var tiles = SpriteImporter.ImportTilesFromText(_txtPasteCode.Text, prefix, selInk, selPaper, selBright, selFlash);
             if (tiles.Count == 0)
             {
                 MessageBox.Show("Nessun dato byte valido trovato nel testo incollato.\nAssicurati di includere dichiarazioni 'db', 'defb' o liste di byte separati da virgole.", "Nessun Dato", MessageBoxButtons.OK, MessageBoxIcon.Warning);

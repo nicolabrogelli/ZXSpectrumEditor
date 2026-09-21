@@ -556,7 +556,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._lblAsmTitle.Name = "_lblAsmTitle";
             this._lblAsmTitle.Size = new System.Drawing.Size(217, 23);
             this._lblAsmTitle.TabIndex = 7;
-            this._lblAsmTitle.Text = "DATI ASSEMBLY (8 BYTE):";
+            this._lblAsmTitle.Text = "DATI ASSEMBLY (9 BYTE):";
             // 
             // _pnlPatternPreview
             // 

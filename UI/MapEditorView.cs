@@ -189,14 +189,9 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (_project == null) return;
 
             int y = 4;
-            int cardW = _pnlTileset.ClientSize.Width - 10;
+            int cardW = _pnlTileset.ClientSize.Width - 30;
             int cardH = 40;
-
-            // Card Tile 0: Vuoto / Sfondo
-            Panel cardEmpty = CreateTileCard(0, "0: [Vuoto / Sfondo]", null, y, cardW, cardH);
-            _pnlTileset.Controls.Add(cardEmpty);
-            y += cardH + 4;
-
+            
             // Card per ogni tile 8x8 del progetto (NON sprite!)
             for (int i = 0; i < _project.Tiles.Count; i++)
             {

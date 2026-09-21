@@ -56,12 +56,13 @@ namespace ZXSpectrumSpriteGenerator.Services
                     string tName = SanitizeIdentifier(tile.Name);
                     sb.AppendLine($"; Tile {t + 1}: {tile.Name} (Ink: {tile.InkColor}, Paper: {tile.PaperColor}, Bright: {(tile.Bright ? "1" : "0")}, Flash: {(tile.Flash ? "1" : "0")})");
                     sb.AppendLine($"tile_{t + 1}_{tName}:");
+                    byte attr = tile.GetAttributeByte();
                     var hexData = tile.GetBytesRowByRow();
-                    sb.Append($"    {dirStr} ");
+                    sb.Append($"    {dirStr} {attr}, ");
                     for (int b = 0; b < hexData.Length; b++)
                     {
                         sb.Append(hexData[b]);
-                        if (b < hexData.Length - 1) sb.Append(",");
+                        if (b < hexData.Length - 1) sb.Append(", ");
                     }
                     sb.AppendLine();
                 }

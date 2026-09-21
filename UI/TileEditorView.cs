@@ -179,6 +179,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             _pnlPreviewBox.Invalidate();
             _pnlPatternPreview.Invalidate();
             _filmstrip.Invalidate();
+            UpdateTileInfo();
             ProjectModified?.Invoke(this, EventArgs.Empty);
         }
 
@@ -191,6 +192,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             _pnlPreviewBox.Invalidate();
             _pnlPatternPreview.Invalidate();
             _filmstrip.Invalidate();
+            UpdateTileInfo();
             ProjectModified?.Invoke(this, EventArgs.Empty);
         }
 
@@ -247,12 +249,13 @@ namespace ZXSpectrumSpriteGenerator.UI
 
             int idx = _project != null ? _project.SelectedTileIndex + 1 : 1;
             int total = _project != null ? _project.Tiles.Count : 1;
-            _lblInfo.Text = $"Tile #{idx} di {total}\r\nDimensione: 8x8 pixel\r\nMemoria video: 8 byte (1 char)\r\nColore: Ink={tile.InkColor}, Paper={tile.PaperColor}\r\nAttributi: Bright={(tile.Bright ? "ON" : "OFF")}, Flash={(tile.Flash ? "ON" : "OFF")}";
+            _lblInfo.Text = $"Tile #{idx} di {total}\r\nDimensione: 8x8 pixel\r\nMemoria: 9 byte (1 attr + 8 pixel)\r\nColore: Ink={tile.InkColor}, Paper={tile.PaperColor}\r\nAttributi: Bright={(tile.Bright ? "ON" : "OFF")}, Flash={(tile.Flash ? "ON" : "OFF")}";
 
-            // Genera codice assembly rapido
+            // Genera codice assembly rapido (9 byte: 1 attributo colore + 8 byte bitmap)
+            byte attr = tile.GetAttributeByte();
             byte[] bytes = tile.GetBytesRowByRow();
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{SanitizeAsmName(tile.Name)}:\r\n    defb ");
+            sb.Append($"{SanitizeAsmName(tile.Name)}:\r\n    defb {attr}, ");
             for (int i = 0; i < bytes.Length; i++)
             {
                 sb.Append(bytes[i]);
