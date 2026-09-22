@@ -25,25 +25,56 @@ namespace ZXSpectrumSpriteGenerator.UI
         public event EventHandler RequestSwitchToSprites;
         public event EventHandler<int> RequestSwitchToTiles;
 
+        public MapCompressionMode SelectedCompressionMode { get; set; } = MapCompressionMode.Packed2Bit;
+
         public MapEditorView()
         {
             InitializeComponent();
-            _cmbQuickAsmFormat.Items.AddRange(new object[] {
-                "Compresso 2-bit (4 tile/byte)",
-                "Standard 1:1 (1 byte/tile)",
-                "Entrambi i formati"
-            });
-            _cmbQuickAsmFormat.SelectedIndex = 0;
 
             _pnlAssignedTiles.AllowDrop = true;
             _pnlAssignedTiles.DragEnter += PnlAssignedTiles_DragEnter;
             _pnlAssignedTiles.DragOver += PnlAssignedTiles_DragOver;
             _pnlAssignedTiles.DragDrop += PnlAssignedTiles_DragDrop;
+
+            _rightPanel.Resize += (s, e) => LayoutRightPanel();
+            LayoutRightPanel();
         }
 
-        private void CmbQuickAsmFormat_SelectedIndexChanged(object sender, EventArgs e)
+        private void LayoutRightPanel()
         {
-            UpdateQuickAsm();
+            if (_rightPanel == null || _pnlAssignedTiles == null || _pnlLibraryTiles == null) return;
+
+            int panelWidth = _rightPanel.ClientSize.Width - 20;
+            if (panelWidth < 100) panelWidth = 260;
+
+            if (_previewBox != null)
+                _previewBox.Width = panelWidth;
+
+            if (_numTilesPerMap != null && _lblTilesPerMap != null)
+            {
+                _numTilesPerMap.Left = 10 + panelWidth - _numTilesPerMap.Width;
+                _lblTilesPerMap.Left = _numTilesPerMap.Left - _lblTilesPerMap.Width - 6;
+            }
+
+            int topAssigned = 126;
+            int middleHeight = 56; // 8px + 14px + 4px + 24px + 6px
+            int bottomMargin = 10;
+            int avail = _rightPanel.ClientSize.Height - topAssigned - middleHeight - bottomMargin;
+            int eachPanelH = Math.Max(160, avail / 2);
+
+            _pnlAssignedTiles.SetBounds(10, topAssigned, panelWidth, eachPanelH);
+
+            int topTitle = _pnlAssignedTiles.Bottom + 8;
+            _lblLibraryTitle.Location = new Point(10, topTitle);
+
+            int topButtons = _lblLibraryTitle.Bottom + 4;
+            int btnW = (panelWidth - 6) / 2;
+            _btnAddTile.SetBounds(10, topButtons, btnW, 24);
+            _btnGoToTileEditor.SetBounds(10 + btnW + 6, topButtons, panelWidth - btnW - 6, 24);
+
+            int topLibrary = _btnAddTile.Bottom + 6;
+            int libraryH = Math.Max(160, _rightPanel.ClientSize.Height - topLibrary - bottomMargin);
+            _pnlLibraryTiles.SetBounds(10, topLibrary, panelWidth, libraryH);
         }
 
         private void NumTilesPerMap_ValueChanged(object sender, EventArgs e)
@@ -56,31 +87,6 @@ namespace ZXSpectrumSpriteGenerator.UI
                 RefreshTilesetPalette();
                 UpdateQuickAsm();
                 ProjectModified?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        public MapCompressionMode SelectedCompressionMode
-        {
-            get
-            {
-                if (_cmbQuickAsmFormat == null) return MapCompressionMode.Packed2Bit;
-                switch (_cmbQuickAsmFormat.SelectedIndex)
-                {
-                    case 0: return MapCompressionMode.Packed2Bit;
-                    case 1: return MapCompressionMode.Uncompressed;
-                    case 2: return MapCompressionMode.Both;
-                    default: return MapCompressionMode.Packed2Bit;
-                }
-            }
-            set
-            {
-                if (_cmbQuickAsmFormat == null) return;
-                switch (value)
-                {
-                    case MapCompressionMode.Packed2Bit: _cmbQuickAsmFormat.SelectedIndex = 0; break;
-                    case MapCompressionMode.Uncompressed: _cmbQuickAsmFormat.SelectedIndex = 1; break;
-                    case MapCompressionMode.Both: _cmbQuickAsmFormat.SelectedIndex = 2; break;
-                }
             }
         }
 
@@ -179,15 +185,6 @@ namespace ZXSpectrumSpriteGenerator.UI
         }
         private void BtnZoomOut_Click(object sender, EventArgs e) => ActionZoom(-1);
         private void BtnZoomIn_Click(object sender, EventArgs e) => ActionZoom(1);
-
-        private void BtnCopyAsm_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(_txtQuickMapAsm.Text))
-            {
-                Clipboard.SetText(_txtQuickMapAsm.Text);
-                MessageBox.Show("Dati Assembly della mappa copiati negli appunti!", "Copia Riuscita", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
 
         public void RefreshView()
         {
@@ -1019,43 +1016,14 @@ namespace ZXSpectrumSpriteGenerator.UI
 
         private void UpdateMapInfo()
         {
-            var map = _project?.CurrentMap;
-            if (map == null)
-            {
-                _lblDimensions.Text = "Dimensioni: -";
-                _lblPixels.Text = "Pixel: -";
-                _lblMemory.Text = "Memoria: -";
-                return;
-            }
-
-            int w = map.Width;
-            int h = map.Height;
-            int pxW = w * map.TileWidth;
-            int pxH = h * map.TileHeight;
-            int totalBytes = w * h;
-            int packedBytes = ((w + 3) / 4) * h;
-
-            string screenTag = (w == 32 && h == 24) ? " (Schermo ZX)" : "";
-            _lblDimensions.Text = $"Dimensioni: {w}x{h} celle (8x8 px)";
-            _lblPixels.Text = $"Pixel: {pxW}x{pxH} px{screenTag}";
-            _lblMemory.Text = $"Memoria Z80: {totalBytes} byte (compresso 2-bit: {packedBytes} byte)";
         }
 
         private void UpdateQuickAsm()
         {
-            if (_project?.CurrentMap == null)
-            {
-                _txtQuickMapAsm.Text = string.Empty;
-                return;
-            }
-
-            _txtQuickMapAsm.Text = MapExporter.ExportToAssembly(_project.CurrentMap, AsmDirective.Defb, exportAllMaps: false, project: _project, compressionMode: SelectedCompressionMode).Trim();
         }
 
         private void Canvas_HoverCoordinatesChanged(object sender, MapHoverEventArgs e)
         {
-            string tInfo = e.TileId == 0 ? "Vuoto" : (_project != null && (e.TileId - 1) < _project.Tiles.Count ? $"Tile #{e.TileId} ({_project.Tiles[e.TileId - 1].Name})" : $"Tile #{e.TileId}");
-            _lblHoverCoords.Text = $"Cella: ({e.TileX}, {e.TileY}) | Pixel: ({e.PixelX}, {e.PixelY}) | [{tInfo}]";
         }
 
         private void Canvas_MapChanged(object sender, EventArgs e)
@@ -1301,7 +1269,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                     "Standard 1:1 (1 byte/tile)",
                     "Entrambi (Standard + Compresso)"
                 });
-                cmbType.SelectedIndex = (_cmbQuickAsmFormat != null && _cmbQuickAsmFormat.SelectedIndex >= 0) ? _cmbQuickAsmFormat.SelectedIndex : 0;
+                cmbType.SelectedIndex = (SelectedCompressionMode == MapCompressionMode.Uncompressed) ? 1 : (SelectedCompressionMode == MapCompressionMode.Both ? 2 : 0);
 
                 Label lblTilesTitle = new Label
                 {
@@ -1389,6 +1357,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                         case 1: mode = MapCompressionMode.Uncompressed; break;
                         default: mode = MapCompressionMode.Both; break;
                     }
+                    SelectedCompressionMode = mode;
 
                     int w = _project.CurrentMap.Width;
                     int h = _project.CurrentMap.Height;

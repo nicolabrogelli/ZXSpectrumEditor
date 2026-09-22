@@ -51,15 +51,6 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnExport = new System.Windows.Forms.ToolStripButton();
             this._btnPng = new System.Windows.Forms.ToolStripButton();
             this._rightPanel = new System.Windows.Forms.Panel();
-            this._btnCopyAsm = new System.Windows.Forms.Button();
-            this._cmbQuickAsmFormat = new System.Windows.Forms.ComboBox();
-            this._txtQuickMapAsm = new System.Windows.Forms.TextBox();
-            this._lblAsmTitle = new System.Windows.Forms.Label();
-            this._lblHoverCoords = new System.Windows.Forms.Label();
-            this._lblMemory = new System.Windows.Forms.Label();
-            this._lblPixels = new System.Windows.Forms.Label();
-            this._lblDimensions = new System.Windows.Forms.Label();
-            this._lblSpecTitle = new System.Windows.Forms.Label();
             this._lblDragHint = new System.Windows.Forms.Label();
             this._pnlAssignedTiles = new System.Windows.Forms.Panel();
             this._lblLibraryTitle = new System.Windows.Forms.Label();
@@ -404,17 +395,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             // 
             // _rightPanel
             // 
-            this._rightPanel.AutoScroll = true;
+            this._rightPanel.AutoScroll = false;
             this._rightPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(31)))));
-            this._rightPanel.Controls.Add(this._btnCopyAsm);
-            this._rightPanel.Controls.Add(this._txtQuickMapAsm);
-            this._rightPanel.Controls.Add(this._cmbQuickAsmFormat);
-            this._rightPanel.Controls.Add(this._lblAsmTitle);
-            this._rightPanel.Controls.Add(this._lblHoverCoords);
-            this._rightPanel.Controls.Add(this._lblMemory);
-            this._rightPanel.Controls.Add(this._lblPixels);
-            this._rightPanel.Controls.Add(this._lblDimensions);
-            this._rightPanel.Controls.Add(this._lblSpecTitle);
             this._rightPanel.Controls.Add(this._pnlLibraryTiles);
             this._rightPanel.Controls.Add(this._btnGoToTileEditor);
             this._rightPanel.Controls.Add(this._btnAddTile);
@@ -433,158 +415,6 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._rightPanel.Size = new System.Drawing.Size(290, 686);
             this._rightPanel.TabIndex = 1;
             // 
-            // _btnCopyAsm
-            // 
-            this._btnCopyAsm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(70)))), ((int)(((byte)(95)))));
-            this._btnCopyAsm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnCopyAsm.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this._btnCopyAsm.ForeColor = System.Drawing.Color.White;
-            this._btnCopyAsm.Location = new System.Drawing.Point(10, 755);
-            this._btnCopyAsm.Name = "_btnCopyAsm";
-            this._btnCopyAsm.Size = new System.Drawing.Size(260, 28);
-            this._btnCopyAsm.TabIndex = 12;
-            this._btnCopyAsm.Text = "📋 Copia Dati Assembly";
-            this._btnCopyAsm.UseVisualStyleBackColor = false;
-            this._btnCopyAsm.Click += new System.EventHandler(this.BtnCopyAsm_Click);
-            // 
-            // _cmbQuickAsmFormat
-            // 
-            this._cmbQuickAsmFormat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(44)))));
-            this._cmbQuickAsmFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this._cmbQuickAsmFormat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._cmbQuickAsmFormat.Font = new System.Drawing.Font("Segoe UI", 8.2F);
-            this._cmbQuickAsmFormat.ForeColor = System.Drawing.Color.White;
-            this._cmbQuickAsmFormat.FormattingEnabled = true;
-            this._cmbQuickAsmFormat.Location = new System.Drawing.Point(10, 625);
-            this._cmbQuickAsmFormat.Name = "_cmbQuickAsmFormat";
-            this._cmbQuickAsmFormat.Size = new System.Drawing.Size(260, 21);
-            this._cmbQuickAsmFormat.TabIndex = 10;
-            this._cmbQuickAsmFormat.SelectedIndexChanged += new System.EventHandler(this.CmbQuickAsmFormat_SelectedIndexChanged);
-            // 
-            // _txtQuickMapAsm
-            // 
-            this._txtQuickMapAsm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(20)))));
-            this._txtQuickMapAsm.Font = new System.Drawing.Font("Consolas", 8.2F);
-            this._txtQuickMapAsm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(255)))), ((int)(((byte)(180)))));
-            this._txtQuickMapAsm.Location = new System.Drawing.Point(10, 652);
-            this._txtQuickMapAsm.Multiline = true;
-            this._txtQuickMapAsm.Name = "_txtQuickMapAsm";
-            this._txtQuickMapAsm.ReadOnly = true;
-            this._txtQuickMapAsm.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._txtQuickMapAsm.Size = new System.Drawing.Size(260, 95);
-            this._txtQuickMapAsm.TabIndex = 11;
-            // 
-            // _lblAsmTitle
-            // 
-            this._lblAsmTitle.AutoSize = true;
-            this._lblAsmTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this._lblAsmTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
-            this._lblAsmTitle.Location = new System.Drawing.Point(10, 605);
-            this._lblAsmTitle.Name = "_lblAsmTitle";
-            this._lblAsmTitle.Size = new System.Drawing.Size(179, 15);
-            this._lblAsmTitle.TabIndex = 9;
-            this._lblAsmTitle.Text = "DATI ASSEMBLY DEFB (MAPPA)";
-            // 
-            // _lblHoverCoords
-            // 
-            this._lblHoverCoords.AutoSize = true;
-            this._lblHoverCoords.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
-            this._lblHoverCoords.Location = new System.Drawing.Point(10, 580);
-            this._lblHoverCoords.Name = "_lblHoverCoords";
-            this._lblHoverCoords.Size = new System.Drawing.Size(131, 15);
-            this._lblHoverCoords.TabIndex = 8;
-            this._lblHoverCoords.Text = "Cella: (0, 0) | Pixel: (0, 0)";
-            // 
-            // _lblMemory
-            // 
-            this._lblMemory.AutoSize = true;
-            this._lblMemory.ForeColor = System.Drawing.Color.LightGray;
-            this._lblMemory.Location = new System.Drawing.Point(10, 561);
-            this._lblMemory.Name = "_lblMemory";
-            this._lblMemory.Size = new System.Drawing.Size(127, 15);
-            this._lblMemory.TabIndex = 7;
-            this._lblMemory.Text = "Memoria Z80: 768 byte";
-            // 
-            // _lblPixels
-            // 
-            this._lblPixels.AutoSize = true;
-            this._lblPixels.ForeColor = System.Drawing.Color.LightGray;
-            this._lblPixels.Location = new System.Drawing.Point(10, 542);
-            this._lblPixels.Name = "_lblPixels";
-            this._lblPixels.Size = new System.Drawing.Size(171, 15);
-            this._lblPixels.TabIndex = 6;
-            this._lblPixels.Text = "Pixel: 256x192 px (Schermo ZX)";
-            // 
-            // _lblDimensions
-            // 
-            this._lblDimensions.AutoSize = true;
-            this._lblDimensions.ForeColor = System.Drawing.Color.LightGray;
-            this._lblDimensions.Location = new System.Drawing.Point(10, 523);
-            this._lblDimensions.Name = "_lblDimensions";
-            this._lblDimensions.Size = new System.Drawing.Size(159, 15);
-            this._lblDimensions.TabIndex = 5;
-            this._lblDimensions.Text = "Dimensioni: 32x24 celle (8x8)";
-            // 
-            // _lblSpecTitle
-            // 
-            this._lblSpecTitle.AutoSize = true;
-            this._lblSpecTitle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this._lblSpecTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
-            this._lblSpecTitle.Location = new System.Drawing.Point(10, 501);
-            this._lblSpecTitle.Name = "_lblSpecTitle";
-            this._lblSpecTitle.Size = new System.Drawing.Size(113, 15);
-            this._lblSpecTitle.TabIndex = 4;
-            this._lblSpecTitle.Text = "SPECIFICHE MAPPA";
-            // 
-            // _pnlLibraryTiles
-            // 
-            this._pnlLibraryTiles.AutoScroll = true;
-            this._pnlLibraryTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(22)))));
-            this._pnlLibraryTiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._pnlLibraryTiles.Location = new System.Drawing.Point(10, 335);
-            this._pnlLibraryTiles.Name = "_pnlLibraryTiles";
-            this._pnlLibraryTiles.Size = new System.Drawing.Size(260, 155);
-            this._pnlLibraryTiles.TabIndex = 18;
-            // 
-            // _btnGoToTileEditor
-            // 
-            this._btnGoToTileEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(75)))), ((int)(((byte)(115)))));
-            this._btnGoToTileEditor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnGoToTileEditor.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold);
-            this._btnGoToTileEditor.ForeColor = System.Drawing.Color.White;
-            this._btnGoToTileEditor.Location = new System.Drawing.Point(140, 307);
-            this._btnGoToTileEditor.Name = "_btnGoToTileEditor";
-            this._btnGoToTileEditor.Size = new System.Drawing.Size(130, 24);
-            this._btnGoToTileEditor.TabIndex = 13;
-            this._btnGoToTileEditor.Text = "🧱 Editor (F3)";
-            this._btnGoToTileEditor.UseVisualStyleBackColor = false;
-            this._btnGoToTileEditor.Click += new System.EventHandler(this.BtnGoToTiles_Click);
-            // 
-            // _btnAddTile
-            // 
-            this._btnAddTile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this._btnAddTile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnAddTile.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold);
-            this._btnAddTile.ForeColor = System.Drawing.Color.White;
-            this._btnAddTile.Location = new System.Drawing.Point(10, 307);
-            this._btnAddTile.Name = "_btnAddTile";
-            this._btnAddTile.Size = new System.Drawing.Size(126, 24);
-            this._btnAddTile.TabIndex = 12;
-            this._btnAddTile.Text = "➕ Nuova Tile...";
-            this._btnAddTile.UseVisualStyleBackColor = false;
-            this._btnAddTile.Click += new System.EventHandler(this.BtnAddTile_Click);
-            // 
-            // _lblLibraryTitle
-            // 
-            this._lblLibraryTitle.AutoSize = true;
-            this._lblLibraryTitle.Font = new System.Drawing.Font("Segoe UI", 8.2F, System.Drawing.FontStyle.Bold);
-            this._lblLibraryTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(215)))), ((int)(((byte)(0)))));
-            this._lblLibraryTitle.Location = new System.Drawing.Point(10, 289);
-            this._lblLibraryTitle.Name = "_lblLibraryTitle";
-            this._lblLibraryTitle.Size = new System.Drawing.Size(160, 13);
-            this._lblLibraryTitle.TabIndex = 17;
-            this._lblLibraryTitle.Text = "📚 LIBRERIA TILE PROGETTO";
-            // 
             // _pnlAssignedTiles
             // 
             this._pnlAssignedTiles.AllowDrop = true;
@@ -593,8 +423,57 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._pnlAssignedTiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._pnlAssignedTiles.Location = new System.Drawing.Point(10, 126);
             this._pnlAssignedTiles.Name = "_pnlAssignedTiles";
-            this._pnlAssignedTiles.Size = new System.Drawing.Size(260, 155);
+            this._pnlAssignedTiles.Size = new System.Drawing.Size(260, 240);
             this._pnlAssignedTiles.TabIndex = 3;
+            // 
+            // _lblLibraryTitle
+            // 
+            this._lblLibraryTitle.AutoSize = true;
+            this._lblLibraryTitle.Font = new System.Drawing.Font("Segoe UI", 8.2F, System.Drawing.FontStyle.Bold);
+            this._lblLibraryTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(215)))), ((int)(((byte)(0)))));
+            this._lblLibraryTitle.Location = new System.Drawing.Point(10, 374);
+            this._lblLibraryTitle.Name = "_lblLibraryTitle";
+            this._lblLibraryTitle.Size = new System.Drawing.Size(160, 13);
+            this._lblLibraryTitle.TabIndex = 17;
+            this._lblLibraryTitle.Text = "📚 LIBRERIA TILE PROGETTO";
+            // 
+            // _btnAddTile
+            // 
+            this._btnAddTile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this._btnAddTile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnAddTile.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold);
+            this._btnAddTile.ForeColor = System.Drawing.Color.White;
+            this._btnAddTile.Location = new System.Drawing.Point(10, 392);
+            this._btnAddTile.Name = "_btnAddTile";
+            this._btnAddTile.Size = new System.Drawing.Size(126, 24);
+            this._btnAddTile.TabIndex = 12;
+            this._btnAddTile.Text = "➕ Nuova Tile...";
+            this._btnAddTile.UseVisualStyleBackColor = false;
+            this._btnAddTile.Click += new System.EventHandler(this.BtnAddTile_Click);
+            // 
+            // _btnGoToTileEditor
+            // 
+            this._btnGoToTileEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(75)))), ((int)(((byte)(115)))));
+            this._btnGoToTileEditor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnGoToTileEditor.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold);
+            this._btnGoToTileEditor.ForeColor = System.Drawing.Color.White;
+            this._btnGoToTileEditor.Location = new System.Drawing.Point(140, 392);
+            this._btnGoToTileEditor.Name = "_btnGoToTileEditor";
+            this._btnGoToTileEditor.Size = new System.Drawing.Size(130, 24);
+            this._btnGoToTileEditor.TabIndex = 13;
+            this._btnGoToTileEditor.Text = "🧱 Editor (F3)";
+            this._btnGoToTileEditor.UseVisualStyleBackColor = false;
+            this._btnGoToTileEditor.Click += new System.EventHandler(this.BtnGoToTiles_Click);
+            // 
+            // _pnlLibraryTiles
+            // 
+            this._pnlLibraryTiles.AutoScroll = true;
+            this._pnlLibraryTiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(22)))));
+            this._pnlLibraryTiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._pnlLibraryTiles.Location = new System.Drawing.Point(10, 420);
+            this._pnlLibraryTiles.Name = "_pnlLibraryTiles";
+            this._pnlLibraryTiles.Size = new System.Drawing.Size(260, 250);
+            this._pnlLibraryTiles.TabIndex = 18;
             // 
             // _lblDragHint
             // 
@@ -792,15 +671,6 @@ namespace ZXSpectrumSpriteGenerator.UI
         private System.Windows.Forms.Button _btnAddTile;
         private System.Windows.Forms.Button _btnGoToTileEditor;
         private System.Windows.Forms.Panel _pnlLibraryTiles;
-        private System.Windows.Forms.Label _lblSpecTitle;
-        private System.Windows.Forms.Label _lblDimensions;
-        private System.Windows.Forms.Label _lblPixels;
-        private System.Windows.Forms.Label _lblMemory;
-        private System.Windows.Forms.Label _lblHoverCoords;
-        private System.Windows.Forms.Label _lblAsmTitle;
-        private System.Windows.Forms.ComboBox _cmbQuickAsmFormat;
-        private System.Windows.Forms.TextBox _txtQuickMapAsm;
-        private System.Windows.Forms.Button _btnCopyAsm;
         private System.Windows.Forms.Panel _centerPanel;
         private ZXSpectrumSpriteGenerator.UI.Controls.MapCanvas _canvas;
     }
