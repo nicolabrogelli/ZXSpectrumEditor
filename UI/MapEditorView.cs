@@ -264,17 +264,51 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (_project == null) return;
             if (_pnlAssignedTiles == null || _pnlLibraryTiles == null) return;
 
+            // Sposta temporaneamente il focus fuori dai pannelli per evitare che WinForms auto-scrolli durante la ricreazione dei controlli
+            if (_canvas != null && _canvas.CanFocus)
+            {
+                _canvas.Focus();
+            }
+
+            // Salva le posizioni correnti di scroll
+            int assignedScrollY = -_pnlAssignedTiles.AutoScrollPosition.Y;
+            int libraryScrollY = -_pnlLibraryTiles.AutoScrollPosition.Y;
+
+            // In Windows Forms, se un pannello con AutoScroll è scrollato (DisplayRectangle.Y < 0),
+            // l'aggiunta di controlli con Top=y viene sfalsata, accumulando spazi vuoti a ogni refresh.
+            // Reimpostare AutoScrollPosition a (0, 0) prima di svuotare e ripopolare previene disallineamenti.
+            _pnlAssignedTiles.AutoScrollPosition = new Point(0, 0);
+            _pnlLibraryTiles.AutoScrollPosition = new Point(0, 0);
+
             _pnlAssignedTiles.SuspendLayout();
             _pnlLibraryTiles.SuspendLayout();
 
-            _pnlAssignedTiles.Controls.Clear();
-            _pnlLibraryTiles.Controls.Clear();
+            while (_pnlAssignedTiles.Controls.Count > 0)
+            {
+                var c = _pnlAssignedTiles.Controls[0];
+                _pnlAssignedTiles.Controls.RemoveAt(0);
+                c.Dispose();
+            }
+            while (_pnlLibraryTiles.Controls.Count > 0)
+            {
+                var c = _pnlLibraryTiles.Controls[0];
+                _pnlLibraryTiles.Controls.RemoveAt(0);
+                c.Dispose();
+            }
+
+            _pnlAssignedTiles.HorizontalScroll.Maximum = 0;
+            _pnlAssignedTiles.HorizontalScroll.Enabled = false;
+            _pnlAssignedTiles.HorizontalScroll.Visible = false;
+
+            _pnlLibraryTiles.HorizontalScroll.Maximum = 0;
+            _pnlLibraryTiles.HorizontalScroll.Enabled = false;
+            _pnlLibraryTiles.HorizontalScroll.Visible = false;
 
             var currentMap = _project.CurrentMap;
             if (currentMap == null)
             {
-                _pnlAssignedTiles.ResumeLayout();
-                _pnlLibraryTiles.ResumeLayout();
+                _pnlAssignedTiles.ResumeLayout(true);
+                _pnlLibraryTiles.ResumeLayout(true);
                 return;
             }
 
@@ -300,10 +334,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (_lblLibraryTitle != null)
                 _lblLibraryTitle.Text = $"📚 LIBRERIA TILE ({_project.Tiles.Count} totali)";
 
-            int cardW = _pnlAssignedTiles.ClientSize.Width - 10;
-            if (cardW < 220) cardW = 238;
+            int cardW = Math.Max(210, _pnlAssignedTiles.ClientSize.Width - 8);
             int cardH = 46;
 
+            int totalAssignedH = 4;
             // --- 1. POPOLAMENTO PANNELLO ASSEGNATE (SET MAPPA) ---
             if (currentMap.AssignedTileIds.Count == 0)
             {
@@ -334,12 +368,12 @@ namespace ZXSpectrumSpriteGenerator.UI
                     _pnlAssignedTiles.Controls.Add(card);
                     y += cardH + 4;
                 }
+                totalAssignedH = y;
             }
 
             // --- 2. POPOLAMENTO PANNELLO LIBRERIA TILE ---
             int libY = 4;
-            int libCardW = _pnlLibraryTiles.ClientSize.Width - 10;
-            if (libCardW < 220) libCardW = 238;
+            int libCardW = Math.Max(210, _pnlLibraryTiles.ClientSize.Width - 8);
 
             for (int i = 0; i < _project.Tiles.Count; i++)
             {
@@ -355,9 +389,23 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _pnlLibraryTiles.Controls.Add(card);
                 libY += cardH + 4;
             }
+            int totalLibH = libY;
 
-            _pnlAssignedTiles.ResumeLayout();
-            _pnlLibraryTiles.ResumeLayout();
+            _pnlAssignedTiles.ResumeLayout(true);
+            _pnlLibraryTiles.ResumeLayout(true);
+
+            // Calcola e ripristina lo scroll massimo consentito per evitare spazi neri
+            int maxAssignedScroll = Math.Max(0, totalAssignedH - _pnlAssignedTiles.ClientSize.Height);
+            if (assignedScrollY > 0 && maxAssignedScroll > 0)
+                _pnlAssignedTiles.AutoScrollPosition = new Point(0, Math.Min(assignedScrollY, maxAssignedScroll));
+            else
+                _pnlAssignedTiles.AutoScrollPosition = new Point(0, 0);
+
+            int maxLibScroll = Math.Max(0, totalLibH - _pnlLibraryTiles.ClientSize.Height);
+            if (libraryScrollY > 0 && maxLibScroll > 0)
+                _pnlLibraryTiles.AutoScrollPosition = new Point(0, Math.Min(libraryScrollY, maxLibScroll));
+            else
+                _pnlLibraryTiles.AutoScrollPosition = new Point(0, 0);
 
             UpdateActiveTileDisplay();
         }
@@ -563,16 +611,26 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Left = width - 58,
                 Width = 52,
                 Height = 30,
-                Text = isAssigned ? "✔ Set" : "➕ Assegna",
+                Text = isAssigned ? "✖ Rimuovi" : "➕ Assegna",
                 Font = new Font("Segoe UI", 6.8f, FontStyle.Bold),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = isAssigned ? Color.FromArgb(28, 55, 38) : Color.FromArgb(0, 100, 180),
-                ForeColor = isAssigned ? Color.FromArgb(140, 255, 180) : Color.White,
-                Cursor = isAssigned ? Cursors.Default : Cursors.Hand,
-                Enabled = !isAssigned
+                BackColor = isAssigned ? Color.FromArgb(50, 24, 24) : Color.FromArgb(0, 100, 180),
+                ForeColor = isAssigned ? Color.FromArgb(255, 140, 120) : Color.White,
+                Cursor = Cursors.Hand,
+                Enabled = true
             };
             btnAction.FlatAppearance.BorderSize = 0;
-            btnAction.Click += (s, e) => AssignTileToCurrentMap(tileId);
+            btnAction.Click += (s, e) =>
+            {
+                if (isAssigned)
+                {
+                    UnassignTileFromCurrentMap(tileId);
+                }
+                else
+                {
+                    AssignTileToCurrentMap(tileId);
+                }
+            };
 
             Action selectCard = () =>
             {
@@ -589,7 +647,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 }
                 else
                 {
-                    selectCard();
+                    UnassignTileFromCurrentMap(tileId);
                 }
             };
 
@@ -932,9 +990,11 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _canvas.ActiveTileId = (map.AssignedTileIds.Count > 0) ? map.AssignedTileIds[0] : 0;
             }
 
+            _canvas?.Focus();
             ProjectModified?.Invoke(this, EventArgs.Empty);
             RefreshTilesetPalette();
             UpdateQuickAsm();
+            _canvas?.Invalidate();
         }
 
         public void MoveAssignedTileSlot(int tileId, int direction)
