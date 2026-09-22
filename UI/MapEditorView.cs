@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -18,6 +19,7 @@ namespace ZXSpectrumSpriteGenerator.UI
     {
         private SpriteProject _project;
         private bool _isUpdatingMapCombo = false;
+        private bool _isUpdatingTilesPerMap = false;
 
         public event EventHandler ProjectModified;
         public event EventHandler RequestSwitchToSprites;
@@ -32,11 +34,29 @@ namespace ZXSpectrumSpriteGenerator.UI
                 "Entrambi i formati"
             });
             _cmbQuickAsmFormat.SelectedIndex = 0;
+
+            _pnlAssignedTiles.AllowDrop = true;
+            _pnlAssignedTiles.DragEnter += PnlAssignedTiles_DragEnter;
+            _pnlAssignedTiles.DragOver += PnlAssignedTiles_DragOver;
+            _pnlAssignedTiles.DragDrop += PnlAssignedTiles_DragDrop;
         }
 
         private void CmbQuickAsmFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateQuickAsm();
+        }
+
+        private void NumTilesPerMap_ValueChanged(object sender, EventArgs e)
+        {
+            if (_isUpdatingTilesPerMap || _project == null || _numTilesPerMap == null) return;
+            int val = (int)_numTilesPerMap.Value;
+            if (_project.TilesPerMap != val)
+            {
+                _project.TilesPerMap = val;
+                RefreshTilesetPalette();
+                UpdateQuickAsm();
+                ProjectModified?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public MapCompressionMode SelectedCompressionMode
@@ -79,13 +99,19 @@ namespace ZXSpectrumSpriteGenerator.UI
                 {
                     _project.AddMap("Mappa 1", 32, 24);
                 }
+                if (_numTilesPerMap != null)
+                {
+                    _isUpdatingTilesPerMap = true;
+                    _numTilesPerMap.Enabled = (_project != null);
+                    if (_project != null)
+                    {
+                        _numTilesPerMap.Value = Math.Max(1, Math.Min(256, _project.TilesPerMap));
+                    }
+                    _isUpdatingTilesPerMap = false;
+                }
                 _canvas.Project = _project;
-                _canvas.Map = _project?.CurrentMap;
                 UpdateMapListCombo();
-                RefreshTilesetPalette();
-                UpdateMapInfo();
-                UpdateQuickAsm();
-                CenterCanvas();
+                SwitchToMapIndex(_project?.SelectedMapIndex ?? 0);
             }
         }
 
@@ -166,12 +192,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         public void RefreshView()
         {
             UpdateMapListCombo();
-            RefreshTilesetPalette();
-            UpdateActiveTileDisplay();
-            UpdateMapInfo();
-            UpdateQuickAsm();
-            _canvas.Invalidate();
-            CenterCanvas();
+            SwitchToMapIndex(_project?.SelectedMapIndex ?? 0);
         }
 
         private void CenterCanvas()
@@ -204,6 +225,29 @@ namespace ZXSpectrumSpriteGenerator.UI
             _isUpdatingMapCombo = false;
         }
 
+        private void SwitchToMapIndex(int index)
+        {
+            if (_project == null || index < 0 || index >= _project.Maps.Count) return;
+
+            _project.SelectedMapIndex = index;
+            _canvas.Map = _project.CurrentMap;
+
+            var map = _project.CurrentMap;
+            if (map != null && map.AssignedTileIds != null && map.AssignedTileIds.Count > 0)
+            {
+                if (!map.AssignedTileIds.Contains(_canvas.ActiveTileId))
+                {
+                    _canvas.ActiveTileId = map.AssignedTileIds[0];
+                }
+            }
+
+            RefreshTilesetPalette();
+            UpdateMapInfo();
+            UpdateQuickAsm();
+            CenterCanvas();
+            _canvas.Invalidate();
+        }
+
         private void CmbMaps_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_isUpdatingMapCombo || _project == null) return;
@@ -211,57 +255,148 @@ namespace ZXSpectrumSpriteGenerator.UI
             int idx = _cmbMaps.SelectedIndex;
             if (idx >= 0 && idx < _project.Maps.Count)
             {
-                _project.SelectedMapIndex = idx;
-                _canvas.Map = _project.CurrentMap;
-                UpdateMapInfo();
-                UpdateQuickAsm();
-                CenterCanvas();
+                SwitchToMapIndex(idx);
             }
         }
 
         public void RefreshTilesetPalette()
         {
-            _pnlTileset.Controls.Clear();
             if (_project == null) return;
+            if (_pnlAssignedTiles == null || _pnlLibraryTiles == null) return;
 
-            int y = 4;
-            int cardW = _pnlTileset.ClientSize.Width - 30;
-            int cardH = 40;
-            
-            // Card per ogni tile 8x8 del progetto (NON sprite!)
+            _pnlAssignedTiles.SuspendLayout();
+            _pnlLibraryTiles.SuspendLayout();
+
+            _pnlAssignedTiles.Controls.Clear();
+            _pnlLibraryTiles.Controls.Clear();
+
+            var currentMap = _project.CurrentMap;
+            if (currentMap == null)
+            {
+                _pnlAssignedTiles.ResumeLayout();
+                _pnlLibraryTiles.ResumeLayout();
+                return;
+            }
+
+            if (currentMap.AssignedTileIds == null)
+                currentMap.AssignedTileIds = new List<int>();
+            currentMap.AssignedTileIds.RemoveAll(id => id <= 0 || id > _project.Tiles.Count);
+
+            // Calcolo utilizzi di ogni tile sulla mappa corrente
+            var counts = new Dictionary<int, int>();
+            for (int cy = 0; cy < currentMap.Height; cy++)
+            {
+                for (int cx = 0; cx < currentMap.Width; cx++)
+                {
+                    int tid = currentMap.GetTile(cx, cy);
+                    if (tid > 0)
+                        counts[tid] = counts.ContainsKey(tid) ? counts[tid] + 1 : 1;
+                }
+            }
+
+            int assignedCount = currentMap.AssignedTileIds.Count;
+            int maxPerMap = _project.TilesPerMap;
+            _lblPalTitle.Text = $"📌 SET MAPPA ({assignedCount}/{maxPerMap})";
+            if (_lblLibraryTitle != null)
+                _lblLibraryTitle.Text = $"📚 LIBRERIA TILE ({_project.Tiles.Count} totali)";
+
+            int cardW = _pnlAssignedTiles.ClientSize.Width - 10;
+            if (cardW < 220) cardW = 238;
+            int cardH = 46;
+
+            // --- 1. POPOLAMENTO PANNELLO ASSEGNATE (SET MAPPA) ---
+            if (currentMap.AssignedTileIds.Count == 0)
+            {
+                Label emptyLabel = new Label
+                {
+                    Text = "Nessuna tile assegnata a questa mappa.\n\nTrascina qui le tile dalla Libreria sottostante\noppure fai doppio clic su una tile per aggiungerla.",
+                    Dock = DockStyle.Fill,
+                    ForeColor = Color.FromArgb(140, 160, 180),
+                    Font = new Font("Segoe UI", 7.8f, FontStyle.Italic),
+                    TextAlign = ContentAlignment.MiddleCenter
+                };
+                _pnlAssignedTiles.Controls.Add(emptyLabel);
+            }
+            else
+            {
+                int y = 4;
+                for (int slotIdx = 0; slotIdx < currentMap.AssignedTileIds.Count; slotIdx++)
+                {
+                    int slotNum = slotIdx + 1;
+                    int tileId = currentMap.AssignedTileIds[slotIdx];
+                    if (tileId <= 0 || tileId > _project.Tiles.Count) continue;
+
+                    var tile = _project.Tiles[tileId - 1];
+                    counts.TryGetValue(tileId, out int cnt);
+                    Bitmap thumb = tile.RenderToBitmap(1);
+
+                    Panel card = CreateAssignedTileCard(tileId, slotNum, tile.Name, thumb, y, cardW, cardH, cnt, slotIdx, currentMap.AssignedTileIds.Count);
+                    _pnlAssignedTiles.Controls.Add(card);
+                    y += cardH + 4;
+                }
+            }
+
+            // --- 2. POPOLAMENTO PANNELLO LIBRERIA TILE ---
+            int libY = 4;
+            int libCardW = _pnlLibraryTiles.ClientSize.Width - 10;
+            if (libCardW < 220) libCardW = 238;
+
             for (int i = 0; i < _project.Tiles.Count; i++)
             {
                 int tileId = i + 1;
                 var tile = _project.Tiles[i];
-                string label = $"{tileId}: {tile.Name}";
+                counts.TryGetValue(tileId, out int cnt);
                 Bitmap thumb = tile.RenderToBitmap(1);
 
-                Panel card = CreateTileCard(tileId, label, thumb, y, cardW, cardH);
-                _pnlTileset.Controls.Add(card);
-                y += cardH + 4;
+                int assignedSlot = currentMap.AssignedTileIds.IndexOf(tileId);
+                bool isAssigned = (assignedSlot >= 0);
+
+                Panel card = CreateLibraryTileCard(tileId, tile.Name, thumb, libY, libCardW, cardH, isAssigned, isAssigned ? (assignedSlot + 1) : 0, cnt);
+                _pnlLibraryTiles.Controls.Add(card);
+                libY += cardH + 4;
             }
+
+            _pnlAssignedTiles.ResumeLayout();
+            _pnlLibraryTiles.ResumeLayout();
 
             UpdateActiveTileDisplay();
         }
 
-        private Panel CreateTileCard(int tileId, string label, Bitmap thumb, int top, int width, int height)
+        private Panel CreateAssignedTileCard(int tileId, int slotNum, string name, Bitmap thumb, int top, int width, int height, int usageCount, int slotIndex, int totalSlots)
         {
             bool isSelected = (_canvas.ActiveTileId == tileId);
+            bool isBeyondLimit = (slotNum > _project.TilesPerMap);
+
             Panel card = new Panel
             {
                 Top = top,
                 Left = 4,
                 Width = width,
                 Height = height,
-                BackColor = isSelected ? Color.FromArgb(40, 70, 110) : Color.FromArgb(28, 28, 34),
+                BackColor = isSelected ? Color.FromArgb(40, 75, 115) : (isBeyondLimit ? Color.FromArgb(45, 25, 25) : Color.FromArgb(28, 30, 38)),
                 BorderStyle = isSelected ? BorderStyle.FixedSingle : BorderStyle.None,
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                Tag = tileId
+            };
+
+            // Badge slot (#1, #2, ...)
+            Label lblSlot = new Label
+            {
+                Top = 6,
+                Left = 4,
+                Width = 26,
+                Height = 34,
+                Text = $"#{slotNum}",
+                Font = new Font("Segoe UI", 7.8f, FontStyle.Bold),
+                ForeColor = isBeyondLimit ? Color.FromArgb(255, 120, 100) : Color.FromArgb(0, 230, 255),
+                BackColor = Color.FromArgb(16, 20, 28),
+                TextAlign = ContentAlignment.MiddleCenter
             };
 
             PictureBox pic = new PictureBox
             {
-                Top = 4,
-                Left = 5,
+                Top = 7,
+                Left = 33,
                 Width = 32,
                 Height = 32,
                 SizeMode = PictureBoxSizeMode.Zoom,
@@ -269,16 +404,86 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Image = thumb
             };
 
-            Label lbl = new Label
+            Label lblTitle = new Label
             {
-                Top = 11,
-                Left = 44,
-                Width = width - 48,
-                Text = label,
+                Top = 4,
+                Left = 69,
+                Width = width - 122,
+                Height = 18,
+                Text = name,
                 ForeColor = isSelected ? Color.Cyan : Color.White,
-                Font = new Font("Segoe UI", 7.8f, isSelected ? FontStyle.Bold : FontStyle.Regular),
-                AutoEllipsis = true
+                Font = new Font("Segoe UI", 8f, isSelected ? FontStyle.Bold : FontStyle.Regular),
+                AutoEllipsis = true,
+                Tag = "title"
             };
+
+            string statusText = usageCount > 0 ? $"Usata: {usageCount}x" : "Non usata";
+            if (isBeyondLimit) statusText += " (Fuori limite)";
+            Label lblStatus = new Label
+            {
+                Top = 24,
+                Left = 69,
+                Width = width - 122,
+                Height = 16,
+                Text = statusText,
+                ForeColor = usageCount > 0 ? Color.FromArgb(120, 230, 160) : Color.FromArgb(160, 170, 185),
+                Font = new Font("Segoe UI", 7.2f, FontStyle.Regular),
+                AutoEllipsis = true,
+                Tag = "status"
+            };
+
+            // Pulsante ▲ Sposta Su
+            Button btnUp = new Button
+            {
+                Top = 4,
+                Left = width - 50,
+                Width = 22,
+                Height = 18,
+                Text = "▲",
+                Font = new Font("Segoe UI", 6f, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(40, 44, 56),
+                ForeColor = (slotIndex > 0) ? Color.White : Color.FromArgb(80, 80, 90),
+                Enabled = (slotIndex > 0),
+                Cursor = (slotIndex > 0) ? Cursors.Hand : Cursors.Default
+            };
+            btnUp.FlatAppearance.BorderSize = 0;
+            btnUp.Click += (s, e) => MoveAssignedTileSlot(tileId, -1);
+
+            // Pulsante ▼ Sposta Giù
+            Button btnDown = new Button
+            {
+                Top = 24,
+                Left = width - 50,
+                Width = 22,
+                Height = 18,
+                Text = "▼",
+                Font = new Font("Segoe UI", 6f, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(40, 44, 56),
+                ForeColor = (slotIndex < totalSlots - 1) ? Color.White : Color.FromArgb(80, 80, 90),
+                Enabled = (slotIndex < totalSlots - 1),
+                Cursor = (slotIndex < totalSlots - 1) ? Cursors.Hand : Cursors.Default
+            };
+            btnDown.FlatAppearance.BorderSize = 0;
+            btnDown.Click += (s, e) => MoveAssignedTileSlot(tileId, 1);
+
+            // Pulsante ✖ Rimuovi dal Set Mappa
+            Button btnRemove = new Button
+            {
+                Top = 4,
+                Left = width - 26,
+                Width = 22,
+                Height = 38,
+                Text = "✖",
+                Font = new Font("Segoe UI", 8.2f, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(45, 25, 25),
+                ForeColor = Color.FromArgb(255, 120, 100),
+                Cursor = Cursors.Hand
+            };
+            btnRemove.FlatAppearance.BorderSize = 0;
+            btnRemove.Click += (s, e) => UnassignTileFromCurrentMap(tileId);
 
             Action selectCard = () =>
             {
@@ -287,47 +492,268 @@ namespace ZXSpectrumSpriteGenerator.UI
                 UpdateActiveTileDisplay();
             };
 
-            Action openInEditor = () =>
+            card.Click += (s, e) => selectCard();
+            pic.Click += (s, e) => selectCard();
+            lblSlot.Click += (s, e) => selectCard();
+            lblTitle.Click += (s, e) => selectCard();
+            lblStatus.Click += (s, e) => selectCard();
+
+            card.Controls.AddRange(new Control[] { lblSlot, pic, lblTitle, lblStatus, btnUp, btnDown, btnRemove });
+            return card;
+        }
+
+        private Panel CreateLibraryTileCard(int tileId, string name, Bitmap thumb, int top, int width, int height, bool isAssigned, int assignedSlot, int usageCount)
+        {
+            bool isSelected = (_canvas.ActiveTileId == tileId);
+
+            Panel card = new Panel
             {
-                if (tileId > 0)
+                Top = top,
+                Left = 4,
+                Width = width,
+                Height = height,
+                BackColor = isSelected ? Color.FromArgb(40, 70, 105) : (isAssigned ? Color.FromArgb(24, 32, 28) : Color.FromArgb(28, 28, 34)),
+                BorderStyle = isSelected ? BorderStyle.FixedSingle : BorderStyle.None,
+                Cursor = Cursors.Hand,
+                Tag = tileId
+            };
+
+            PictureBox pic = new PictureBox
+            {
+                Top = 7,
+                Left = 6,
+                Width = 32,
+                Height = 32,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Black,
+                Image = thumb
+            };
+
+            Label lblTitle = new Label
+            {
+                Top = 4,
+                Left = 44,
+                Width = width - 105,
+                Height = 18,
+                Text = $"#{tileId}: {name}",
+                ForeColor = isSelected ? Color.Cyan : Color.White,
+                Font = new Font("Segoe UI", 8f, isSelected ? FontStyle.Bold : FontStyle.Regular),
+                AutoEllipsis = true,
+                Tag = "title"
+            };
+
+            string statusText = isAssigned ? $"✔ Nel set (Slot #{assignedSlot})" : (usageCount > 0 ? $"⚠ Usata {usageCount}x (non nel set)" : "➕ Trascina per assegnare");
+            Color statusColor = isAssigned ? Color.FromArgb(120, 230, 160) : (usageCount > 0 ? Color.FromArgb(255, 130, 100) : Color.FromArgb(140, 180, 220));
+            Label lblStatus = new Label
+            {
+                Top = 24,
+                Left = 44,
+                Width = width - 105,
+                Height = 16,
+                Text = statusText,
+                ForeColor = statusColor,
+                Font = new Font("Segoe UI", 7.2f, FontStyle.Regular),
+                AutoEllipsis = true,
+                Tag = "status"
+            };
+
+            Button btnAction = new Button
+            {
+                Top = 8,
+                Left = width - 58,
+                Width = 52,
+                Height = 30,
+                Text = isAssigned ? "✔ Set" : "➕ Assegna",
+                Font = new Font("Segoe UI", 6.8f, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = isAssigned ? Color.FromArgb(28, 55, 38) : Color.FromArgb(0, 100, 180),
+                ForeColor = isAssigned ? Color.FromArgb(140, 255, 180) : Color.White,
+                Cursor = isAssigned ? Cursors.Default : Cursors.Hand,
+                Enabled = !isAssigned
+            };
+            btnAction.FlatAppearance.BorderSize = 0;
+            btnAction.Click += (s, e) => AssignTileToCurrentMap(tileId);
+
+            Action selectCard = () =>
+            {
+                _canvas.ActiveTileId = tileId;
+                RefreshTilesetSelection();
+                UpdateActiveTileDisplay();
+            };
+
+            Action assignAction = () =>
+            {
+                if (!isAssigned)
                 {
-                    RequestSwitchToTiles?.Invoke(this, tileId - 1);
+                    AssignTileToCurrentMap(tileId);
+                }
+                else
+                {
+                    selectCard();
                 }
             };
 
+            // Drag & Drop: avvia DoDragDrop al trascinamento del mouse
+            Point dragStart = Point.Empty;
+            Action<Control> wireDrag = (ctrl) =>
+            {
+                ctrl.MouseDown += (s, e) =>
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        dragStart = e.Location;
+                    }
+                };
+                ctrl.MouseMove += (s, e) =>
+                {
+                    if (e.Button == MouseButtons.Left && dragStart != Point.Empty)
+                    {
+                        int dx = Math.Abs(e.X - dragStart.X);
+                        int dy = Math.Abs(e.Y - dragStart.Y);
+                        if (dx > SystemInformation.DragSize.Width || dy > SystemInformation.DragSize.Height)
+                        {
+                            dragStart = Point.Empty;
+                            card.DoDragDrop(new TileDragData(tileId), DragDropEffects.Copy);
+                        }
+                    }
+                };
+            };
+
+            wireDrag(card);
+            wireDrag(pic);
+            wireDrag(lblTitle);
+            wireDrag(lblStatus);
+
             card.Click += (s, e) => selectCard();
             pic.Click += (s, e) => selectCard();
-            lbl.Click += (s, e) => selectCard();
+            lblTitle.Click += (s, e) => selectCard();
+            lblStatus.Click += (s, e) => selectCard();
 
-            card.DoubleClick += (s, e) => openInEditor();
-            pic.DoubleClick += (s, e) => openInEditor();
-            lbl.DoubleClick += (s, e) => openInEditor();
+            card.DoubleClick += (s, e) => assignAction();
+            pic.DoubleClick += (s, e) => assignAction();
+            lblTitle.DoubleClick += (s, e) => assignAction();
+            lblStatus.DoubleClick += (s, e) => assignAction();
 
-            card.Controls.AddRange(new Control[] { pic, lbl });
+            card.Controls.AddRange(new Control[] { pic, lblTitle, lblStatus, btnAction });
             return card;
         }
 
         private void RefreshTilesetSelection()
         {
             int currentTile = _canvas.ActiveTileId;
-            int idx = 0;
-            foreach (Control c in _pnlTileset.Controls)
-            {
-                if (c is Panel card)
-                {
-                    bool isSelected = (idx == currentTile);
-                    card.BackColor = isSelected ? Color.FromArgb(40, 70, 110) : Color.FromArgb(28, 28, 34);
-                    card.BorderStyle = isSelected ? BorderStyle.FixedSingle : BorderStyle.None;
 
-                    foreach (Control child in card.Controls)
+            if (_pnlAssignedTiles != null)
+            {
+                foreach (Control c in _pnlAssignedTiles.Controls)
+                {
+                    if (c is Panel card && card.Tag is int tileId)
                     {
-                        if (child is Label lbl)
+                        bool isSelected = (tileId == currentTile);
+                        card.BackColor = isSelected ? Color.FromArgb(40, 75, 115) : Color.FromArgb(28, 30, 38);
+                        card.BorderStyle = isSelected ? BorderStyle.FixedSingle : BorderStyle.None;
+                        foreach (Control child in card.Controls)
                         {
-                            lbl.ForeColor = isSelected ? Color.Cyan : Color.White;
-                            lbl.Font = new Font("Segoe UI", 7.8f, isSelected ? FontStyle.Bold : FontStyle.Regular);
+                            if (child is Label lbl && lbl.Tag as string == "title")
+                            {
+                                lbl.ForeColor = isSelected ? Color.Cyan : Color.White;
+                                lbl.Font = new Font("Segoe UI", 8f, isSelected ? FontStyle.Bold : FontStyle.Regular);
+                            }
                         }
                     }
-                    idx++;
+                }
+            }
+
+            if (_pnlLibraryTiles != null)
+            {
+                foreach (Control c in _pnlLibraryTiles.Controls)
+                {
+                    if (c is Panel card && card.Tag is int tileId)
+                    {
+                        bool isSelected = (tileId == currentTile);
+                        int assignedSlot = (_project?.CurrentMap?.AssignedTileIds != null) ? _project.CurrentMap.AssignedTileIds.IndexOf(tileId) : -1;
+                        bool isAssigned = (assignedSlot >= 0);
+                        card.BackColor = isSelected ? Color.FromArgb(40, 70, 105) : (isAssigned ? Color.FromArgb(24, 32, 28) : Color.FromArgb(28, 28, 34));
+                        card.BorderStyle = isSelected ? BorderStyle.FixedSingle : BorderStyle.None;
+                        foreach (Control child in card.Controls)
+                        {
+                            if (child is Label lbl && lbl.Tag as string == "title")
+                            {
+                                lbl.ForeColor = isSelected ? Color.Cyan : Color.White;
+                                lbl.Font = new Font("Segoe UI", 8f, isSelected ? FontStyle.Bold : FontStyle.Regular);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void UpdateTileUsageLabels()
+        {
+            if (_project == null) return;
+            var map = _project.CurrentMap;
+            if (map == null) return;
+
+            var counts = new Dictionary<int, int>();
+            for (int cy = 0; cy < map.Height; cy++)
+            {
+                for (int cx = 0; cx < map.Width; cx++)
+                {
+                    int tid = map.GetTile(cx, cy);
+                    if (tid > 0)
+                        counts[tid] = counts.ContainsKey(tid) ? counts[tid] + 1 : 1;
+                }
+            }
+
+            if (_pnlAssignedTiles != null)
+            {
+                foreach (Control c in _pnlAssignedTiles.Controls)
+                {
+                    if (c is Panel card && card.Tag is int tileId)
+                    {
+                        counts.TryGetValue(tileId, out int cnt);
+                        foreach (Control child in card.Controls)
+                        {
+                            if (child is Label lblStatus && lblStatus.Tag as string == "status")
+                            {
+                                int slotIdx = (map.AssignedTileIds != null) ? map.AssignedTileIds.IndexOf(tileId) : -1;
+                                bool isBeyond = (slotIdx + 1 > _project.TilesPerMap);
+                                string statusText = cnt > 0 ? $"Usata: {cnt}x" : "Non usata";
+                                if (isBeyond) statusText += " (Fuori limite)";
+                                lblStatus.Text = statusText;
+                                lblStatus.ForeColor = cnt > 0 ? Color.FromArgb(120, 230, 160) : Color.FromArgb(160, 170, 185);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (_pnlLibraryTiles != null)
+            {
+                foreach (Control c in _pnlLibraryTiles.Controls)
+                {
+                    if (c is Panel card && card.Tag is int tileId)
+                    {
+                        counts.TryGetValue(tileId, out int cnt);
+                        int assignedSlot = (map.AssignedTileIds != null) ? map.AssignedTileIds.IndexOf(tileId) : -1;
+                        bool isAssigned = (assignedSlot >= 0);
+
+                        foreach (Control child in card.Controls)
+                        {
+                            if (child is Label lblStatus && lblStatus.Tag as string == "status")
+                            {
+                                if (isAssigned)
+                                {
+                                    lblStatus.Text = cnt > 0 ? $"✔ Nel set (#{assignedSlot + 1}) • {cnt}x" : $"✔ Nel set (Slot #{assignedSlot + 1})";
+                                    lblStatus.ForeColor = Color.FromArgb(120, 230, 160);
+                                }
+                                else
+                                {
+                                    lblStatus.Text = cnt > 0 ? $"⚠ Usata: {cnt}x (non nel set)" : "➕ Trascina per assegnare";
+                                    lblStatus.ForeColor = cnt > 0 ? Color.FromArgb(255, 130, 100) : Color.FromArgb(140, 180, 220);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -341,21 +767,194 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 _picActiveTile.Image = null;
                 _picActiveTile.BackColor = Color.Black;
-                _lblActiveTileName.Text = "Tile #0: [Vuoto / Sfondo]";
+                _lblActiveTileName.ForeColor = Color.Yellow;
+                _lblActiveTileName.Text = "Tile #0: [Vuoto / Sfondo]\n(Cella trasparente)";
             }
             else if (_project != null && (tileId - 1) < _project.Tiles.Count)
             {
                 var tile = _project.Tiles[tileId - 1];
                 _picActiveTile.Image = tile.RenderToBitmap(2);
-                _lblActiveTileName.Text = $"Tile #{tileId}: {tile.Name}";
+
+                int count = 0;
+                var map = _project.CurrentMap;
+                if (map != null)
+                {
+                    for (int cy = 0; cy < map.Height; cy++)
+                    {
+                        for (int cx = 0; cx < map.Width; cx++)
+                        {
+                            if (map.GetTile(cx, cy) == tileId) count++;
+                        }
+                    }
+                }
+
+                int assignedSlot = (map?.AssignedTileIds != null) ? map.AssignedTileIds.IndexOf(tileId) : -1;
+                bool isAssigned = (assignedSlot >= 0);
+
+                if (isAssigned)
+                {
+                    _lblActiveTileName.Text = $"Tile #{tileId}: {tile.Name}\n✔ Set Mappa: Slot #{assignedSlot + 1} • Usata: {count}x";
+                    _lblActiveTileName.ForeColor = Color.Cyan;
+                }
+                else
+                {
+                    string warn = count > 0 ? $"⚠ Non nel set! Usata: {count}x (esportata come 0)" : "➕ Non nel set della mappa (non esportata)";
+                    _lblActiveTileName.Text = $"Tile #{tileId}: {tile.Name}\n{warn}";
+                    _lblActiveTileName.ForeColor = Color.FromArgb(255, 140, 140);
+                }
             }
             else
             {
                 _picActiveTile.Image = null;
+                _lblActiveTileName.ForeColor = Color.Yellow;
                 _lblActiveTileName.Text = $"Tile #{tileId}";
             }
 
             oldBmp?.Dispose();
+        }
+
+        private void PnlAssignedTiles_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(TileDragData)) || e.Data.GetDataPresent(typeof(int)))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void PnlAssignedTiles_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(TileDragData)) || e.Data.GetDataPresent(typeof(int)))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        private void PnlAssignedTiles_DragDrop(object sender, DragEventArgs e)
+        {
+            int tileId = 0;
+            if (e.Data.GetDataPresent(typeof(TileDragData)))
+            {
+                var data = (TileDragData)e.Data.GetData(typeof(TileDragData));
+                tileId = data.TileId;
+            }
+            else if (e.Data.GetDataPresent(typeof(int)))
+            {
+                tileId = (int)e.Data.GetData(typeof(int));
+            }
+
+            if (tileId > 0)
+            {
+                AssignTileToCurrentMap(tileId);
+            }
+        }
+
+        public void AssignTileToCurrentMap(int tileId)
+        {
+            if (_project?.CurrentMap == null || tileId <= 0) return;
+            var map = _project.CurrentMap;
+            if (map.AssignedTileIds == null)
+                map.AssignedTileIds = new List<int>();
+
+            if (map.AssignedTileIds.Contains(tileId))
+            {
+                int slot = map.AssignedTileIds.IndexOf(tileId) + 1;
+                MessageBox.Show($"La tile #{tileId} è già assegnata a questa mappa nello Slot #{slot}.", "Tile Già Assegnata", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _canvas.ActiveTileId = tileId;
+                RefreshTilesetSelection();
+                UpdateActiveTileDisplay();
+                return;
+            }
+
+            if (map.AssignedTileIds.Count >= _project.TilesPerMap)
+            {
+                var res = MessageBox.Show(
+                    $"La mappa ha già raggiunto il limite di {_project.TilesPerMap} tile assegnate configurato per il progetto.\n\n" +
+                    $"Vuoi incrementare il limite 'Tile/Mappa' del progetto per assegnare anche questa tile?",
+                    "Limite Tile Raggiunto",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                {
+                    _project.TilesPerMap++;
+                    if (_numTilesPerMap != null)
+                    {
+                        _isUpdatingTilesPerMap = true;
+                        _numTilesPerMap.Value = _project.TilesPerMap;
+                        _isUpdatingTilesPerMap = false;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            map.AssignedTileIds.Add(tileId);
+            _canvas.ActiveTileId = tileId;
+            ProjectModified?.Invoke(this, EventArgs.Empty);
+            RefreshTilesetPalette();
+            UpdateQuickAsm();
+        }
+
+        public void UnassignTileFromCurrentMap(int tileId)
+        {
+            if (_project?.CurrentMap == null || tileId <= 0) return;
+            var map = _project.CurrentMap;
+            if (map.AssignedTileIds == null || !map.AssignedTileIds.Contains(tileId)) return;
+
+            int usageCount = 0;
+            for (int y = 0; y < map.Height; y++)
+                for (int x = 0; x < map.Width; x++)
+                    if (map.GetTile(x, y) == tileId) usageCount++;
+
+            if (usageCount > 0)
+            {
+                var res = MessageBox.Show(
+                    $"La tile #{tileId} è attualmente utilizzata {usageCount} volte nella mappa.\n\n" +
+                    $"Se la rimuovi dal set della mappa, le celle corrispondenti non verranno esportate (saranno esportate come vuoto/0).\n\n" +
+                    $"Vuoi procedere con la rimozione dal set?",
+                    "Conferma Rimozione Tile dal Set",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (res != DialogResult.Yes) return;
+            }
+
+            map.AssignedTileIds.Remove(tileId);
+
+            if (_canvas.ActiveTileId == tileId)
+            {
+                _canvas.ActiveTileId = (map.AssignedTileIds.Count > 0) ? map.AssignedTileIds[0] : 0;
+            }
+
+            ProjectModified?.Invoke(this, EventArgs.Empty);
+            RefreshTilesetPalette();
+            UpdateQuickAsm();
+        }
+
+        public void MoveAssignedTileSlot(int tileId, int direction)
+        {
+            if (_project?.CurrentMap == null || tileId <= 0) return;
+            var map = _project.CurrentMap;
+            if (map.AssignedTileIds == null) return;
+
+            int idx = map.AssignedTileIds.IndexOf(tileId);
+            if (idx < 0) return;
+
+            int newIdx = idx + direction;
+            if (newIdx < 0 || newIdx >= map.AssignedTileIds.Count) return;
+
+            map.AssignedTileIds.RemoveAt(idx);
+            map.AssignedTileIds.Insert(newIdx, tileId);
+
+            ProjectModified?.Invoke(this, EventArgs.Empty);
+            RefreshTilesetPalette();
+            UpdateQuickAsm();
         }
 
         private void UpdateMapInfo()
@@ -402,6 +1001,8 @@ namespace ZXSpectrumSpriteGenerator.UI
         private void Canvas_MapChanged(object sender, EventArgs e)
         {
             ProjectModified?.Invoke(this, EventArgs.Empty);
+            UpdateTileUsageLabels();
+            UpdateActiveTileDisplay();
             UpdateQuickAsm();
         }
 
@@ -451,11 +1052,8 @@ namespace ZXSpectrumSpriteGenerator.UI
                     if (string.IsNullOrEmpty(mName)) mName = $"Mappa {_project.Maps.Count + 1}";
 
                     var newMap = _project.AddMap(mName, (int)numW.Value, (int)numH.Value);
-                    _canvas.Map = newMap;
                     UpdateMapListCombo();
-                    UpdateMapInfo();
-                    UpdateQuickAsm();
-                    CenterCanvas();
+                    SwitchToMapIndex(_project.SelectedMapIndex);
                     ProjectModified?.Invoke(this, EventArgs.Empty);
                 }
             }
@@ -465,11 +1063,8 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             if (_project?.CurrentMap == null) return;
             var dup = _project.DuplicateCurrentMap();
-            _canvas.Map = dup;
             UpdateMapListCombo();
-            UpdateMapInfo();
-            UpdateQuickAsm();
-            CenterCanvas();
+            SwitchToMapIndex(_project.SelectedMapIndex);
             ProjectModified?.Invoke(this, EventArgs.Empty);
         }
 
@@ -484,11 +1079,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (MessageBox.Show($"Sei sicuro di voler eliminare la mappa '{_project.CurrentMap.Name}'?", "Conferma Eliminazione", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 _project.RemoveCurrentMap();
-                _canvas.Map = _project.CurrentMap;
                 UpdateMapListCombo();
-                UpdateMapInfo();
-                UpdateQuickAsm();
-                CenterCanvas();
+                SwitchToMapIndex(_project.SelectedMapIndex);
                 ProjectModified?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -577,6 +1169,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 _project.CurrentMap.Clear(0);
                 _canvas.Invalidate();
+                UpdateTileUsageLabels();
+                UpdateActiveTileDisplay();
                 UpdateQuickAsm();
                 ProjectModified?.Invoke(this, EventArgs.Empty);
             }
@@ -587,6 +1181,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (_project?.CurrentMap != null && _project.CurrentMap.Undo())
             {
                 _canvas.Invalidate();
+                UpdateTileUsageLabels();
+                UpdateActiveTileDisplay();
                 UpdateQuickAsm();
                 ProjectModified?.Invoke(this, EventArgs.Empty);
             }
@@ -597,6 +1193,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (_project?.CurrentMap != null && _project.CurrentMap.Redo())
             {
                 _canvas.Invalidate();
+                UpdateTileUsageLabels();
+                UpdateActiveTileDisplay();
                 UpdateQuickAsm();
                 ProjectModified?.Invoke(this, EventArgs.Empty);
             }
@@ -622,10 +1220,10 @@ namespace ZXSpectrumSpriteGenerator.UI
                 dlg.ForeColor = Color.White;
                 dlg.MinimumSize = new Size(620, 480);
 
-                // Pannello superiore: componente di selezione della tipologia di mappa
-                Panel topPanel = new Panel { Dock = DockStyle.Top, Height = 58, BackColor = Color.FromArgb(24, 24, 28), Padding = new Padding(12, 10, 12, 6) };
+                // Pannello superiore: componente di selezione della tipologia di mappa e configurazione tile
+                Panel topPanel = new Panel { Dock = DockStyle.Top, Height = 72, BackColor = Color.FromArgb(24, 24, 28), Padding = new Padding(12, 10, 12, 6) };
 
-                Label lblFormatTitle = new Label { Text = "Tipologia Mappa:", AutoSize = true, Left = 12, Top = 14, Font = new Font("Segoe UI", 9f, FontStyle.Bold), ForeColor = Color.FromArgb(0, 220, 255) };
+                Label lblFormatTitle = new Label { Text = "Tipologia Mappa:", AutoSize = true, Left = 12, Top = 12, Font = new Font("Segoe UI", 9f, FontStyle.Bold), ForeColor = Color.FromArgb(0, 220, 255) };
 
                 ComboBox cmbType = new ComboBox
                 {
@@ -634,9 +1232,9 @@ namespace ZXSpectrumSpriteGenerator.UI
                     BackColor = Color.FromArgb(40, 40, 48),
                     ForeColor = Color.White,
                     Font = new Font("Segoe UI", 9f),
-                    Left = 140,
-                    Top = 11,
-                    Width = 260
+                    Left = 135,
+                    Top = 9,
+                    Width = 230
                 };
                 cmbType.Items.AddRange(new object[] {
                     "Compresso 2-bit (4 tile/byte)",
@@ -645,18 +1243,41 @@ namespace ZXSpectrumSpriteGenerator.UI
                 });
                 cmbType.SelectedIndex = (_cmbQuickAsmFormat != null && _cmbQuickAsmFormat.SelectedIndex >= 0) ? _cmbQuickAsmFormat.SelectedIndex : 0;
 
+                Label lblTilesTitle = new Label
+                {
+                    Text = "Tile/Mappa (prog):",
+                    AutoSize = true,
+                    Left = 385,
+                    Top = 12,
+                    Font = new Font("Segoe UI", 8.8f, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(0, 220, 255)
+                };
+
+                NumericUpDown numExportTiles = new NumericUpDown
+                {
+                    Left = 515,
+                    Top = 9,
+                    Width = 60,
+                    Minimum = 1,
+                    Maximum = 256,
+                    Value = Math.Max(1, Math.Min(256, _project.TilesPerMap)),
+                    BackColor = Color.FromArgb(40, 40, 48),
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 8.5f, FontStyle.Bold)
+                };
+
                 Label lblFormatInfo = new Label
                 {
                     AutoSize = false,
-                    Left = 415,
-                    Top = 8,
-                    Width = 300,
-                    Height = 44,
+                    Left = 12,
+                    Top = 38,
+                    Width = 700,
+                    Height = 28,
                     Font = new Font("Segoe UI", 8.2f),
                     ForeColor = Color.FromArgb(200, 230, 200)
                 };
 
-                topPanel.Controls.AddRange(new Control[] { lblFormatTitle, cmbType, lblFormatInfo });
+                topPanel.Controls.AddRange(new Control[] { lblFormatTitle, cmbType, lblTilesTitle, numExportTiles, lblFormatInfo });
 
                 TabControl tc = new TabControl { Dock = DockStyle.Fill };
                 TabPage tabAsm = new TabPage("Assembly Z80");
@@ -714,43 +1335,68 @@ namespace ZXSpectrumSpriteGenerator.UI
                     int stdBytes = w * h;
                     int packedBytesPerRow = (w + 3) / 4;
                     int packedBytes = packedBytesPerRow * h;
+                    var exportTilesList = MapExporter.GetTilesToExport(_project.CurrentMap, _project, mode);
+                    int tilesToExport = exportTilesList.Count;
+                    int assignedCount = (_project.CurrentMap.AssignedTileIds != null) ? _project.CurrentMap.AssignedTileIds.Count : 0;
 
                     if (mode == MapCompressionMode.Packed2Bit)
                     {
                         int savingPct = (stdBytes > 0) ? ((stdBytes - packedBytes) * 100 / stdBytes) : 0;
-                        lblFormatInfo.Text = $"Compresso 2-bit: {packedBytes} byte ({packedBytesPerRow} B/riga)\nRisparmio RAM: -{savingPct}% | 4 tile/byte (tile 0..3)";
+                        lblFormatInfo.Text = $"Compresso 2-bit: {packedBytes} byte ({packedBytesPerRow} B/riga, -{savingPct}% RAM) | Tileset esportato: {tilesToExport} tile (assegnati alla mappa: {assignedCount}, limite 2-bit: max 3 + sfondo, limite progetto: {_project.TilesPerMap})";
                         lblBinInfo.Text = $"FILE BINARIO COMPRESSO (.BIN)\n" +
                                           $"--------------------------------------------------\n" +
                                           $"Dimensioni mappa: {w}x{h} celle tile\n" +
                                           $"Formato byte: 4 tile per byte riga per riga\n" +
                                           $"Byte per riga: {packedBytesPerRow}\n" +
                                           $"Dimensione file: {packedBytes} byte (risparmio {savingPct}%)\n" +
-                                          $"Layout: [b7-6: T0] [b5-4: T1] [b3-2: T2] [b1-0: T3]";
+                                          $"Layout: [b7-6: T0] [b5-4: T1] [b3-2: T2] [b1-0: T3]\n" +
+                                          $"Tileset esportato: {tilesToExport} tile (assegnati alla mappa: {assignedCount}, limite progetto: {_project.TilesPerMap})";
                     }
                     else if (mode == MapCompressionMode.Uncompressed)
                     {
-                        lblFormatInfo.Text = $"Standard 1:1: {stdBytes} byte (1 byte per tile)\n1 cella = 1 byte intero | Supporta tile 0..255";
+                        lblFormatInfo.Text = $"Standard 1:1: {stdBytes} byte (1 byte per tile) | Tileset esportato: {tilesToExport} tile (assegnati alla mappa: {assignedCount}, limite progetto: {_project.TilesPerMap})";
                         lblBinInfo.Text = $"FILE BINARIO STANDARD 1:1 (.BIN)\n" +
                                           $"--------------------------------------------------\n" +
                                           $"Dimensioni mappa: {w}x{h} celle tile\n" +
                                           $"Formato byte: 1 byte per tile (sequenziale)\n" +
                                           $"Dimensione file: {stdBytes} byte\n" +
-                                          $"Supporta tutti gli indici di tile fino a 255";
+                                          $"Supporta tutti gli indici di tile fino a 255\n" +
+                                          $"Tileset esportato: {tilesToExport} tile (assegnati alla mappa: {assignedCount}, limite progetto: {_project.TilesPerMap})";
                     }
                     else
                     {
-                        lblFormatInfo.Text = $"Entrambi i formati inclusi:\n1:1 ({stdBytes} B) e Compresso ({packedBytes} B)";
+                        lblFormatInfo.Text = $"Entrambi i formati inclusi: 1:1 ({stdBytes} B) e Compresso ({packedBytes} B) | Tileset esportato: {tilesToExport} tile (assegnati: {assignedCount})";
                         lblBinInfo.Text = $"FILE BINARIO (.BIN)\n" +
                                           $"--------------------------------------------------\n" +
-                                          $"Seleziona 'Compresso' o 'Standard' in alto per esportare\nil file binario nel formato desiderato.";
+                                          $"Seleziona 'Compresso' o 'Standard' in alto per esportare\nil file binario nel formato desiderato.\n" +
+                                          $"Tileset esportato: {tilesToExport} tile (assegnati alla mappa: {assignedCount}, limite progetto: {_project.TilesPerMap})";
                     }
 
                     txtAsm.Text = MapExporter.ExportToAssembly(_project.CurrentMap, AsmDirective.Defb, exportAllMaps: false, project: _project, compressionMode: mode);
                     txtC.Text = MapExporter.ExportToC(_project.CurrentMap, exportAllMaps: false, project: _project, compressionMode: mode);
-                    txtBasic.Text = MapExporter.ExportToBasic(_project.CurrentMap, startLine: 5000, compressionMode: mode);
+                    txtBasic.Text = MapExporter.ExportToBasic(_project.CurrentMap, startLine: 5000, compressionMode: mode, project: _project);
                 };
 
                 cmbType.SelectedIndexChanged += (s, e) => updateAllTabs();
+
+                numExportTiles.ValueChanged += (s, e) =>
+                {
+                    int val = (int)numExportTiles.Value;
+                    if (_project.TilesPerMap != val)
+                    {
+                        _project.TilesPerMap = val;
+                        if (_numTilesPerMap != null)
+                        {
+                            _isUpdatingTilesPerMap = true;
+                            _numTilesPerMap.Value = val;
+                            _isUpdatingTilesPerMap = false;
+                        }
+                        ProjectModified?.Invoke(this, EventArgs.Empty);
+                        RefreshTilesetPalette();
+                        updateAllTabs();
+                    }
+                };
+
                 updateAllTabs();
 
                 btnSaveBinDirect.Click += (s, e) =>
@@ -854,6 +1500,18 @@ namespace ZXSpectrumSpriteGenerator.UI
                     MessageBox.Show($"Mappa salvata come immagine PNG:\n{sfd.FileName}", "Esportazione Completata", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Oggetto di trasferimento per il Drag & Drop di una tile dalla libreria al set della mappa.
+    /// </summary>
+    public class TileDragData
+    {
+        public int TileId { get; }
+        public TileDragData(int tileId)
+        {
+            TileId = tileId;
         }
     }
 }

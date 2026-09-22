@@ -75,6 +75,7 @@ namespace ZXSpectrumSpriteGenerator.Services
 
             sb.AppendLine("  ],");
             sb.AppendLine($"  \"selectedTileIndex\": {project.SelectedTileIndex},");
+            sb.AppendLine($"  \"tilesPerMap\": {project.TilesPerMap},");
             sb.AppendLine("  \"tiles\": [");
 
             for (int t = 0; t < project.Tiles.Count; t++)
@@ -115,9 +116,13 @@ namespace ZXSpectrumSpriteGenerator.Services
                 sb.AppendLine($"      \"defaultInk\": {map.DefaultInk},");
                 sb.AppendLine($"      \"bright\": {(map.Bright ? "true" : "false")},");
 
-                byte[] mapData = map.ToByteArray();
+                byte[] mapData = map.ToRawByteArray();
                 string mapHex = ByteArrayToHex(mapData);
-                sb.AppendLine($"      \"tilesHex\": \"{mapHex}\"");
+                sb.AppendLine($"      \"tilesHex\": \"{mapHex}\",");
+                string assignedStr = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0)
+                    ? string.Join(", ", map.AssignedTileIds)
+                    : string.Empty;
+                sb.AppendLine($"      \"assignedTileIds\": [{assignedStr}]");
 
                 sb.Append("    }");
                 if (m < project.Maps.Count - 1)
@@ -222,6 +227,7 @@ namespace ZXSpectrumSpriteGenerator.Services
 
             // Estrai array di tile (Tileset 8x8)
             int selTileIdx = ExtractInt(json, "selectedTileIndex", 0);
+            project.TilesPerMap = ExtractInt(json, "tilesPerMap", 8);
             project.Tiles.Clear();
             if (tilesKeywordIdx > 0)
             {
@@ -311,6 +317,35 @@ namespace ZXSpectrumSpriteGenerator.Services
                             map.FromByteArray(mapBytes, mW, mH);
                         }
 
+                        bool hasAssignedKey = objStr.IndexOf("\"assignedTileIds\"", StringComparison.OrdinalIgnoreCase) >= 0;
+                        if (hasAssignedKey)
+                        {
+                            var assignedIds = ExtractIntList(objStr, "assignedTileIds");
+                            map.AssignedTileIds = assignedIds ?? new List<int>();
+                        }
+                        else
+                        {
+                            // Fallback per file senza assignedTileIds (es. versioni precedenti):
+                            // Popola con le tile utilizzate nella mappa, oppure con le prime N tile del progetto
+                            var usedTiles = new List<int>();
+                            for (int cy = 0; cy < map.Height; cy++)
+                            {
+                                for (int cx = 0; cx < map.Width; cx++)
+                                {
+                                    int t = map.GetTile(cx, cy);
+                                    if (t > 0 && !usedTiles.Contains(t))
+                                        usedTiles.Add(t);
+                                }
+                            }
+                            int maxAllowed = (project.TilesPerMap > 0) ? project.TilesPerMap : 8;
+                            for (int i = 1; i <= project.Tiles.Count && usedTiles.Count < maxAllowed; i++)
+                            {
+                                if (!usedTiles.Contains(i))
+                                    usedTiles.Add(i);
+                            }
+                            map.AssignedTileIds = (usedTiles.Count > maxAllowed) ? usedTiles.GetRange(0, maxAllowed) : usedTiles;
+                        }
+
                         project.Maps.Add(map);
                     }
                 }
@@ -333,6 +368,28 @@ namespace ZXSpectrumSpriteGenerator.Services
         {
             if (string.IsNullOrEmpty(s)) return string.Empty;
             return s.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r");
+        }
+
+        private static List<int> ExtractIntList(string text, string key)
+        {
+            var list = new List<int>();
+            var match = Regex.Match(text, $"\"{key}\"\\s*:\\s*\\[([^\\]]*)\\]", RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                string raw = match.Groups[1].Value.Trim();
+                if (!string.IsNullOrEmpty(raw))
+                {
+                    string[] parts = raw.Split(',');
+                    foreach (var p in parts)
+                    {
+                        if (int.TryParse(p.Trim(), out int val))
+                        {
+                            list.Add(val);
+                        }
+                    }
+                }
+            }
+            return list;
         }
 
         private static string ExtractString(string text, string key)

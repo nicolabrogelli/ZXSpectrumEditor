@@ -19,6 +19,9 @@ namespace ZXSpectrumSpriteGenerator.Models
         public List<Tile> Tiles { get; private set; } = new List<Tile>();
         public int SelectedTileIndex { get; set; } = 0;
 
+        // Numero finito di tile consentite ed esportabili per tutte le mappe del progetto
+        public int TilesPerMap { get; set; } = 8;
+
         // Gestione Mappe di Gioco (Tilemaps)
         public List<GameMap> Maps { get; private set; } = new List<GameMap>();
         public int SelectedMapIndex { get; set; } = 0;
@@ -232,11 +235,44 @@ namespace ZXSpectrumSpriteGenerator.Models
         public bool RemoveCurrentTile()
         {
             if (Tiles.Count <= 1) return false;
+            int removedId = SelectedTileIndex + 1; // ID 1-based
             Tiles.RemoveAt(SelectedTileIndex);
             if (SelectedTileIndex >= Tiles.Count)
             {
                 SelectedTileIndex = Tiles.Count - 1;
             }
+
+            // Aggiusta gli ID delle tile in tutte le mappe del progetto
+            foreach (var map in Maps)
+            {
+                if (map.AssignedTileIds != null)
+                {
+                    for (int i = map.AssignedTileIds.Count - 1; i >= 0; i--)
+                    {
+                        if (map.AssignedTileIds[i] == removedId)
+                        {
+                            map.AssignedTileIds.RemoveAt(i);
+                        }
+                        else if (map.AssignedTileIds[i] > removedId)
+                        {
+                            map.AssignedTileIds[i]--;
+                        }
+                    }
+                }
+
+                for (int y = 0; y < map.Height; y++)
+                {
+                    for (int x = 0; x < map.Width; x++)
+                    {
+                        int t = map.GetTile(x, y);
+                        if (t == removedId)
+                            map.SetTile(x, y, 0);
+                        else if (t > removedId)
+                            map.SetTile(x, y, t - 1);
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -269,6 +305,11 @@ namespace ZXSpectrumSpriteGenerator.Models
                 TileWidth = 8,
                 TileHeight = 8
             };
+            int count = Math.Min(TilesPerMap, Tiles.Count);
+            for (int t = 1; t <= count; t++)
+            {
+                map.AssignedTileIds.Add(t);
+            }
             Maps.Add(map);
             SelectedMapIndex = Maps.Count - 1;
             return map;

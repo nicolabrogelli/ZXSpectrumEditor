@@ -535,6 +535,7 @@
     }
   ],
   "selectedTileIndex": 17,
+  "tilesPerMap": 6,
   "tiles": [
     {
       "name": "Tile_Imp_2_1",

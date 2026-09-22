@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -25,6 +26,76 @@ namespace ZXSpectrumSpriteGenerator.Services
     /// </summary>
     public static class MapExporter
     {
+        public static List<Tile> GetTilesToExport(GameMap map, SpriteProject project, MapCompressionMode compressionMode, bool exportAllMaps = false)
+        {
+            var list = new List<Tile>();
+            if (project == null || project.Tiles.Count == 0) return list;
+
+            if (exportAllMaps)
+            {
+                var seenIds = new HashSet<int>();
+                foreach (var m in project.Maps)
+                {
+                    if (m.AssignedTileIds != null && m.AssignedTileIds.Count > 0)
+                    {
+                        int limit = (project.TilesPerMap > 0) ? project.TilesPerMap : m.AssignedTileIds.Count;
+                        if (compressionMode == MapCompressionMode.Packed2Bit) limit = Math.Min(limit, 3);
+                        int count = Math.Min(m.AssignedTileIds.Count, limit);
+                        for (int i = 0; i < count; i++)
+                        {
+                            int tid = m.AssignedTileIds[i];
+                            if (!seenIds.Contains(tid))
+                            {
+                                seenIds.Add(tid);
+                                if (tid > 0 && tid <= project.Tiles.Count)
+                                    list.Add(project.Tiles[tid - 1]);
+                            }
+                        }
+                    }
+                }
+                if (list.Count == 0)
+                {
+                    int maxAllowed = (project.TilesPerMap > 0) ? project.TilesPerMap : project.Tiles.Count;
+                    if (compressionMode == MapCompressionMode.Packed2Bit) maxAllowed = Math.Min(maxAllowed, 3);
+                    int count = Math.Min(project.Tiles.Count, maxAllowed);
+                    for (int i = 0; i < count; i++)
+                        list.Add(project.Tiles[i]);
+                }
+                return list;
+            }
+
+            if (map != null && map.AssignedTileIds != null && map.AssignedTileIds.Count > 0)
+            {
+                int maxAllowed = (project.TilesPerMap > 0) ? project.TilesPerMap : map.AssignedTileIds.Count;
+                if (compressionMode == MapCompressionMode.Packed2Bit)
+                {
+                    maxAllowed = Math.Min(maxAllowed, 3);
+                }
+                int count = Math.Min(map.AssignedTileIds.Count, maxAllowed);
+                for (int i = 0; i < count; i++)
+                {
+                    int tid = map.AssignedTileIds[i];
+                    if (tid > 0 && tid <= project.Tiles.Count)
+                    {
+                        list.Add(project.Tiles[tid - 1]);
+                    }
+                }
+            }
+            else
+            {
+                int maxAllowed = (project.TilesPerMap > 0) ? project.TilesPerMap : project.Tiles.Count;
+                if (compressionMode == MapCompressionMode.Packed2Bit)
+                {
+                    maxAllowed = Math.Min(maxAllowed, 3);
+                }
+                int count = Math.Min(project.Tiles.Count, maxAllowed);
+                for (int i = 0; i < count; i++)
+                    list.Add(project.Tiles[i]);
+            }
+
+            return list;
+        }
+
         public static string ExportToAssembly(GameMap map, AsmDirective directive = AsmDirective.Defb, bool exportAllMaps = false, SpriteProject project = null, MapCompressionMode compressionMode = MapCompressionMode.Both, NumberFormat numberFormat = NumberFormat.BinaryPercent)
         {
             if (map == null && project == null) return string.Empty;
@@ -55,7 +126,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                 for (int m = 0; m < project.Maps.Count; m++)
                 {
                     ExportSingleMapAsm(sb, project.Maps[m], dirStr, compressionMode, numberFormat);
-                    sb.AppendLine();
+                    if (m < project.Maps.Count - 1) sb.AppendLine();
                 }
             }
             else if (map != null)
@@ -66,14 +137,16 @@ namespace ZXSpectrumSpriteGenerator.Services
             // Esportazione dei dati grafici 8x8 dei Tile (Tileset)
             if (project != null && project.Tiles.Count > 0)
             {
+                var tilesToExport = GetTilesToExport(map, project, compressionMode, exportAllMaps);
+
                 sb.AppendLine();
                 sb.AppendLine("; ===========================================================");
                 sb.AppendLine("; TILESET (8x8 PIXEL) - DEFINIZIONI GRAFICHE DEI TILE");
-                sb.AppendLine($"; Totale tile: {project.Tiles.Count}" + ((compressionMode == MapCompressionMode.Packed2Bit && project.Tiles.Count > 3) ? " (nota: indici 2-bit supportano tile 1..3 oltre a vuoto)" : ""));
+                sb.AppendLine($"; Totale tile esportati: {tilesToExport.Count} (assegnati alla mappa: {(map?.AssignedTileIds?.Count ?? 0)}, limite di progetto: {project.TilesPerMap})");
                 sb.AppendLine("; ===========================================================");
-                for (int t = 0; t < project.Tiles.Count; t++)
+                for (int t = 0; t < tilesToExport.Count; t++)
                 {
-                    var tile = project.Tiles[t];
+                    var tile = tilesToExport[t];
                     string tName = SanitizeIdentifier(tile.Name);
                     sb.AppendLine($"; Tile {t + 1}: {tile.Name} (Ink: {tile.InkColor}, Paper: {tile.PaperColor}, Bright: {(tile.Bright ? "1" : "0")}, Flash: {(tile.Flash ? "1" : "0")})");
                     sb.AppendLine($"tile_{t + 1}_{tName}:");
@@ -123,6 +196,7 @@ namespace ZXSpectrumSpriteGenerator.Services
 
             string cleanName = SanitizeIdentifier(map.Name);
             int totalBytes = map.Width * map.Height;
+            bool hasAssigned = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0);
 
             sb.AppendLine($"; --- Mappa: {map.Name} [Formato Standard 1:1, 1 byte/tile] ---");
             sb.AppendLine($"; Dimensioni: {map.Width}x{map.Height} celle ({map.Width * map.TileWidth}x{map.Height * map.TileHeight} px), {totalBytes} byte");
@@ -135,7 +209,8 @@ namespace ZXSpectrumSpriteGenerator.Services
                 sb.Append($"    {dirStr} ");
                 for (int x = 0; x < map.Width; x++)
                 {
-                    sb.Append(map.GetTile(x, y));
+                    int val = hasAssigned ? map.GetExportSlot(map.GetTile(x, y)) : map.GetTile(x, y);
+                    sb.Append(val);
                     if (x < map.Width - 1) sb.Append(",");
                 }
                 sb.AppendLine($" ; Riga {y}");
@@ -149,13 +224,15 @@ namespace ZXSpectrumSpriteGenerator.Services
             string cleanName = SanitizeIdentifier(map.Name);
             int bytesPerRow = (map.Width + 3) / 4;
             int totalPackedBytes = bytesPerRow * map.Height;
+            bool hasAssigned = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0);
 
             bool hasOverflow = false;
             for (int y = 0; y < map.Height && !hasOverflow; y++)
             {
                 for (int x = 0; x < map.Width; x++)
                 {
-                    if (map.GetTile(x, y) > 3)
+                    int slotVal = hasAssigned ? map.GetExportSlot(map.GetTile(x, y)) : map.GetTile(x, y);
+                    if (slotVal > 3)
                     {
                         hasOverflow = true;
                         break;
@@ -183,10 +260,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                 for (int b = 0; b < bytesPerRow; b++)
                 {
                     int startX = b * 4;
-                    int t0 = (startX < map.Width) ? (map.GetTile(startX, y) & 0x03) : 0;
-                    int t1 = (startX + 1 < map.Width) ? (map.GetTile(startX + 1, y) & 0x03) : 0;
-                    int t2 = (startX + 2 < map.Width) ? (map.GetTile(startX + 2, y) & 0x03) : 0;
-                    int t3 = (startX + 3 < map.Width) ? (map.GetTile(startX + 3, y) & 0x03) : 0;
+                    int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
+                    int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
+                    int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
+                    int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
 
                     byte packedByte = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                     sb.Append(FormatPackedByte(packedByte, numberFormat));
@@ -243,6 +320,33 @@ namespace ZXSpectrumSpriteGenerator.Services
                 ExportSingleMapC(sb, map, compressionMode);
             }
 
+            // Esportazione dei dati grafici 8x8 dei Tile (Tileset) in C
+            if (project != null && project.Tiles.Count > 0)
+            {
+                var tilesToExport = GetTilesToExport(map, project, compressionMode, exportAllMaps);
+
+                sb.AppendLine();
+                sb.AppendLine("// ===========================================================");
+                sb.AppendLine("// TILESET (8x8 PIXEL) - DEFINIZIONI GRAFICHE DEI TILE");
+                sb.AppendLine($"// Totale tile esportati: {tilesToExport.Count} (assegnati alla mappa: {(map?.AssignedTileIds?.Count ?? 0)}, limite di progetto: {project.TilesPerMap})");
+                sb.AppendLine("// ===========================================================");
+                for (int t = 0; t < tilesToExport.Count; t++)
+                {
+                    var tile = tilesToExport[t];
+                    string tName = SanitizeIdentifier(tile.Name);
+                    byte attr = tile.GetAttributeByte();
+                    var hexData = tile.GetBytesRowByRow();
+                    sb.AppendLine($"// Tile {t + 1}: {tile.Name} (Attr: 0x{attr:X2})");
+                    sb.Append($"const unsigned char tile_{t + 1}_{tName}[9] = {{ 0x{attr:X2}, ");
+                    for (int b = 0; b < hexData.Length; b++)
+                    {
+                        sb.Append($"0x{hexData[b]:X2}");
+                        if (b < hexData.Length - 1) sb.Append(", ");
+                    }
+                    sb.AppendLine(" };");
+                }
+            }
+
             return sb.ToString();
         }
 
@@ -270,6 +374,7 @@ namespace ZXSpectrumSpriteGenerator.Services
         {
             if (map == null) return;
             string cleanName = SanitizeIdentifier(map.Name);
+            bool hasAssigned = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0);
             sb.AppendLine($"// --- Mappa {map.Name} (Standard 1:1 - {map.Width * map.Height} byte) ---");
             sb.AppendLine($"#define {cleanName.ToUpper()}_WIDTH  {map.Width}");
             sb.AppendLine($"#define {cleanName.ToUpper()}_HEIGHT {map.Height}");
@@ -280,7 +385,8 @@ namespace ZXSpectrumSpriteGenerator.Services
                 sb.Append("    { ");
                 for (int x = 0; x < map.Width; x++)
                 {
-                    sb.Append(map.GetTile(x, y));
+                    int val = hasAssigned ? map.GetExportSlot(map.GetTile(x, y)) : map.GetTile(x, y);
+                    sb.Append(val);
                     if (x < map.Width - 1) sb.Append(", ");
                 }
                 sb.Append(" }");
@@ -296,6 +402,7 @@ namespace ZXSpectrumSpriteGenerator.Services
             string cleanName = SanitizeIdentifier(map.Name);
             int bytesPerRow = (map.Width + 3) / 4;
             int totalBytes = bytesPerRow * map.Height;
+            bool hasAssigned = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0);
 
             sb.AppendLine($"// --- Mappa {map.Name} (Compresso 2-bit, 4 tile/byte - {totalBytes} byte) ---");
             sb.AppendLine($"// Struttura byte (MSB->LSB): [Bit 7-6: Tile x+0] [Bit 5-4: Tile x+1] [Bit 3-2: Tile x+2] [Bit 1-0: Tile x+3]");
@@ -310,10 +417,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                 for (int b = 0; b < bytesPerRow; b++)
                 {
                     int startX = b * 4;
-                    int t0 = (startX < map.Width) ? (map.GetTile(startX, y) & 0x03) : 0;
-                    int t1 = (startX + 1 < map.Width) ? (map.GetTile(startX + 1, y) & 0x03) : 0;
-                    int t2 = (startX + 2 < map.Width) ? (map.GetTile(startX + 2, y) & 0x03) : 0;
-                    int t3 = (startX + 3 < map.Width) ? (map.GetTile(startX + 3, y) & 0x03) : 0;
+                    int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
+                    int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
+                    int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
+                    int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
 
                     byte packed = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                     sb.Append("0x" + packed.ToString("X2"));
@@ -327,12 +434,13 @@ namespace ZXSpectrumSpriteGenerator.Services
             sb.AppendLine("};");
         }
 
-        public static string ExportToBasic(GameMap map, int startLine = 5000, MapCompressionMode compressionMode = MapCompressionMode.Uncompressed)
+        public static string ExportToBasic(GameMap map, int startLine = 5000, MapCompressionMode compressionMode = MapCompressionMode.Uncompressed, SpriteProject project = null)
         {
             if (map == null) return string.Empty;
 
             StringBuilder sb = new StringBuilder();
             int line = startLine;
+            bool hasAssigned = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0);
 
             if (compressionMode == MapCompressionMode.Packed2Bit)
             {
@@ -350,10 +458,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                     for (int b = 0; b < bytesPerRow; b++)
                     {
                         int startX = b * 4;
-                        int t0 = (startX < map.Width) ? (map.GetTile(startX, y) & 0x03) : 0;
-                        int t1 = (startX + 1 < map.Width) ? (map.GetTile(startX + 1, y) & 0x03) : 0;
-                        int t2 = (startX + 2 < map.Width) ? (map.GetTile(startX + 2, y) & 0x03) : 0;
-                        int t3 = (startX + 3 < map.Width) ? (map.GetTile(startX + 3, y) & 0x03) : 0;
+                        int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
+                        int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
+                        int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
+                        int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
 
                         byte packed = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                         sb.Append(packed);
@@ -375,7 +483,8 @@ namespace ZXSpectrumSpriteGenerator.Services
                     sb.Append($"{line} DATA ");
                     for (int x = 0; x < map.Width; x++)
                     {
-                        sb.Append(map.GetTile(x, y));
+                        int val = hasAssigned ? map.GetExportSlot(map.GetTile(x, y)) : map.GetTile(x, y);
+                        sb.Append(val);
                         if (x < map.Width - 1) sb.Append(",");
                     }
                     sb.AppendLine();
@@ -394,10 +503,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                     for (int b = 0; b < bytesPerRow; b++)
                     {
                         int startX = b * 4;
-                        int t0 = (startX < map.Width) ? (map.GetTile(startX, y) & 0x03) : 0;
-                        int t1 = (startX + 1 < map.Width) ? (map.GetTile(startX + 1, y) & 0x03) : 0;
-                        int t2 = (startX + 2 < map.Width) ? (map.GetTile(startX + 2, y) & 0x03) : 0;
-                        int t3 = (startX + 3 < map.Width) ? (map.GetTile(startX + 3, y) & 0x03) : 0;
+                        int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
+                        int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
+                        int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
+                        int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
 
                         byte packed = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                         sb.Append(packed);
@@ -419,8 +528,32 @@ namespace ZXSpectrumSpriteGenerator.Services
                     sb.Append($"{line} DATA ");
                     for (int x = 0; x < map.Width; x++)
                     {
-                        sb.Append(map.GetTile(x, y));
+                        int val = hasAssigned ? map.GetExportSlot(map.GetTile(x, y)) : map.GetTile(x, y);
+                        sb.Append(val);
                         if (x < map.Width - 1) sb.Append(",");
+                    }
+                    sb.AppendLine();
+                    line += 10;
+                }
+            }
+
+            // Esportazione dei dati grafici 8x8 dei Tile (Tileset) in BASIC
+            if (project != null && project.Tiles.Count > 0)
+            {
+                var tilesToExport = GetTilesToExport(map, project, compressionMode);
+
+                sb.AppendLine();
+                sb.AppendLine($"{line} REM *** TILESET (8x8 PIXEL) - {tilesToExport.Count} TILE ESPORTATI (Limite: {project.TilesPerMap}) ***"); line += 10;
+                for (int t = 0; t < tilesToExport.Count; t++)
+                {
+                    var tile = tilesToExport[t];
+                    byte attr = tile.GetAttributeByte();
+                    var rawBytes = tile.GetBytesRowByRow();
+                    sb.AppendLine($"{line} REM Tile {t + 1}: {tile.Name} (Attr={attr})"); line += 10;
+                    sb.Append($"{line} DATA {attr}");
+                    for (int b = 0; b < rawBytes.Length; b++)
+                    {
+                        sb.Append($",{rawBytes[b]}");
                     }
                     sb.AppendLine();
                     line += 10;

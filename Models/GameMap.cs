@@ -25,6 +25,25 @@ namespace ZXSpectrumSpriteGenerator.Models
         // Griglia di tile bidimensionale [x, y]
         public int[,] Tiles { get; private set; }
 
+        /// <summary>
+        /// Elenco degli ID delle tile (1-based index in project.Tiles) assegnate specificamente a questa mappa.
+        /// Solo queste tile costituiscono il tileset locale della mappa e vengono esportate.
+        /// </summary>
+        public List<int> AssignedTileIds { get; set; } = new List<int>();
+
+        /// <summary>
+        /// Restituisce lo slot 1-based (1..N) della tile per l'esportazione.
+        /// Se la tile non fa parte di AssignedTileIds, o se tileId è 0, restituisce 0 (vuoto).
+        /// Se la mappa non ha AssignedTileIds configurati, restituisce tileId inalterato.
+        /// </summary>
+        public int GetExportSlot(int tileId)
+        {
+            if (tileId <= 0) return 0;
+            if (AssignedTileIds == null || AssignedTileIds.Count == 0) return tileId;
+            int idx = AssignedTileIds.IndexOf(tileId);
+            return idx >= 0 ? (idx + 1) : 0;
+        }
+
         // Stack per la gestione Undo / Redo
         private readonly Stack<int[,]> _undoStack = new Stack<int[,]>();
         private readonly Stack<int[,]> _redoStack = new Stack<int[,]>();
@@ -86,27 +105,30 @@ namespace ZXSpectrumSpriteGenerator.Models
             return true;
         }
 
-        public void Clear(int fillTile = 0)
+        public void Clear(int emptyTileId = 0)
         {
             PushUndoState();
             for (int y = 0; y < Height; y++)
                 for (int x = 0; x < Width; x++)
-                    Tiles[x, y] = fillTile;
+                    Tiles[x, y] = emptyTileId;
         }
 
-        public void Resize(int newWidth, int newHeight, int fillTile = 0)
+        public void Resize(int newWidth, int newHeight)
         {
-            if (newWidth <= 0 || newHeight <= 0) return;
+            newWidth = Math.Max(1, newWidth);
+            newHeight = Math.Max(1, newHeight);
+            if (newWidth == Width && newHeight == Height) return;
+
             PushUndoState();
             int[,] newTiles = new int[newWidth, newHeight];
-            for (int y = 0; y < newHeight; y++)
+            int minW = Math.Min(Width, newWidth);
+            int minH = Math.Min(Height, newHeight);
+
+            for (int y = 0; y < minH; y++)
             {
-                for (int x = 0; x < newWidth; x++)
+                for (int x = 0; x < minW; x++)
                 {
-                    if (x < Width && y < Height)
-                        newTiles[x, y] = Tiles[x, y];
-                    else
-                        newTiles[x, y] = fillTile;
+                    newTiles[x, y] = Tiles[x, y];
                 }
             }
             Width = newWidth;
@@ -125,6 +147,7 @@ namespace ZXSpectrumSpriteGenerator.Models
                 Bright = this.Bright
             };
             clone.Tiles = CloneTiles(this.Tiles, Width, Height);
+            clone.AssignedTileIds = new List<int>(this.AssignedTileIds);
             return clone;
         }
 
@@ -138,6 +161,27 @@ namespace ZXSpectrumSpriteGenerator.Models
         }
 
         public byte[] ToByteArray()
+        {
+            byte[] bytes = new byte[Width * Height];
+            int idx = 0;
+            bool hasAssigned = (AssignedTileIds != null && AssignedTileIds.Count > 0);
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    int raw = Tiles[x, y];
+                    int val = hasAssigned ? GetExportSlot(raw) : raw;
+                    bytes[idx++] = (byte)(val & 0xFF);
+                }
+            }
+            return bytes;
+        }
+
+        /// <summary>
+        /// Esporta la griglia della mappa preservando i raw TileId del progetto (senza rimappatura agli slot di esportazione).
+        /// Utilizzato per il salvataggio nel file di progetto .zxproj.
+        /// </summary>
+        public byte[] ToRawByteArray()
         {
             byte[] bytes = new byte[Width * Height];
             int idx = 0;
@@ -175,16 +219,17 @@ namespace ZXSpectrumSpriteGenerator.Models
             int bytesPerRow = (Width + 3) / 4;
             byte[] bytes = new byte[bytesPerRow * Height];
             int idx = 0;
+            bool hasAssigned = (AssignedTileIds != null && AssignedTileIds.Count > 0);
 
             for (int y = 0; y < Height; y++)
             {
                 for (int b = 0; b < bytesPerRow; b++)
                 {
                     int startX = b * 4;
-                    int t0 = (startX < Width) ? (Tiles[startX, y] & 0x03) : 0;
-                    int t1 = (startX + 1 < Width) ? (Tiles[startX + 1, y] & 0x03) : 0;
-                    int t2 = (startX + 2 < Width) ? (Tiles[startX + 2, y] & 0x03) : 0;
-                    int t3 = (startX + 3 < Width) ? (Tiles[startX + 3, y] & 0x03) : 0;
+                    int t0 = (startX < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX, y]) : Tiles[startX, y]) & 0x03) : 0;
+                    int t1 = (startX + 1 < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX + 1, y]) : Tiles[startX + 1, y]) & 0x03) : 0;
+                    int t2 = (startX + 2 < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX + 2, y]) : Tiles[startX + 2, y]) & 0x03) : 0;
+                    int t3 = (startX + 3 < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX + 3, y]) : Tiles[startX + 3, y]) & 0x03) : 0;
 
                     bytes[idx++] = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                 }
