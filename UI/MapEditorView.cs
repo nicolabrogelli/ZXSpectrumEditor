@@ -26,6 +26,42 @@ namespace ZXSpectrumSpriteGenerator.UI
         public MapEditorView()
         {
             InitializeComponent();
+            _cmbQuickAsmFormat.Items.AddRange(new object[] {
+                "Compresso 2-bit (4 tile/byte)",
+                "Standard 1:1 (1 byte/tile)",
+                "Entrambi i formati"
+            });
+            _cmbQuickAsmFormat.SelectedIndex = 0;
+        }
+
+        private void CmbQuickAsmFormat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateQuickAsm();
+        }
+
+        public MapCompressionMode SelectedCompressionMode
+        {
+            get
+            {
+                if (_cmbQuickAsmFormat == null) return MapCompressionMode.Packed2Bit;
+                switch (_cmbQuickAsmFormat.SelectedIndex)
+                {
+                    case 0: return MapCompressionMode.Packed2Bit;
+                    case 1: return MapCompressionMode.Uncompressed;
+                    case 2: return MapCompressionMode.Both;
+                    default: return MapCompressionMode.Packed2Bit;
+                }
+            }
+            set
+            {
+                if (_cmbQuickAsmFormat == null) return;
+                switch (value)
+                {
+                    case MapCompressionMode.Packed2Bit: _cmbQuickAsmFormat.SelectedIndex = 0; break;
+                    case MapCompressionMode.Uncompressed: _cmbQuickAsmFormat.SelectedIndex = 1; break;
+                    case MapCompressionMode.Both: _cmbQuickAsmFormat.SelectedIndex = 2; break;
+                }
+            }
         }
 
         [Browsable(false)]
@@ -338,11 +374,12 @@ namespace ZXSpectrumSpriteGenerator.UI
             int pxW = w * map.TileWidth;
             int pxH = h * map.TileHeight;
             int totalBytes = w * h;
+            int packedBytes = ((w + 3) / 4) * h;
 
             string screenTag = (w == 32 && h == 24) ? " (Schermo ZX)" : "";
             _lblDimensions.Text = $"Dimensioni: {w}x{h} celle (8x8 px)";
             _lblPixels.Text = $"Pixel: {pxW}x{pxH} px{screenTag}";
-            _lblMemory.Text = $"Memoria Z80: {totalBytes} byte ({totalBytes} celle)";
+            _lblMemory.Text = $"Memoria Z80: {totalBytes} byte (compresso 2-bit: {packedBytes} byte)";
         }
 
         private void UpdateQuickAsm()
@@ -353,7 +390,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 return;
             }
 
-            _txtQuickMapAsm.Text = MapExporter.ExportToAssembly(_project.CurrentMap, AsmDirective.Defb, exportAllMaps: false, project: _project).Trim();
+            _txtQuickMapAsm.Text = MapExporter.ExportToAssembly(_project.CurrentMap, AsmDirective.Defb, exportAllMaps: false, project: _project, compressionMode: SelectedCompressionMode).Trim();
         }
 
         private void Canvas_HoverCoordinatesChanged(object sender, MapHoverEventArgs e)
@@ -579,62 +616,226 @@ namespace ZXSpectrumSpriteGenerator.UI
             using (Form dlg = new Form())
             {
                 dlg.Text = "Esporta Dati Mappa di Gioco ZX Spectrum";
-                dlg.Size = new Size(680, 520);
+                dlg.Size = new Size(740, 580);
                 dlg.StartPosition = FormStartPosition.CenterParent;
                 dlg.BackColor = Color.FromArgb(30, 30, 36);
                 dlg.ForeColor = Color.White;
+                dlg.MinimumSize = new Size(620, 480);
+
+                // Pannello superiore: componente di selezione della tipologia di mappa
+                Panel topPanel = new Panel { Dock = DockStyle.Top, Height = 58, BackColor = Color.FromArgb(24, 24, 28), Padding = new Padding(12, 10, 12, 6) };
+
+                Label lblFormatTitle = new Label { Text = "Tipologia Mappa:", AutoSize = true, Left = 12, Top = 14, Font = new Font("Segoe UI", 9f, FontStyle.Bold), ForeColor = Color.FromArgb(0, 220, 255) };
+
+                ComboBox cmbType = new ComboBox
+                {
+                    DropDownStyle = ComboBoxStyle.DropDownList,
+                    FlatStyle = FlatStyle.Flat,
+                    BackColor = Color.FromArgb(40, 40, 48),
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 9f),
+                    Left = 140,
+                    Top = 11,
+                    Width = 260
+                };
+                cmbType.Items.AddRange(new object[] {
+                    "Compresso 2-bit (4 tile/byte)",
+                    "Standard 1:1 (1 byte/tile)",
+                    "Entrambi (Standard + Compresso)"
+                });
+                cmbType.SelectedIndex = (_cmbQuickAsmFormat != null && _cmbQuickAsmFormat.SelectedIndex >= 0) ? _cmbQuickAsmFormat.SelectedIndex : 0;
+
+                Label lblFormatInfo = new Label
+                {
+                    AutoSize = false,
+                    Left = 415,
+                    Top = 8,
+                    Width = 300,
+                    Height = 44,
+                    Font = new Font("Segoe UI", 8.2f),
+                    ForeColor = Color.FromArgb(200, 230, 200)
+                };
+
+                topPanel.Controls.AddRange(new Control[] { lblFormatTitle, cmbType, lblFormatInfo });
 
                 TabControl tc = new TabControl { Dock = DockStyle.Fill };
                 TabPage tabAsm = new TabPage("Assembly Z80");
                 TabPage tabC = new TabPage("C / Z88DK");
                 TabPage tabBasic = new TabPage("Sinclair BASIC");
+                TabPage tabBin = new TabPage("File Binario (.bin)");
 
                 TextBox txtAsm = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Both, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.FromArgb(180, 255, 180), Font = new Font("Consolas", 8.8f) };
-                txtAsm.Text = MapExporter.ExportToAssembly(_project.CurrentMap, AsmDirective.Defb, exportAllMaps: false, project: _project);
                 tabAsm.Controls.Add(txtAsm);
 
                 TextBox txtC = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Both, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.FromArgb(180, 220, 255), Font = new Font("Consolas", 8.8f) };
-                txtC.Text = MapExporter.ExportToC(_project.CurrentMap, exportAllMaps: false, project: _project);
                 tabC.Controls.Add(txtC);
 
                 TextBox txtBasic = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Both, BackColor = Color.FromArgb(20, 20, 25), ForeColor = Color.FromArgb(255, 230, 150), Font = new Font("Consolas", 8.8f) };
-                txtBasic.Text = MapExporter.ExportToBasic(_project.CurrentMap);
                 tabBasic.Controls.Add(txtBasic);
 
-                tc.TabPages.AddRange(new TabPage[] { tabAsm, tabC, tabBasic });
+                // Pannello per il tab binario
+                Panel pnlBin = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(20, 20, 25), Padding = new Padding(20) };
+                Label lblBinInfo = new Label
+                {
+                    Dock = DockStyle.Top,
+                    Height = 140,
+                    Font = new Font("Consolas", 9.5f),
+                    ForeColor = Color.FromArgb(200, 240, 255)
+                };
+                Button btnSaveBinDirect = new Button
+                {
+                    Text = "💾 Esporta File Binario (.bin)...",
+                    Width = 250,
+                    Height = 36,
+                    Top = 150,
+                    Left = 20,
+                    BackColor = Color.FromArgb(40, 130, 80),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Font = new Font("Segoe UI", 9f, FontStyle.Bold)
+                };
+                pnlBin.Controls.AddRange(new Control[] { lblBinInfo, btnSaveBinDirect });
+                tabBin.Controls.Add(pnlBin);
 
-                Panel bottom = new Panel { Dock = DockStyle.Bottom, Height = 44, BackColor = Color.FromArgb(24, 24, 28) };
-                Button btnCopy = new Button { Text = "📋 Copia Codice", Left = 15, Top = 8, Width = 140, Height = 28, BackColor = Color.FromArgb(0, 122, 204), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+                tc.TabPages.AddRange(new TabPage[] { tabAsm, tabC, tabBasic, tabBin });
+
+                Action updateAllTabs = () =>
+                {
+                    MapCompressionMode mode;
+                    switch (cmbType.SelectedIndex)
+                    {
+                        case 0: mode = MapCompressionMode.Packed2Bit; break;
+                        case 1: mode = MapCompressionMode.Uncompressed; break;
+                        default: mode = MapCompressionMode.Both; break;
+                    }
+
+                    int w = _project.CurrentMap.Width;
+                    int h = _project.CurrentMap.Height;
+                    int stdBytes = w * h;
+                    int packedBytesPerRow = (w + 3) / 4;
+                    int packedBytes = packedBytesPerRow * h;
+
+                    if (mode == MapCompressionMode.Packed2Bit)
+                    {
+                        int savingPct = (stdBytes > 0) ? ((stdBytes - packedBytes) * 100 / stdBytes) : 0;
+                        lblFormatInfo.Text = $"Compresso 2-bit: {packedBytes} byte ({packedBytesPerRow} B/riga)\nRisparmio RAM: -{savingPct}% | 4 tile/byte (tile 0..3)";
+                        lblBinInfo.Text = $"FILE BINARIO COMPRESSO (.BIN)\n" +
+                                          $"--------------------------------------------------\n" +
+                                          $"Dimensioni mappa: {w}x{h} celle tile\n" +
+                                          $"Formato byte: 4 tile per byte riga per riga\n" +
+                                          $"Byte per riga: {packedBytesPerRow}\n" +
+                                          $"Dimensione file: {packedBytes} byte (risparmio {savingPct}%)\n" +
+                                          $"Layout: [b7-6: T0] [b5-4: T1] [b3-2: T2] [b1-0: T3]";
+                    }
+                    else if (mode == MapCompressionMode.Uncompressed)
+                    {
+                        lblFormatInfo.Text = $"Standard 1:1: {stdBytes} byte (1 byte per tile)\n1 cella = 1 byte intero | Supporta tile 0..255";
+                        lblBinInfo.Text = $"FILE BINARIO STANDARD 1:1 (.BIN)\n" +
+                                          $"--------------------------------------------------\n" +
+                                          $"Dimensioni mappa: {w}x{h} celle tile\n" +
+                                          $"Formato byte: 1 byte per tile (sequenziale)\n" +
+                                          $"Dimensione file: {stdBytes} byte\n" +
+                                          $"Supporta tutti gli indici di tile fino a 255";
+                    }
+                    else
+                    {
+                        lblFormatInfo.Text = $"Entrambi i formati inclusi:\n1:1 ({stdBytes} B) e Compresso ({packedBytes} B)";
+                        lblBinInfo.Text = $"FILE BINARIO (.BIN)\n" +
+                                          $"--------------------------------------------------\n" +
+                                          $"Seleziona 'Compresso' o 'Standard' in alto per esportare\nil file binario nel formato desiderato.";
+                    }
+
+                    txtAsm.Text = MapExporter.ExportToAssembly(_project.CurrentMap, AsmDirective.Defb, exportAllMaps: false, project: _project, compressionMode: mode);
+                    txtC.Text = MapExporter.ExportToC(_project.CurrentMap, exportAllMaps: false, project: _project, compressionMode: mode);
+                    txtBasic.Text = MapExporter.ExportToBasic(_project.CurrentMap, startLine: 5000, compressionMode: mode);
+                };
+
+                cmbType.SelectedIndexChanged += (s, e) => updateAllTabs();
+                updateAllTabs();
+
+                btnSaveBinDirect.Click += (s, e) =>
+                {
+                    using (SaveFileDialog sfd = new SaveFileDialog())
+                    {
+                        bool isPacked = (cmbType.SelectedIndex == 0);
+                        sfd.Filter = "File Binario (*.bin)|*.bin";
+                        sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.bin" : $"{_project.CurrentMap.Name}.bin";
+                        if (sfd.ShowDialog(dlg) == DialogResult.OK)
+                        {
+                            MapCompressionMode bMode = isPacked ? MapCompressionMode.Packed2Bit : MapCompressionMode.Uncompressed;
+                            MapExporter.ExportToBinary(sfd.FileName, _project.CurrentMap, bMode);
+                            MessageBox.Show($"File binario salvato con successo:\n{sfd.FileName}", "Salvataggio Binario", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                };
+
+                Panel bottom = new Panel { Dock = DockStyle.Bottom, Height = 46, BackColor = Color.FromArgb(24, 24, 28) };
+                Button btnCopy = new Button { Text = "📋 Copia Codice", Left = 15, Top = 9, Width = 140, Height = 28, BackColor = Color.FromArgb(0, 122, 204), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
                 btnCopy.Click += (s, e) =>
                 {
-                    TextBox activeBox = (tc.SelectedTab == tabAsm) ? txtAsm : ((tc.SelectedTab == tabC) ? txtC : txtBasic);
+                    if (tc.SelectedTab == tabBin)
+                    {
+                        Clipboard.SetText(lblBinInfo.Text);
+                        MessageBox.Show("Informazioni file binario copiate negli appunti!", "Copia Riuscita", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    TextBox activeBox = (tc.SelectedTab == tabAsm) ? txtAsm :
+                                       (tc.SelectedTab == tabC) ? txtC : txtBasic;
                     Clipboard.SetText(activeBox.Text);
                     MessageBox.Show("Codice esportato copiato negli appunti!", "Copia Riuscita", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 };
 
-                Button btnSaveFile = new Button { Text = "💾 Salva su File...", Left = 165, Top = 8, Width = 140, Height = 28, BackColor = Color.FromArgb(40, 130, 80), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+                Button btnSaveFile = new Button { Text = "💾 Salva su File...", Left = 165, Top = 9, Width = 140, Height = 28, BackColor = Color.FromArgb(40, 130, 80), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
                 btnSaveFile.Click += (s, e) =>
                 {
+                    bool isPacked = (cmbType.SelectedIndex == 0);
                     using (SaveFileDialog sfd = new SaveFileDialog())
                     {
-                        if (tc.SelectedTab == tabAsm) { sfd.Filter = "Assembly Z80 (*.asm;*.z80)|*.asm;*.z80"; sfd.FileName = "map.asm"; }
-                        else if (tc.SelectedTab == tabC) { sfd.Filter = "C Source (*.c;*.h)|*.c;*.h"; sfd.FileName = "map.c"; }
-                        else { sfd.Filter = "Sinclair BASIC (*.bas;*.txt)|*.bas;*.txt"; sfd.FileName = "map.bas"; }
+                        if (tc.SelectedTab == tabAsm)
+                        {
+                            sfd.Filter = "Assembly Z80 (*.asm;*.z80)|*.asm;*.z80";
+                            sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.asm" : $"{_project.CurrentMap.Name}.asm";
+                        }
+                        else if (tc.SelectedTab == tabC)
+                        {
+                            sfd.Filter = "C Source (*.c;*.h)|*.c;*.h";
+                            sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.c" : $"{_project.CurrentMap.Name}.c";
+                        }
+                        else if (tc.SelectedTab == tabBasic)
+                        {
+                            sfd.Filter = "Sinclair BASIC (*.bas;*.txt)|*.bas;*.txt";
+                            sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.bas" : $"{_project.CurrentMap.Name}.bas";
+                        }
+                        else
+                        {
+                            sfd.Filter = "File Binario (*.bin)|*.bin";
+                            sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.bin" : $"{_project.CurrentMap.Name}.bin";
+                        }
 
                         if (sfd.ShowDialog(dlg) == DialogResult.OK)
                         {
-                            TextBox activeBox = (tc.SelectedTab == tabAsm) ? txtAsm : ((tc.SelectedTab == tabC) ? txtC : txtBasic);
-                            File.WriteAllText(sfd.FileName, activeBox.Text, System.Text.Encoding.UTF8);
+                            if (tc.SelectedTab == tabBin)
+                            {
+                                MapCompressionMode bMode = isPacked ? MapCompressionMode.Packed2Bit : MapCompressionMode.Uncompressed;
+                                MapExporter.ExportToBinary(sfd.FileName, _project.CurrentMap, bMode);
+                            }
+                            else
+                            {
+                                TextBox activeBox = (tc.SelectedTab == tabAsm) ? txtAsm :
+                                                   (tc.SelectedTab == tabC) ? txtC : txtBasic;
+                                File.WriteAllText(sfd.FileName, activeBox.Text, System.Text.Encoding.UTF8);
+                            }
                             MessageBox.Show($"File salvato con successo:\n{sfd.FileName}", "Salvataggio Completato", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 };
 
-                Button btnClose = new Button { Text = "Chiudi", Left = 560, Top = 8, Width = 90, Height = 28, BackColor = Color.FromArgb(60, 60, 70), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.OK };
+                Button btnClose = new Button { Text = "Chiudi", Left = 620, Top = 9, Width = 90, Height = 28, BackColor = Color.FromArgb(60, 60, 70), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.OK, Anchor = AnchorStyles.Right | AnchorStyles.Top };
 
                 bottom.Controls.AddRange(new Control[] { btnCopy, btnSaveFile, btnClose });
 
                 dlg.Controls.Add(tc);
+                dlg.Controls.Add(topPanel);
                 dlg.Controls.Add(bottom);
                 dlg.ShowDialog(this);
             }

@@ -52,6 +52,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnPng = new System.Windows.Forms.ToolStripButton();
             this._rightPanel = new System.Windows.Forms.Panel();
             this._btnCopyAsm = new System.Windows.Forms.Button();
+            this._cmbQuickAsmFormat = new System.Windows.Forms.ComboBox();
             this._txtQuickMapAsm = new System.Windows.Forms.TextBox();
             this._lblAsmTitle = new System.Windows.Forms.Label();
             this._lblHoverCoords = new System.Windows.Forms.Label();
@@ -401,6 +402,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._rightPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(31)))));
             this._rightPanel.Controls.Add(this._btnCopyAsm);
             this._rightPanel.Controls.Add(this._txtQuickMapAsm);
+            this._rightPanel.Controls.Add(this._cmbQuickAsmFormat);
             this._rightPanel.Controls.Add(this._lblAsmTitle);
             this._rightPanel.Controls.Add(this._lblHoverCoords);
             this._rightPanel.Controls.Add(this._lblMemory);
@@ -429,23 +431,37 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnCopyAsm.Location = new System.Drawing.Point(10, 645);
             this._btnCopyAsm.Name = "_btnCopyAsm";
             this._btnCopyAsm.Size = new System.Drawing.Size(260, 28);
-            this._btnCopyAsm.TabIndex = 11;
+            this._btnCopyAsm.TabIndex = 12;
             this._btnCopyAsm.Text = "📋 Copia Dati Assembly";
             this._btnCopyAsm.UseVisualStyleBackColor = false;
             this._btnCopyAsm.Click += new System.EventHandler(this.BtnCopyAsm_Click);
+            // 
+            // _cmbQuickAsmFormat
+            // 
+            this._cmbQuickAsmFormat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(44)))));
+            this._cmbQuickAsmFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._cmbQuickAsmFormat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._cmbQuickAsmFormat.Font = new System.Drawing.Font("Segoe UI", 8.2F);
+            this._cmbQuickAsmFormat.ForeColor = System.Drawing.Color.White;
+            this._cmbQuickAsmFormat.FormattingEnabled = true;
+            this._cmbQuickAsmFormat.Location = new System.Drawing.Point(10, 515);
+            this._cmbQuickAsmFormat.Name = "_cmbQuickAsmFormat";
+            this._cmbQuickAsmFormat.Size = new System.Drawing.Size(260, 21);
+            this._cmbQuickAsmFormat.TabIndex = 10;
+            this._cmbQuickAsmFormat.SelectedIndexChanged += new System.EventHandler(this.CmbQuickAsmFormat_SelectedIndexChanged);
             // 
             // _txtQuickMapAsm
             // 
             this._txtQuickMapAsm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(20)))));
             this._txtQuickMapAsm.Font = new System.Drawing.Font("Consolas", 8.2F);
             this._txtQuickMapAsm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(255)))), ((int)(((byte)(180)))));
-            this._txtQuickMapAsm.Location = new System.Drawing.Point(10, 517);
+            this._txtQuickMapAsm.Location = new System.Drawing.Point(10, 542);
             this._txtQuickMapAsm.Multiline = true;
             this._txtQuickMapAsm.Name = "_txtQuickMapAsm";
             this._txtQuickMapAsm.ReadOnly = true;
             this._txtQuickMapAsm.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._txtQuickMapAsm.Size = new System.Drawing.Size(260, 120);
-            this._txtQuickMapAsm.TabIndex = 10;
+            this._txtQuickMapAsm.Size = new System.Drawing.Size(260, 95);
+            this._txtQuickMapAsm.TabIndex = 11;
             // 
             // _lblAsmTitle
             // 
@@ -709,6 +725,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private System.Windows.Forms.Label _lblMemory;
         private System.Windows.Forms.Label _lblHoverCoords;
         private System.Windows.Forms.Label _lblAsmTitle;
+        private System.Windows.Forms.ComboBox _cmbQuickAsmFormat;
         private System.Windows.Forms.TextBox _txtQuickMapAsm;
         private System.Windows.Forms.Button _btnCopyAsm;
         private System.Windows.Forms.Panel _centerPanel;

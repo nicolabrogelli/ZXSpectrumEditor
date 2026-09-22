@@ -165,5 +165,63 @@ namespace ZXSpectrumSpriteGenerator.Models
                 }
             }
         }
+
+        /// <summary>
+        /// Comprime i dati della mappa in formato 2-bit per tile (4 tile per byte riga per riga).
+        /// Per ogni byte: Tile 0 nei bit 7-6, Tile 1 nei bit 5-4, Tile 2 nei bit 3-2, Tile 3 nei bit 1-0.
+        /// </summary>
+        public byte[] ToPackedByteArray()
+        {
+            int bytesPerRow = (Width + 3) / 4;
+            byte[] bytes = new byte[bytesPerRow * Height];
+            int idx = 0;
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int b = 0; b < bytesPerRow; b++)
+                {
+                    int startX = b * 4;
+                    int t0 = (startX < Width) ? (Tiles[startX, y] & 0x03) : 0;
+                    int t1 = (startX + 1 < Width) ? (Tiles[startX + 1, y] & 0x03) : 0;
+                    int t2 = (startX + 2 < Width) ? (Tiles[startX + 2, y] & 0x03) : 0;
+                    int t3 = (startX + 3 < Width) ? (Tiles[startX + 3, y] & 0x03) : 0;
+
+                    bytes[idx++] = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
+                }
+            }
+
+            return bytes;
+        }
+
+        /// <summary>
+        /// Carica i dati della mappa da un array di byte compresso in formato 2-bit per tile (4 tile per byte riga per riga).
+        /// </summary>
+        public void FromPackedByteArray(byte[] data, int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Tiles = new int[Width, Height];
+            int bytesPerRow = (Width + 3) / 4;
+            int idx = 0;
+
+            for (int y = 0; y < Height && idx < data.Length; y++)
+            {
+                for (int b = 0; b < bytesPerRow && idx < data.Length; b++)
+                {
+                    byte val = data[idx++];
+                    int startX = b * 4;
+
+                    int t0 = (val >> 6) & 0x03;
+                    int t1 = (val >> 4) & 0x03;
+                    int t2 = (val >> 2) & 0x03;
+                    int t3 = val & 0x03;
+
+                    if (startX < Width) Tiles[startX, y] = t0;
+                    if (startX + 1 < Width) Tiles[startX + 1, y] = t1;
+                    if (startX + 2 < Width) Tiles[startX + 2, y] = t2;
+                    if (startX + 3 < Width) Tiles[startX + 3, y] = t3;
+                }
+            }
+        }
     }
 }
