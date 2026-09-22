@@ -49,6 +49,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnResizeMap = new System.Windows.Forms.ToolStripButton();
             this._sepMgmt2 = new System.Windows.Forms.ToolStripSeparator();
             this._btnExport = new System.Windows.Forms.ToolStripButton();
+            this._btnImport = new System.Windows.Forms.ToolStripButton();
             this._btnPng = new System.Windows.Forms.ToolStripButton();
             this._rightPanel = new System.Windows.Forms.Panel();
             this._lblDragHint = new System.Windows.Forms.Label();
@@ -268,6 +269,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnResizeMap,
             this._sepMgmt2,
             this._btnExport,
+            this._btnImport,
             this._btnPng});
             this._tsMgmt.Location = new System.Drawing.Point(0, 0);
             this._tsMgmt.Name = "_tsMgmt";
@@ -384,6 +386,17 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._btnExport.Size = new System.Drawing.Size(143, 19);
             this._btnExport.Text = "⚡ Esporta Dati Mappa...";
             this._btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            // 
+            // _btnImport
+            // 
+            this._btnImport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(90)))), ((int)(((byte)(140)))));
+            this._btnImport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this._btnImport.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this._btnImport.ForeColor = System.Drawing.Color.White;
+            this._btnImport.Name = "_btnImport";
+            this._btnImport.Size = new System.Drawing.Size(126, 22);
+            this._btnImport.Text = "📥 Importa Mappa...";
+            this._btnImport.Click += new System.EventHandler(this.BtnImport_Click);
             // 
             // _btnPng
             // 
@@ -638,6 +651,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private System.Windows.Forms.ToolStripButton _btnResizeMap;
         private System.Windows.Forms.ToolStripSeparator _sepMgmt2;
         private System.Windows.Forms.ToolStripButton _btnExport;
+        private System.Windows.Forms.ToolStripButton _btnImport;
         private System.Windows.Forms.ToolStripButton _btnPng;
         private System.Windows.Forms.ToolStrip _tsTools;
         private System.Windows.Forms.ToolStripLabel _lblTools;

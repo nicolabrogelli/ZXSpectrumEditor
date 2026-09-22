@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using ZXSpectrumSpriteGenerator.Models;
 using ZXSpectrumSpriteGenerator.Services;
@@ -140,6 +141,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private void BtnRenameMap_Click(object sender, EventArgs e) => ActionRenameMap();
         private void BtnResizeMap_Click(object sender, EventArgs e) => ActionResizeMap();
         private void BtnExport_Click(object sender, EventArgs e) => ActionExportMap();
+        private void BtnImport_Click(object sender, EventArgs e) => ActionImportMap();
         private void BtnPng_Click(object sender, EventArgs e) => ActionExportPng();
         private void BtnBackToSprites_Click(object sender, EventArgs e) => RequestSwitchToSprites?.Invoke(this, EventArgs.Empty);
 
@@ -1235,6 +1237,21 @@ namespace ZXSpectrumSpriteGenerator.UI
             CenterCanvas();
         }
 
+        public void ActionImportMap()
+        {
+            if (_project == null) return;
+
+            using (var dlg = new ImportMapDialog(_project))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    UpdateMapListCombo();
+                    SwitchToMapIndex(_project.SelectedMapIndex);
+                    ProjectModified?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
         public void ActionExportMap()
         {
             if (_project?.CurrentMap == null) return;
@@ -1541,6 +1558,720 @@ namespace ZXSpectrumSpriteGenerator.UI
         public TileDragData(int tileId)
         {
             TileId = tileId;
+        }
+    }
+
+    /// <summary>
+    /// Dialog modale per l'importazione di mappe di gioco in formato compresso 2-bit (4 tile per byte riga per riga).
+    /// Supporta l'incollamento da codice sorgente (Assembly, C, BASIC o numeri grezzi) o il caricamento da file.
+    /// Mappa tutti e 4 i valori a 2-bit (%00, %01, %10, %11) e preserva intatte le tile già presenti nel Set Mappa.
+    /// </summary>
+    public class ImportMapDialog : Form
+    {
+        private readonly SpriteProject _project;
+
+        // Controlli destinazione e dimensioni
+        private RadioButton _rbOverwriteCurrent;
+        private RadioButton _rbNewMap;
+        private TextBox _txtMapName;
+        private NumericUpDown _numWidth;
+        private NumericUpDown _numHeight;
+        private Label _lblExpectedStats;
+        private CheckBox _chkSkipHeader;
+
+        // Controlli assegnazione tile 2-bit
+        private ComboBox _cmbMappingMode;
+        private CheckBox _chkKeepExistingTiles;
+        private ComboBox _cmbSlot0;
+        private ComboBox _cmbSlot1;
+        private ComboBox _cmbSlot2;
+        private ComboBox _cmbSlot3;
+        private PictureBox _picSlot0;
+        private PictureBox _picSlot1;
+        private PictureBox _picSlot2;
+        private PictureBox _picSlot3;
+
+        // Editor testo e statistiche
+        private TextBox _txtCode;
+        private Label _lblParseStatus;
+        private Button _btnOk;
+        private Button _btnCancel;
+
+        private List<byte> _parsedBytes = new List<byte>();
+
+        private class TileItem
+        {
+            public int TileId { get; set; }
+            public string DisplayName { get; set; }
+            public override string ToString() => DisplayName;
+        }
+
+        public ImportMapDialog(SpriteProject project)
+        {
+            _project = project;
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            this.Text = "📥 Importa Mappa di Gioco (Compresso 2-bit, 4 tile/byte)";
+            this.Size = new Size(820, 710);
+            this.MinimumSize = new Size(740, 600);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.BackColor = Color.FromArgb(28, 28, 33);
+            this.ForeColor = Color.White;
+            this.Font = new Font("Segoe UI", 9f);
+            this.ShowIcon = false;
+
+            // 1. TOP PANEL: Titolo, Opzioni Mappa, Dimensioni e Assegnazione Tile
+            Panel pnlTop = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 275,
+                BackColor = Color.FromArgb(22, 22, 26),
+                Padding = new Padding(14, 10, 14, 10)
+            };
+
+            Label lblTitle = new Label
+            {
+                Text = "📥 IMPORTAZIONE MAPPA DI GIOCO - FORMATO COMPRESSO 2-BIT",
+                Font = new Font("Segoe UI", 10.5f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(0, 220, 255),
+                AutoSize = true,
+                Location = new Point(14, 8)
+            };
+
+            Label lblDesc = new Label
+            {
+                Text = "Incolla nel box sottostante i dati Assembly (defb/db), array C, BASIC (DATA) o byte esadecimali/binari.\n" +
+                       "Formato compresso: ogni byte contiene 4 tile (2-bit per tile: %00, %01, %10, %11 riga per riga).",
+                Font = new Font("Segoe UI", 8.2f),
+                ForeColor = Color.FromArgb(200, 210, 225),
+                AutoSize = true,
+                Location = new Point(14, 32)
+            };
+
+            // Raggruppamento Opzioni Mappa (Destinazione & Dimensioni)
+            GroupBox grpTarget = new GroupBox
+            {
+                Text = "Destinazione e Dimensioni",
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(255, 215, 0),
+                Location = new Point(14, 66),
+                Size = new Size(776, 90)
+            };
+
+            bool hasCurrentMap = _project?.CurrentMap != null;
+            string curName = hasCurrentMap ? _project.CurrentMap.Name : "Nessuna";
+
+            _rbOverwriteCurrent = new RadioButton
+            {
+                Text = $"Sovrascrivi mappa corrente ({curName})",
+                AutoSize = true,
+                Location = new Point(14, 22),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                Checked = hasCurrentMap,
+                Enabled = hasCurrentMap
+            };
+
+            _rbNewMap = new RadioButton
+            {
+                Text = "Crea Nuova Mappa:",
+                Checked = !hasCurrentMap,
+                AutoSize = true,
+                Location = new Point(360, 22),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.5f)
+            };
+
+            _txtMapName = new TextBox
+            {
+                Text = $"Mappa {(_project?.Maps.Count ?? 0) + 1}",
+                Location = new Point(500, 20),
+                Width = 200,
+                BackColor = Color.FromArgb(36, 36, 44),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.5f),
+                Enabled = !hasCurrentMap
+            };
+
+            _rbOverwriteCurrent.CheckedChanged += (s, e) =>
+            {
+                _txtMapName.Enabled = _rbNewMap.Checked;
+                if (_rbOverwriteCurrent.Checked && _project?.CurrentMap != null)
+                {
+                    _numWidth.Value = _project.CurrentMap.Width;
+                    _numHeight.Value = _project.CurrentMap.Height;
+                }
+            };
+            _rbNewMap.CheckedChanged += (s, e) => _txtMapName.Enabled = _rbNewMap.Checked;
+
+            Label lblW = new Label
+            {
+                Text = "Larghezza (celle):",
+                AutoSize = true,
+                Location = new Point(14, 56),
+                ForeColor = Color.LightGray,
+                Font = new Font("Segoe UI", 8.2f)
+            };
+
+            _numWidth = new NumericUpDown
+            {
+                Minimum = 1,
+                Maximum = 256,
+                Value = _project?.CurrentMap?.Width ?? 32,
+                Location = new Point(125, 54),
+                Width = 60,
+                BackColor = Color.FromArgb(36, 36, 44),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold)
+            };
+
+            Label lblH = new Label
+            {
+                Text = "Altezza (celle):",
+                AutoSize = true,
+                Location = new Point(200, 56),
+                ForeColor = Color.LightGray,
+                Font = new Font("Segoe UI", 8.2f)
+            };
+
+            _numHeight = new NumericUpDown
+            {
+                Minimum = 1,
+                Maximum = 256,
+                Value = _project?.CurrentMap?.Height ?? 24,
+                Location = new Point(290, 54),
+                Width = 60,
+                BackColor = Color.FromArgb(36, 36, 44),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold)
+            };
+
+            _lblExpectedStats = new Label
+            {
+                Text = "Byte attesi: 192 (8 B/riga x 24 righe)",
+                AutoSize = true,
+                Location = new Point(365, 56),
+                ForeColor = Color.FromArgb(120, 230, 160),
+                Font = new Font("Segoe UI", 8.2f, FontStyle.Bold)
+            };
+
+            _chkSkipHeader = new CheckBox
+            {
+                Text = "Salta byte intestazione (width, height, bytes/row)",
+                AutoSize = true,
+                Location = new Point(570, 54),
+                ForeColor = Color.FromArgb(180, 220, 255),
+                Font = new Font("Segoe UI", 8.2f)
+            };
+
+            grpTarget.Controls.AddRange(new Control[] {
+                _rbOverwriteCurrent, _rbNewMap, _txtMapName,
+                lblW, _numWidth, lblH, _numHeight, _lblExpectedStats, _chkSkipHeader
+            });
+
+            // Raggruppamento Assegnazione Tile per gli indici 2-bit
+            GroupBox grpTiles = new GroupBox
+            {
+                Text = "Mappatura Tile per Indici 2-bit (0..3)",
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(0, 220, 255),
+                Location = new Point(14, 164),
+                Size = new Size(776, 98)
+            };
+
+            Label lblMode = new Label
+            {
+                Text = "Schema:",
+                Location = new Point(14, 22),
+                AutoSize = true,
+                ForeColor = Color.LightGray,
+                Font = new Font("Segoe UI", 8.2f)
+            };
+
+            _cmbMappingMode = new ComboBox
+            {
+                Location = new Point(70, 19),
+                Width = 340,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                BackColor = Color.FromArgb(36, 36, 44),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.2f)
+            };
+            _cmbMappingMode.Items.Add("Standard: %00=Sfondo/Vuoto, %01..%11=Tile 1..3 del Set Mappa");
+            _cmbMappingMode.Items.Add("4 Tile Piene: %00..%11=Tile 1..4 del Set Mappa");
+            _cmbMappingMode.SelectedIndex = 0;
+            _cmbMappingMode.SelectedIndexChanged += (s, e) => ApplyDefaultSlotMapping();
+
+            _chkKeepExistingTiles = new CheckBox
+            {
+                Text = "Mantieni tutte le tile già presenti nel Set Mappa",
+                Checked = true,
+                AutoSize = true,
+                Location = new Point(430, 20),
+                ForeColor = Color.FromArgb(140, 230, 160),
+                Font = new Font("Segoe UI", 8.2f, FontStyle.Bold)
+            };
+
+            // Slot 0
+            Label lblSlot0 = new Label { Text = "%00 (0):", Location = new Point(14, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot0 = new ComboBox { Location = new Point(72, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot0 = new PictureBox { Location = new Point(172, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+
+            // Slot 1
+            Label lblSlot1 = new Label { Text = "%01 (1):", Location = new Point(206, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot1 = new ComboBox { Location = new Point(264, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot1 = new PictureBox { Location = new Point(364, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+
+            // Slot 2
+            Label lblSlot2 = new Label { Text = "%10 (2):", Location = new Point(398, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot2 = new ComboBox { Location = new Point(456, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot2 = new PictureBox { Location = new Point(556, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+
+            // Slot 3
+            Label lblSlot3 = new Label { Text = "%11 (3):", Location = new Point(590, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot3 = new ComboBox { Location = new Point(648, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot3 = new PictureBox { Location = new Point(748, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+
+            grpTiles.Controls.AddRange(new Control[] {
+                lblMode, _cmbMappingMode, _chkKeepExistingTiles,
+                lblSlot0, _cmbSlot0, _picSlot0,
+                lblSlot1, _cmbSlot1, _picSlot1,
+                lblSlot2, _cmbSlot2, _picSlot2,
+                lblSlot3, _cmbSlot3, _picSlot3
+            });
+
+            pnlTop.Controls.AddRange(new Control[] { lblTitle, lblDesc, grpTarget, grpTiles });
+
+            // 2. BOTTOM PANEL: Statistiche di Parsing & Pulsanti Azione
+            Panel pnlBottom = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 62,
+                BackColor = Color.FromArgb(20, 20, 24),
+                Padding = new Padding(14, 10, 14, 10)
+            };
+
+            _lblParseStatus = new Label
+            {
+                Text = "In attesa di dati...",
+                Location = new Point(14, 14),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 8.8f, FontStyle.Bold),
+                ForeColor = Color.Yellow
+            };
+
+            _btnOk = new Button
+            {
+                Text = "📥 Importa Mappa",
+                DialogResult = DialogResult.OK,
+                Size = new Size(150, 36),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                Location = new Point(500, 13),
+                BackColor = Color.FromArgb(40, 130, 80),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9f, FontStyle.Bold),
+                Cursor = Cursors.Hand,
+                Enabled = false
+            };
+            _btnOk.FlatAppearance.BorderSize = 0;
+            _btnOk.Click += BtnOk_Click;
+
+            _btnCancel = new Button
+            {
+                Text = "Annulla",
+                DialogResult = DialogResult.Cancel,
+                Size = new Size(100, 36),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                Location = new Point(660, 13),
+                BackColor = Color.FromArgb(60, 60, 70),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9f),
+                Cursor = Cursors.Hand
+            };
+            _btnCancel.FlatAppearance.BorderSize = 0;
+
+            pnlBottom.Controls.AddRange(new Control[] { _lblParseStatus, _btnOk, _btnCancel });
+
+            // 3. CENTER PANEL: Barra Strumenti & TextBox Codice Mappa
+            Panel pnlCenter = new Panel
+            {
+                Dock = DockStyle.Fill,
+                Padding = new Padding(14, 6, 14, 6)
+            };
+
+            Panel pnlTextTools = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 32,
+                BackColor = Color.FromArgb(28, 28, 33)
+            };
+
+            Label lblCodeTitle = new Label
+            {
+                Text = "Dati Mappa (Incolla qui il codice o carica da file):",
+                Location = new Point(0, 7),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.White
+            };
+
+            Button btnPaste = new Button
+            {
+                Text = "📋 Incolla dagli Appunti",
+                Size = new Size(160, 26),
+                Location = new Point(330, 3),
+                BackColor = Color.FromArgb(0, 122, 204),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btnPaste.FlatAppearance.BorderSize = 0;
+            btnPaste.Click += (s, e) =>
+            {
+                if (Clipboard.ContainsText())
+                {
+                    _txtCode.Text = Clipboard.GetText();
+                }
+            };
+
+            Button btnOpenFile = new Button
+            {
+                Text = "📂 Carica da File...",
+                Size = new Size(140, 26),
+                Location = new Point(500, 3),
+                BackColor = Color.FromArgb(45, 75, 115),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btnOpenFile.FlatAppearance.BorderSize = 0;
+            btnOpenFile.Click += BtnOpenFile_Click;
+
+            Button btnClear = new Button
+            {
+                Text = "🧹 Pulisci",
+                Size = new Size(80, 26),
+                Location = new Point(650, 3),
+                BackColor = Color.FromArgb(50, 50, 60),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 8f),
+                Cursor = Cursors.Hand
+            };
+            btnClear.FlatAppearance.BorderSize = 0;
+            btnClear.Click += (s, e) => _txtCode.Clear();
+
+            pnlTextTools.Controls.AddRange(new Control[] { lblCodeTitle, btnPaste, btnOpenFile, btnClear });
+
+            _txtCode = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ScrollBars = ScrollBars.Both,
+                Font = new Font("Consolas", 9f),
+                BackColor = Color.FromArgb(16, 16, 20),
+                ForeColor = Color.FromArgb(180, 255, 180),
+                WordWrap = false
+            };
+            _txtCode.TextChanged += TxtCode_TextChanged;
+
+            pnlCenter.Controls.Add(_txtCode);
+            pnlCenter.Controls.Add(pnlTextTools);
+
+            this.Controls.Add(pnlCenter);
+            this.Controls.Add(pnlBottom);
+            this.Controls.Add(pnlTop);
+
+            // Eventi di calcolo dinamico
+            _numWidth.ValueChanged += (s, e) => UpdateStats();
+            _numHeight.ValueChanged += (s, e) => UpdateStats();
+            _chkSkipHeader.CheckedChanged += (s, e) => UpdateStats();
+
+            _cmbSlot0.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot0, _picSlot0);
+            _cmbSlot1.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot1, _picSlot1);
+            _cmbSlot2.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot2, _picSlot2);
+            _cmbSlot3.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot3, _picSlot3);
+
+            this.AcceptButton = _btnOk;
+            this.CancelButton = _btnCancel;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            PopulateTileCombos();
+            ApplyDefaultSlotMapping();
+            UpdateStats();
+        }
+
+        private void PopulateTileCombos()
+        {
+            ComboBox[] combos = new ComboBox[] { _cmbSlot0, _cmbSlot1, _cmbSlot2, _cmbSlot3 };
+            foreach (var cmb in combos)
+            {
+                cmb.Items.Clear();
+                cmb.Items.Add(new TileItem { TileId = 0, DisplayName = "(Vuoto / Sfondo)" });
+
+                if (_project != null)
+                {
+                    for (int i = 0; i < _project.Tiles.Count; i++)
+                    {
+                        int tid = i + 1;
+                        string name = $"#{tid}: {_project.Tiles[i].Name}";
+                        cmb.Items.Add(new TileItem { TileId = tid, DisplayName = name });
+                    }
+                }
+            }
+        }
+
+        private void ApplyDefaultSlotMapping()
+        {
+            var curMap = _project?.CurrentMap;
+            bool isFull4Tiles = (_cmbMappingMode.SelectedIndex == 1);
+
+            int d0 = 0, d1 = 0, d2 = 0, d3 = 0;
+
+            if (curMap?.AssignedTileIds != null && curMap.AssignedTileIds.Count > 0)
+            {
+                if (isFull4Tiles)
+                {
+                    if (curMap.AssignedTileIds.Count >= 1) d0 = curMap.AssignedTileIds[0];
+                    if (curMap.AssignedTileIds.Count >= 2) d1 = curMap.AssignedTileIds[1];
+                    if (curMap.AssignedTileIds.Count >= 3) d2 = curMap.AssignedTileIds[2];
+                    if (curMap.AssignedTileIds.Count >= 4) d3 = curMap.AssignedTileIds[3];
+                }
+                else
+                {
+                    d0 = 0; // Sfondo vuoto
+                    if (curMap.AssignedTileIds.Count >= 1) d1 = curMap.AssignedTileIds[0];
+                    if (curMap.AssignedTileIds.Count >= 2) d2 = curMap.AssignedTileIds[1];
+                    if (curMap.AssignedTileIds.Count >= 3) d3 = curMap.AssignedTileIds[2];
+                }
+            }
+            else if (_project != null && _project.Tiles.Count > 0)
+            {
+                if (isFull4Tiles)
+                {
+                    if (_project.Tiles.Count >= 1) d0 = 1;
+                    if (_project.Tiles.Count >= 2) d1 = 2;
+                    if (_project.Tiles.Count >= 3) d2 = 3;
+                    if (_project.Tiles.Count >= 4) d3 = 4;
+                }
+                else
+                {
+                    d0 = 0;
+                    if (_project.Tiles.Count >= 1) d1 = 1;
+                    if (_project.Tiles.Count >= 2) d2 = 2;
+                    if (_project.Tiles.Count >= 3) d3 = 3;
+                }
+            }
+
+            SelectTileInCombo(_cmbSlot0, d0);
+            SelectTileInCombo(_cmbSlot1, d1);
+            SelectTileInCombo(_cmbSlot2, d2);
+            SelectTileInCombo(_cmbSlot3, d3);
+        }
+
+        private void SelectTileInCombo(ComboBox cmb, int tileId)
+        {
+            for (int i = 0; i < cmb.Items.Count; i++)
+            {
+                if (cmb.Items[i] is TileItem item && item.TileId == tileId)
+                {
+                    cmb.SelectedIndex = i;
+                    return;
+                }
+            }
+            if (cmb.Items.Count > 0) cmb.SelectedIndex = 0;
+        }
+
+        private void UpdateSlotPreview(ComboBox cmb, PictureBox pic)
+        {
+            if (cmb.SelectedItem is TileItem item && item.TileId > 0 && _project != null && (item.TileId - 1) < _project.Tiles.Count)
+            {
+                var old = pic.Image;
+                pic.Image = _project.Tiles[item.TileId - 1].RenderToBitmap(2);
+                old?.Dispose();
+            }
+            else
+            {
+                pic.Image = null;
+            }
+        }
+
+        private void TxtCode_TextChanged(object sender, EventArgs e)
+        {
+            string text = _txtCode.Text;
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                _parsedBytes.Clear();
+                UpdateStats();
+                return;
+            }
+
+            // Tenta il riconoscimento automatico dell'intestazione (Assembly, C o BASIC)
+            if (MapImporter.TryDetectHeader(text, out int dw, out int dh, out string dName, out bool hasHeaderBytes))
+            {
+                _numWidth.Value = dw;
+                _numHeight.Value = dh;
+                if (!string.IsNullOrWhiteSpace(dName) && _txtMapName.Text.StartsWith("Mappa"))
+                {
+                    _txtMapName.Text = dName;
+                }
+                _chkSkipHeader.Checked = hasHeaderBytes;
+            }
+
+            _parsedBytes = MapImporter.ParseBytesFromText(text);
+            UpdateStats();
+        }
+
+        private void UpdateStats()
+        {
+            int w = (int)_numWidth.Value;
+            int h = (int)_numHeight.Value;
+            int bytesPerRow = (w + 3) / 4;
+            int expectedDataBytes = bytesPerRow * h;
+            _lblExpectedStats.Text = $"Byte attesi: {expectedDataBytes} ({bytesPerRow} B/riga x {h} righe)";
+
+            int availableBytes = _parsedBytes.Count;
+            if (_chkSkipHeader.Checked)
+            {
+                availableBytes = Math.Max(0, availableBytes - 3);
+            }
+
+            int completeRows = bytesPerRow > 0 ? (availableBytes / bytesPerRow) : 0;
+
+            if (_parsedBytes.Count == 0)
+            {
+                _lblParseStatus.Text = "In attesa di dati...";
+                _lblParseStatus.ForeColor = Color.Yellow;
+                _btnOk.Enabled = false;
+            }
+            else if (availableBytes == expectedDataBytes)
+            {
+                _lblParseStatus.Text = $"✔ Dati completi e validi: {availableBytes} byte ({completeRows}/{h} righe per mappa {w}x{h})";
+                _lblParseStatus.ForeColor = Color.FromArgb(120, 230, 160);
+                _btnOk.Enabled = true;
+            }
+            else if (availableBytes > expectedDataBytes)
+            {
+                int excess = availableBytes - expectedDataBytes;
+                _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte ({completeRows} righe complete). Eccedenza di +{excess} byte; verranno usati i primi {expectedDataBytes}.";
+                _lblParseStatus.ForeColor = Color.FromArgb(255, 180, 80);
+                _btnOk.Enabled = true;
+            }
+            else
+            {
+                int missing = expectedDataBytes - availableBytes;
+                _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte su {expectedDataBytes} attesi ({completeRows}/{h} righe complete). Mancano {missing} byte; le celle rimanenti saranno vuote.";
+                _lblParseStatus.ForeColor = Color.FromArgb(255, 140, 100);
+                _btnOk.Enabled = true;
+            }
+        }
+
+        private void BtnOpenFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Tutti i file supportati (*.asm;*.inc;*.txt;*.c;*.h;*.bas;*.bin)|*.asm;*.inc;*.txt;*.c;*.h;*.bas;*.bin|" +
+                             "Sorgenti Assembly (*.asm;*.inc;*.txt)|*.asm;*.inc;*.txt|" +
+                             "File Binari Raw (*.bin)|*.bin|" +
+                             "Sorgenti C (*.c;*.h)|*.c;*.h|" +
+                             "Sinclair BASIC (*.bas)|*.bas|" +
+                             "Tutti i file (*.*)|*.*";
+                ofd.Title = "Carica Dati Mappa da File";
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    try
+                    {
+                        if (Path.GetExtension(ofd.FileName).Equals(".bin", StringComparison.OrdinalIgnoreCase))
+                        {
+                            byte[] binBytes = File.ReadAllBytes(ofd.FileName);
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < binBytes.Length; i++)
+                            {
+                                if (i % 8 == 0)
+                                {
+                                    if (i > 0) sb.AppendLine();
+                                    sb.Append("defb ");
+                                }
+                                else
+                                {
+                                    sb.Append(", ");
+                                }
+                                sb.Append("%" + Convert.ToString(binBytes[i], 2).PadLeft(8, '0'));
+                            }
+                            _txtCode.Text = sb.ToString();
+                        }
+                        else
+                        {
+                            _txtCode.Text = File.ReadAllText(ofd.FileName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Impossibile leggere il file:\n{ex.Message}", "Errore File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void BtnOk_Click(object sender, EventArgs e)
+        {
+            if (_parsedBytes == null || _parsedBytes.Count == 0)
+            {
+                MessageBox.Show("Nessun dato byte valido trovato nel testo incollato.", "Dati Non Validi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int w = (int)_numWidth.Value;
+            int h = (int)_numHeight.Value;
+
+            int slot0 = (_cmbSlot0.SelectedItem is TileItem it0) ? it0.TileId : 0;
+            int slot1 = (_cmbSlot1.SelectedItem is TileItem it1) ? it1.TileId : 0;
+            int slot2 = (_cmbSlot2.SelectedItem is TileItem it2) ? it2.TileId : 0;
+            int slot3 = (_cmbSlot3.SelectedItem is TileItem it3) ? it3.TileId : 0;
+
+            GameMap targetMap;
+            if (_rbNewMap.Checked)
+            {
+                string name = string.IsNullOrWhiteSpace(_txtMapName.Text) ? $"Mappa {_project.Maps.Count + 1}" : _txtMapName.Text.Trim();
+                targetMap = _project.AddMap(name, w, h);
+            }
+            else
+            {
+                targetMap = _project.CurrentMap;
+                if (targetMap == null)
+                {
+                    targetMap = _project.AddMap("Mappa 1", w, h);
+                }
+                else
+                {
+                    targetMap.PushUndoState();
+                }
+            }
+
+            bool keepExisting = _chkKeepExistingTiles.Checked;
+            MapImporter.ImportPacked2Bit(targetMap, _parsedBytes, w, h, slot0, slot1, slot2, slot3, _chkSkipHeader.Checked, keepExisting);
+
+            MessageBox.Show(
+                $"Mappa '{targetMap.Name}' importata con successo nel formato compresso 2-bit!\n\n" +
+                $"Dimensioni: {targetMap.Width}x{targetMap.Height} celle\n" +
+                $"Tile nel Set Mappa: {targetMap.AssignedTileIds.Count} (mantenute intatte)",
+                "Importazione Riuscita",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }

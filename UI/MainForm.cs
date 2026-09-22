@@ -709,6 +709,12 @@ namespace ZXSpectrumSpriteGenerator.UI
             _mapEditorView.ActionExportMap();
         }
 
+        private void ActionImpMap_Click(object sender, EventArgs e)
+        {
+            SwitchToMapEditor();
+            _mapEditorView.ActionImportMap();
+        }
+
         private void ActionExpPng_Click(object sender, EventArgs e)
         {
             SwitchToMapEditor();

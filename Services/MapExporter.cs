@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using ZXSpectrumSpriteGenerator.Models;
@@ -644,6 +645,328 @@ namespace ZXSpectrumSpriteGenerator.Services
             string clean = Regex.Replace(name, @"[^a-zA-Z0-9_]", "_");
             if (char.IsDigit(clean[0])) clean = "m_" + clean;
             return clean.ToLower();
+        }
+    }
+
+    /// <summary>
+    /// Servizio per importare mappe di gioco per Sinclair ZX Spectrum da sorgenti di testo o dati binari
+    /// (Assembly Z80, C/Z88DK, Sinclair BASIC o elenchi di byte).
+    /// Supporta il formato compresso 2-bit (4 tile per byte riga per riga).
+    /// </summary>
+    public static class MapImporter
+    {
+        /// <summary>
+        /// Esegue il parsing di testo contenente direttive db/defb/DEFB, C array, BASIC DATA
+        /// o liste di numeri in vari formati (binario % o 0b, esadecimale $, 0x o h, decimale).
+        /// </summary>
+        public static List<byte> ParseBytesFromText(string text)
+        {
+            var result = new List<byte>();
+            if (string.IsNullOrWhiteSpace(text)) return result;
+
+            // Rimuovi commenti a blocco C /* ... */
+            string cleanText = Regex.Replace(text, @"/\*.*?\*/", " ", RegexOptions.Singleline);
+
+            var lines = cleanText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var cleanLines = new List<string>();
+
+            foreach (var line in lines)
+            {
+                // Se la riga indica l'inizio della sezione TILESET, fermati (importiamo solo la mappa, non le tiles)
+                if (line.IndexOf("TILESET", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    break;
+                }
+
+                string cleaned = line;
+
+                // Rimuovi commenti di riga Assembly (;)
+                int commentIdx = cleaned.IndexOf(';');
+                if (commentIdx >= 0) cleaned = cleaned.Substring(0, commentIdx);
+
+                // Rimuovi commenti di riga C (//)
+                commentIdx = cleaned.IndexOf("//", StringComparison.Ordinal);
+                if (commentIdx >= 0) cleaned = cleaned.Substring(0, commentIdx);
+
+                // Rimuovi commenti BASIC (REM)
+                int remIdx = cleaned.IndexOf("REM", StringComparison.OrdinalIgnoreCase);
+                if (remIdx >= 0) cleaned = cleaned.Substring(0, remIdx);
+
+                // Rimuovi etichette (es. "map_label:")
+                cleaned = Regex.Replace(cleaned, @"^[A-Za-z0-9_]+:\s*", "");
+
+                // Rimuovi direttive assembly, C keywords e BASIC DATA
+                cleaned = Regex.Replace(cleaned, @"\b(defb|db|DEFB|\.byte|BYTE|DATA|const|unsigned|char|static)\b", " ", RegexOptions.IgnoreCase);
+
+                // Rimuovi numeri di riga basic all'inizio (es. "5040 DATA ...")
+                cleaned = Regex.Replace(cleaned, @"^\s*\d+\s+", "");
+
+                // Rimuovi caratteri di formattazione C ({, }, [, ], =, ;)
+                cleaned = cleaned.Replace('{', ' ').Replace('}', ' ').Replace('[', ' ').Replace(']', ' ').Replace('=', ' ');
+
+                cleanLines.Add(cleaned);
+            }
+
+            string allText = string.Join(" ", cleanLines);
+
+            // Trova tutti i token separati da virgole, spazi o tabulazioni
+            string[] tokens = allText.Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var token in tokens)
+            {
+                string t = token.Trim();
+                if (string.IsNullOrEmpty(t)) continue;
+
+                if (TryParseByte(t, out byte b))
+                {
+                    result.Add(b);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Tenta di interpretare un singolo token come byte (binario %, 0b, hex $, 0x, h o decimale).
+        /// </summary>
+        public static bool TryParseByte(string token, out byte value)
+        {
+            value = 0;
+            if (string.IsNullOrWhiteSpace(token)) return false;
+
+            token = token.Trim();
+
+            try
+            {
+                // Formato Binario: %01010101 oppure 0b01010101
+                if (token.StartsWith("%"))
+                {
+                    string bin = token.Substring(1).Trim();
+                    value = Convert.ToByte(bin, 2);
+                    return true;
+                }
+                if (token.StartsWith("0b", StringComparison.OrdinalIgnoreCase))
+                {
+                    string bin = token.Substring(2).Trim();
+                    value = Convert.ToByte(bin, 2);
+                    return true;
+                }
+
+                // Formato Esadecimale: $FF, 0xFF, FFh
+                if (token.StartsWith("$"))
+                {
+                    string hex = token.Substring(1).Trim();
+                    if (byte.TryParse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
+                        return true;
+                }
+                if (token.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                {
+                    string hex = token.Substring(2).Trim();
+                    if (byte.TryParse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
+                        return true;
+                }
+                if (token.EndsWith("h", StringComparison.OrdinalIgnoreCase) && token.Length > 1)
+                {
+                    string hex = token.Substring(0, token.Length - 1).Trim();
+                    if (byte.TryParse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
+                        return true;
+                }
+
+                // Decimale standard (0..255)
+                if (byte.TryParse(token, NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
+                {
+                    return true;
+                }
+
+                // Binario senza prefisso (stringa di esattamente 8 caratteri '0' e '1')
+                if (token.Length == 8 && Regex.IsMatch(token, @"^[01]{8}$"))
+                {
+                    value = Convert.ToByte(token, 2);
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Analizza il testo per verificare se contiene intestazioni con dimensioni (Assembly, C, BASIC).
+        /// </summary>
+        public static bool TryDetectHeader(string text, out int width, out int height, out string mapName, out bool hasHeaderBytes)
+        {
+            width = 32;
+            height = 24;
+            mapName = "Mappa Importata";
+            hasHeaderBytes = false;
+
+            if (string.IsNullOrWhiteSpace(text)) return false;
+
+            // 1. Riconoscimento intestazione Assembly esportata
+            // Es: cleanName_packed_width: defb 32
+            //     cleanName_packed_height: defb 24
+            Match mW = Regex.Match(text, @"(\w+)_packed_width:\s*(?:defb|db|\.byte)\s*(\d+)", RegexOptions.IgnoreCase);
+            Match mH = Regex.Match(text, @"(\w+)_packed_height:\s*(?:defb|db|\.byte)\s*(\d+)", RegexOptions.IgnoreCase);
+            if (mW.Success && mH.Success)
+            {
+                if (int.TryParse(mW.Groups[2].Value, out int w) && int.TryParse(mH.Groups[2].Value, out int h))
+                {
+                    width = Math.Max(1, Math.Min(256, w));
+                    height = Math.Max(1, Math.Min(256, h));
+                    mapName = mW.Groups[1].Value.Replace("_", " ").Trim();
+                    hasHeaderBytes = true;
+                    return true;
+                }
+            }
+
+            // 2. Riconoscimento intestazione C / Z88DK
+            // Es: #define MAP1_PACKED_WIDTH 32
+            //     #define MAP1_PACKED_HEIGHT 24
+            Match cW = Regex.Match(text, @"#define\s+(\w+)_PACKED_WIDTH\s+(\d+)", RegexOptions.IgnoreCase);
+            Match cH = Regex.Match(text, @"#define\s+(\w+)_PACKED_HEIGHT\s+(\d+)", RegexOptions.IgnoreCase);
+            if (cW.Success && cH.Success)
+            {
+                if (int.TryParse(cW.Groups[2].Value, out int w) && int.TryParse(cH.Groups[2].Value, out int h))
+                {
+                    width = Math.Max(1, Math.Min(256, w));
+                    height = Math.Max(1, Math.Min(256, h));
+                    mapName = cW.Groups[1].Value.Replace("_", " ").Trim();
+                    hasHeaderBytes = false;
+                    return true;
+                }
+            }
+
+            // 3. Riconoscimento intestazione Sinclair BASIC
+            // Es: DATA 32,24,8
+            Match bData = Regex.Match(text, @"DATA\s+(\d+)\s*,\s*(\d+)\s*,\s*(\d+)", RegexOptions.IgnoreCase);
+            if (bData.Success)
+            {
+                if (int.TryParse(bData.Groups[1].Value, out int w) && int.TryParse(bData.Groups[2].Value, out int h))
+                {
+                    width = Math.Max(1, Math.Min(256, w));
+                    height = Math.Max(1, Math.Min(256, h));
+                    Match bName = Regex.Match(text, @"REM\s+\*\*\*\s+MAPPA(?:\s+ZX\s+SPECTRUM)?:\s+([^\*]+)", RegexOptions.IgnoreCase);
+                    if (bName.Success)
+                    {
+                        mapName = bName.Groups[1].Value.Replace("(Compresso 2-bit, 4 tile/byte)", "").Trim();
+                    }
+                    hasHeaderBytes = true;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Decomprime i dati a 2-bit (4 tile/byte riga per riga) inserendoli nella GameMap indicata.
+        /// Supporta la mappatura completa di tutti e 4 i valori a 2-bit (0..3) e preserva intatte
+        /// tutte le tile già presenti nel Set Mappa.
+        /// </summary>
+        public static void ImportPacked2Bit(
+            GameMap targetMap,
+            IReadOnlyList<byte> bytes,
+            int width,
+            int height,
+            int slot0TileId,
+            int slot1TileId,
+            int slot2TileId,
+            int slot3TileId,
+            bool skipHeader,
+            bool preserveExistingAssignedTiles = true)
+        {
+            if (targetMap == null || bytes == null) return;
+
+            width = Math.Max(1, width);
+            height = Math.Max(1, height);
+
+            int bytesPerRow = (width + 3) / 4;
+            int startIndex = skipHeader ? 3 : 0;
+
+            // Se la mappa ha dimensioni diverse, ridimensionala
+            if (targetMap.Width != width || targetMap.Height != height)
+            {
+                targetMap.Resize(width, height);
+            }
+
+            // Pulisci le celle della mappa (imposta tutte le celle a 0)
+            targetMap.Clear();
+
+            // Decompressione riga per riga
+            for (int y = 0; y < height; y++)
+            {
+                for (int b = 0; b < bytesPerRow; b++)
+                {
+                    int byteIdx = startIndex + (y * bytesPerRow) + b;
+                    if (byteIdx >= bytes.Count) break;
+
+                    byte packedByte = bytes[byteIdx];
+
+                    // Estrai i 4 indici a 2-bit (MSB -> LSB)
+                    int i0 = (packedByte >> 6) & 0x03;
+                    int i1 = (packedByte >> 4) & 0x03;
+                    int i2 = (packedByte >> 2) & 0x03;
+                    int i3 = packedByte & 0x03;
+
+                    int startX = b * 4;
+                    if (startX + 0 < width) targetMap.SetTile(startX + 0, y, ResolveTileId(i0, slot0TileId, slot1TileId, slot2TileId, slot3TileId));
+                    if (startX + 1 < width) targetMap.SetTile(startX + 1, y, ResolveTileId(i1, slot0TileId, slot1TileId, slot2TileId, slot3TileId));
+                    if (startX + 2 < width) targetMap.SetTile(startX + 2, y, ResolveTileId(i2, slot0TileId, slot1TileId, slot2TileId, slot3TileId));
+                    if (startX + 3 < width) targetMap.SetTile(startX + 3, y, ResolveTileId(i3, slot0TileId, slot1TileId, slot2TileId, slot3TileId));
+                }
+            }
+
+            // Configura le tile assegnate alla mappa: NON cancellare le tile esistenti se preserveExistingAssignedTiles è vero!
+            if (targetMap.AssignedTileIds == null)
+            {
+                targetMap.AssignedTileIds = new List<int>();
+            }
+
+            if (!preserveExistingAssignedTiles)
+            {
+                targetMap.AssignedTileIds.Clear();
+            }
+
+            // Aggiungi ciascuna tile utilizzata nella mappatura degli slot (se non già presente)
+            int[] usedSlots = new int[] { slot0TileId, slot1TileId, slot2TileId, slot3TileId };
+            foreach (int tid in usedSlots)
+            {
+                if (tid > 0 && !targetMap.AssignedTileIds.Contains(tid))
+                {
+                    targetMap.AssignedTileIds.Add(tid);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overload per compatibilità con chiamate a 3 slot (slot 0 predefinito a vuoto/0).
+        /// </summary>
+        public static void ImportPacked2Bit(
+            GameMap targetMap,
+            IReadOnlyList<byte> bytes,
+            int width,
+            int height,
+            int slot1TileId,
+            int slot2TileId,
+            int slot3TileId,
+            bool skipHeader = false)
+        {
+            ImportPacked2Bit(targetMap, bytes, width, height, 0, slot1TileId, slot2TileId, slot3TileId, skipHeader, true);
+        }
+
+        private static int ResolveTileId(int index2Bit, int slot0TileId, int slot1TileId, int slot2TileId, int slot3TileId)
+        {
+            switch (index2Bit)
+            {
+                case 0: return slot0TileId;
+                case 1: return slot1TileId;
+                case 2: return slot2TileId;
+                case 3: return slot3TileId;
+                default: return 0;
+            }
         }
     }
 }

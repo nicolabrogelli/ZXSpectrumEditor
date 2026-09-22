@@ -74,6 +74,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._mClearMap = new System.Windows.Forms.ToolStripMenuItem();
             this._mMapsSep2 = new System.Windows.Forms.ToolStripSeparator();
             this._mExpMap = new System.Windows.Forms.ToolStripMenuItem();
+            this._mImpMap = new System.Windows.Forms.ToolStripMenuItem();
             this._mExpPng = new System.Windows.Forms.ToolStripMenuItem();
             this._mHelp = new System.Windows.Forms.ToolStripMenuItem();
             this._mAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -564,6 +565,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._mClearMap,
             this._mMapsSep2,
             this._mExpMap,
+            this._mImpMap,
             this._mExpPng});
             this._mMaps.Name = "_mMaps";
             this._mMaps.Size = new System.Drawing.Size(84, 32);
@@ -642,6 +644,13 @@ namespace ZXSpectrumSpriteGenerator.UI
             this._mExpMap.Size = new System.Drawing.Size(460, 34);
             this._mExpMap.Text = "⚡ &Esporta Dati Mappa (ASM / C / BASIC)...";
             this._mExpMap.Click += new System.EventHandler(this.ActionExpMap_Click);
+            // 
+            // _mImpMap
+            // 
+            this._mImpMap.Name = "_mImpMap";
+            this._mImpMap.Size = new System.Drawing.Size(460, 34);
+            this._mImpMap.Text = "📥 &Importa Dati Mappa (Compresso 2-bit)...";
+            this._mImpMap.Click += new System.EventHandler(this.ActionImpMap_Click);
             // 
             // _mExpPng
             // 
@@ -1858,6 +1867,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private System.Windows.Forms.ToolStripMenuItem _mClearMap;
         private System.Windows.Forms.ToolStripSeparator _mMapsSep2;
         private System.Windows.Forms.ToolStripMenuItem _mExpMap;
+        private System.Windows.Forms.ToolStripMenuItem _mImpMap;
         private System.Windows.Forms.ToolStripMenuItem _mExpPng;
         private System.Windows.Forms.ToolStripMenuItem _mHelp;
         private System.Windows.Forms.ToolStripMenuItem _mAbout;
