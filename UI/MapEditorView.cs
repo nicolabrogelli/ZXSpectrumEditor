@@ -355,7 +355,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 int y = 4;
                 for (int slotIdx = 0; slotIdx < currentMap.AssignedTileIds.Count; slotIdx++)
                 {
-                    int slotNum = slotIdx + 1;
+                    int slotNum = slotIdx;
                     int tileId = currentMap.AssignedTileIds[slotIdx];
                     if (tileId <= 0 || tileId > _project.Tiles.Count) continue;
 
@@ -384,7 +384,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 int assignedSlot = currentMap.AssignedTileIds.IndexOf(tileId);
                 bool isAssigned = (assignedSlot >= 0);
 
-                Panel card = CreateLibraryTileCard(tileId, tile.Name, thumb, libY, libCardW, cardH, isAssigned, isAssigned ? (assignedSlot + 1) : 0, cnt);
+                Panel card = CreateLibraryTileCard(tileId, tile.Name, thumb, libY, libCardW, cardH, isAssigned, assignedSlot, cnt);
                 _pnlLibraryTiles.Controls.Add(card);
                 libY += cardH + 4;
             }
@@ -412,7 +412,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private Panel CreateAssignedTileCard(int tileId, int slotNum, string name, Bitmap thumb, int top, int width, int height, int usageCount, int slotIndex, int totalSlots)
         {
             bool isSelected = (_canvas.ActiveTileId == tileId);
-            bool isBeyondLimit = (slotNum > _project.TilesPerMap);
+            bool isBeyondLimit = (_project.TilesPerMap > 0 && slotNum >= _project.TilesPerMap);
 
             Panel card = new Panel
             {
@@ -426,7 +426,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Tag = tileId
             };
 
-            // Badge slot (#1, #2, ...)
+            // Badge slot (#0, #1, ...)
             Label lblSlot = new Label
             {
                 Top = 6,
@@ -457,7 +457,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Left = 69,
                 Width = width - 122,
                 Height = 18,
-                Text = name,
+                Text = $"Tile #{tileId - 1}: {name}",
                 ForeColor = isSelected ? Color.Cyan : Color.White,
                 Font = new Font("Segoe UI", 8f, isSelected ? FontStyle.Bold : FontStyle.Regular),
                 AutoEllipsis = true,
@@ -582,7 +582,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Left = 44,
                 Width = width - 105,
                 Height = 18,
-                Text = $"#{tileId}: {name}",
+                Text = $"Tile #{tileId - 1}: {name}",
                 ForeColor = isSelected ? Color.Cyan : Color.White,
                 Font = new Font("Segoe UI", 8f, isSelected ? FontStyle.Bold : FontStyle.Regular),
                 AutoEllipsis = true,
@@ -825,7 +825,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _picActiveTile.Image = null;
                 _picActiveTile.BackColor = Color.Black;
                 _lblActiveTileName.ForeColor = Color.Yellow;
-                _lblActiveTileName.Text = "Tile #0: [Vuoto / Sfondo]\n(Cella trasparente)";
+                _lblActiveTileName.Text = "[Cella Vuota / Gomma]\n(Nessuna tile - colore Paper)";
             }
             else if (_project != null && (tileId - 1) < _project.Tiles.Count)
             {
@@ -850,13 +850,13 @@ namespace ZXSpectrumSpriteGenerator.UI
 
                 if (isAssigned)
                 {
-                    _lblActiveTileName.Text = $"Tile #{tileId}: {tile.Name}\n✔ Set Mappa: Slot #{assignedSlot + 1} • Usata: {count}x";
+                    _lblActiveTileName.Text = $"Tile #{tileId - 1}: {tile.Name}\n✔ Set Mappa: Slot #{assignedSlot} • Usata: {count}x";
                     _lblActiveTileName.ForeColor = Color.Cyan;
                 }
                 else
                 {
                     string warn = count > 0 ? $"⚠ Non nel set! Usata: {count}x (esportata come 0)" : "➕ Non nel set della mappa (non esportata)";
-                    _lblActiveTileName.Text = $"Tile #{tileId}: {tile.Name}\n{warn}";
+                    _lblActiveTileName.Text = $"Tile #{tileId - 1}: {tile.Name}\n{warn}";
                     _lblActiveTileName.ForeColor = Color.FromArgb(255, 140, 140);
                 }
             }
@@ -864,7 +864,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 _picActiveTile.Image = null;
                 _lblActiveTileName.ForeColor = Color.Yellow;
-                _lblActiveTileName.Text = $"Tile #{tileId}";
+                _lblActiveTileName.Text = $"Tile #{tileId - 1}";
             }
 
             oldBmp?.Dispose();
@@ -918,8 +918,8 @@ namespace ZXSpectrumSpriteGenerator.UI
 
             if (map.AssignedTileIds.Contains(tileId))
             {
-                int slot = map.AssignedTileIds.IndexOf(tileId) + 1;
-                MessageBox.Show($"La tile #{tileId} è già assegnata a questa mappa nello Slot #{slot}.", "Tile Già Assegnata", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                int slot = map.AssignedTileIds.IndexOf(tileId);
+                MessageBox.Show($"La tile #{tileId - 1} è già assegnata a questa mappa nello Slot #{slot}.", "Tile Già Assegnata", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 _canvas.ActiveTileId = tileId;
                 RefreshTilesetSelection();
                 UpdateActiveTileDisplay();
@@ -972,7 +972,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             if (usageCount > 0)
             {
                 var res = MessageBox.Show(
-                    $"La tile #{tileId} è attualmente utilizzata {usageCount} volte nella mappa.\n\n" +
+                    $"La tile #{tileId - 1} è attualmente utilizzata {usageCount} volte nella mappa.\n\n" +
                     $"Se la rimuovi dal set della mappa, le celle corrispondenti non verranno esportate (saranno esportate come vuoto/0).\n\n" +
                     $"Vuoi procedere con la rimozione dal set?",
                     "Conferma Rimozione Tile dal Set",
@@ -1800,8 +1800,8 @@ namespace ZXSpectrumSpriteGenerator.UI
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 8.2f)
             };
-            _cmbMappingMode.Items.Add("Standard: %00=Sfondo/Vuoto, %01..%11=Tile 1..3 del Set Mappa");
-            _cmbMappingMode.Items.Add("4 Tile Piene: %00..%11=Tile 1..4 del Set Mappa");
+            _cmbMappingMode.Items.Add("4 Tile del Set Mappa: %00=Tile #0, %01=Tile #1, %10=Tile #2, %11=Tile #3");
+            _cmbMappingMode.Items.Add("Con Sfondo: %00=Vuoto/Sfondo, %01=Tile #0, %10=Tile #1, %11=Tile #2");
             _cmbMappingMode.SelectedIndex = 0;
             _cmbMappingMode.SelectedIndexChanged += (s, e) => ApplyDefaultSlotMapping();
 
@@ -1816,24 +1816,24 @@ namespace ZXSpectrumSpriteGenerator.UI
             };
 
             // Slot 0
-            Label lblSlot0 = new Label { Text = "%00 (0):", Location = new Point(14, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot0 = new ComboBox { Location = new Point(72, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot0 = new PictureBox { Location = new Point(172, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            Label lblSlot0 = new Label { Text = "Slot 0 (%00):", Location = new Point(14, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot0 = new ComboBox { Location = new Point(82, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot0 = new PictureBox { Location = new Point(176, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
 
             // Slot 1
-            Label lblSlot1 = new Label { Text = "%01 (1):", Location = new Point(206, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot1 = new ComboBox { Location = new Point(264, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot1 = new PictureBox { Location = new Point(364, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            Label lblSlot1 = new Label { Text = "Slot 1 (%01):", Location = new Point(206, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot1 = new ComboBox { Location = new Point(274, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot1 = new PictureBox { Location = new Point(368, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
 
             // Slot 2
-            Label lblSlot2 = new Label { Text = "%10 (2):", Location = new Point(398, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot2 = new ComboBox { Location = new Point(456, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot2 = new PictureBox { Location = new Point(556, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            Label lblSlot2 = new Label { Text = "Slot 2 (%10):", Location = new Point(398, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot2 = new ComboBox { Location = new Point(466, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot2 = new PictureBox { Location = new Point(560, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
 
             // Slot 3
-            Label lblSlot3 = new Label { Text = "%11 (3):", Location = new Point(590, 60), Width = 56, Font = new Font("Segoe UI", 8.2f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot3 = new ComboBox { Location = new Point(648, 57), Width = 98, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot3 = new PictureBox { Location = new Point(748, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            Label lblSlot3 = new Label { Text = "Slot 3 (%11):", Location = new Point(590, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
+            _cmbSlot3 = new ComboBox { Location = new Point(658, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
+            _picSlot3 = new PictureBox { Location = new Point(752, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
 
             grpTiles.Controls.AddRange(new Control[] {
                 lblMode, _cmbMappingMode, _chkKeepExistingTiles,
@@ -2024,7 +2024,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                     for (int i = 0; i < _project.Tiles.Count; i++)
                     {
                         int tid = i + 1;
-                        string name = $"#{tid}: {_project.Tiles[i].Name}";
+                        string name = $"Tile #{i}: {_project.Tiles[i].Name}";
                         cmb.Items.Add(new TileItem { TileId = tid, DisplayName = name });
                     }
                 }
@@ -2034,7 +2034,7 @@ namespace ZXSpectrumSpriteGenerator.UI
         private void ApplyDefaultSlotMapping()
         {
             var curMap = _project?.CurrentMap;
-            bool isFull4Tiles = (_cmbMappingMode.SelectedIndex == 1);
+            bool isFull4Tiles = (_cmbMappingMode.SelectedIndex == 0);
 
             int d0 = 0, d1 = 0, d2 = 0, d3 = 0;
 

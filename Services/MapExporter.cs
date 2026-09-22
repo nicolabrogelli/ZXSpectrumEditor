@@ -245,7 +245,7 @@ namespace ZXSpectrumSpriteGenerator.Services
             sb.AppendLine($"; Dimensioni: {map.Width}x{map.Height} celle ({map.Width * map.TileWidth}x{map.Height * map.TileHeight} px)");
             sb.AppendLine($"; Memoria: {totalPackedBytes} byte ({bytesPerRow} byte/riga, 4 tile per byte riga per riga)");
             sb.AppendLine($"; Struttura byte (MSB -> LSB): [Bit 7-6: Tile x+0] [Bit 5-4: Tile x+1] [Bit 3-2: Tile x+2] [Bit 1-0: Tile x+3]");
-            sb.AppendLine($"; Indici tile (2-bit): 0..3 (00=Vuoto/Sfondo, 01=Tile 1, 10=Tile 2, 11=Tile 3)");
+            sb.AppendLine($"; Indici tile (2-bit): 0..3 (00=Tile 0, 01=Tile 1, 10=Tile 2, 11=Tile 3)");
             if (hasOverflow)
             {
                 sb.AppendLine("; ATTENZIONE: La mappa contiene indici tile >= 4. I valori sono stati mascherati a 2 bit (& 3).");
@@ -261,10 +261,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                 for (int b = 0; b < bytesPerRow; b++)
                 {
                     int startX = b * 4;
-                    int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
-                    int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
-                    int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
-                    int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
+                    int t0 = (startX < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX, y)) : 0;
+                    int t1 = (startX + 1 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 1, y)) : 0;
+                    int t2 = (startX + 2 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 2, y)) : 0;
+                    int t3 = (startX + 3 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 3, y)) : 0;
 
                     byte packedByte = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                     sb.Append(FormatPackedByte(packedByte, numberFormat));
@@ -418,10 +418,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                 for (int b = 0; b < bytesPerRow; b++)
                 {
                     int startX = b * 4;
-                    int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
-                    int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
-                    int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
-                    int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
+                    int t0 = (startX < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX, y)) : 0;
+                    int t1 = (startX + 1 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 1, y)) : 0;
+                    int t2 = (startX + 2 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 2, y)) : 0;
+                    int t3 = (startX + 3 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 3, y)) : 0;
 
                     byte packed = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                     sb.Append("0x" + packed.ToString("X2"));
@@ -459,10 +459,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                     for (int b = 0; b < bytesPerRow; b++)
                     {
                         int startX = b * 4;
-                        int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
-                        int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
-                        int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
-                        int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
+                        int t0 = (startX < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX, y)) : 0;
+                        int t1 = (startX + 1 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 1, y)) : 0;
+                        int t2 = (startX + 2 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 2, y)) : 0;
+                        int t3 = (startX + 3 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 3, y)) : 0;
 
                         byte packed = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                         sb.Append(packed);
@@ -504,10 +504,10 @@ namespace ZXSpectrumSpriteGenerator.Services
                     for (int b = 0; b < bytesPerRow; b++)
                     {
                         int startX = b * 4;
-                        int t0 = (startX < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX, y)) : map.GetTile(startX, y)) & 0x03) : 0;
-                        int t1 = (startX + 1 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 1, y)) : map.GetTile(startX + 1, y)) & 0x03) : 0;
-                        int t2 = (startX + 2 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 2, y)) : map.GetTile(startX + 2, y)) & 0x03) : 0;
-                        int t3 = (startX + 3 < map.Width) ? ((hasAssigned ? map.GetExportSlot(map.GetTile(startX + 3, y)) : map.GetTile(startX + 3, y)) & 0x03) : 0;
+                        int t0 = (startX < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX, y)) : 0;
+                        int t1 = (startX + 1 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 1, y)) : 0;
+                        int t2 = (startX + 2 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 2, y)) : 0;
+                        int t3 = (startX + 3 < map.Width) ? map.GetExportSlot2Bit(map.GetTile(startX + 3, y)) : 0;
 
                         byte packed = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                         sb.Append(packed);
@@ -550,7 +550,7 @@ namespace ZXSpectrumSpriteGenerator.Services
                     var tile = tilesToExport[t];
                     byte attr = tile.GetAttributeByte();
                     var rawBytes = tile.GetBytesRowByRow();
-                    sb.AppendLine($"{line} REM Tile {t + 1}: {tile.Name} (Attr={attr})"); line += 10;
+                    sb.AppendLine($"{line} REM Tile {t}: {tile.Name} (Attr={attr})"); line += 10;
                     sb.Append($"{line} DATA {attr}");
                     for (int b = 0; b < rawBytes.Length; b++)
                     {

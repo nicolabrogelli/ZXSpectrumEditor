@@ -44,6 +44,18 @@ namespace ZXSpectrumSpriteGenerator.Models
             return idx >= 0 ? (idx + 1) : 0;
         }
 
+        /// <summary>
+        /// Restituisce lo slot 0-based (0..3) della tile per l'esportazione a 2-bit.
+        /// La prima tile assegnata al Set Mappa corrisponde a 0 (%00), la seconda a 1 (%01), ecc.
+        /// </summary>
+        public int GetExportSlot2Bit(int tileId)
+        {
+            if (tileId <= 0) return 0;
+            if (AssignedTileIds == null || AssignedTileIds.Count == 0) return Math.Max(0, (tileId - 1) & 0x03);
+            int idx = AssignedTileIds.IndexOf(tileId);
+            return idx >= 0 ? (idx & 0x03) : 0;
+        }
+
         // Stack per la gestione Undo / Redo
         private readonly Stack<int[,]> _undoStack = new Stack<int[,]>();
         private readonly Stack<int[,]> _redoStack = new Stack<int[,]>();
@@ -226,10 +238,10 @@ namespace ZXSpectrumSpriteGenerator.Models
                 for (int b = 0; b < bytesPerRow; b++)
                 {
                     int startX = b * 4;
-                    int t0 = (startX < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX, y]) : Tiles[startX, y]) & 0x03) : 0;
-                    int t1 = (startX + 1 < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX + 1, y]) : Tiles[startX + 1, y]) & 0x03) : 0;
-                    int t2 = (startX + 2 < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX + 2, y]) : Tiles[startX + 2, y]) & 0x03) : 0;
-                    int t3 = (startX + 3 < Width) ? ((hasAssigned ? GetExportSlot(Tiles[startX + 3, y]) : Tiles[startX + 3, y]) & 0x03) : 0;
+                    int t0 = (startX < Width) ? GetExportSlot2Bit(Tiles[startX, y]) : 0;
+                    int t1 = (startX + 1 < Width) ? GetExportSlot2Bit(Tiles[startX + 1, y]) : 0;
+                    int t2 = (startX + 2 < Width) ? GetExportSlot2Bit(Tiles[startX + 2, y]) : 0;
+                    int t3 = (startX + 3 < Width) ? GetExportSlot2Bit(Tiles[startX + 3, y]) : 0;
 
                     bytes[idx++] = (byte)((t0 << 6) | (t1 << 4) | (t2 << 2) | t3);
                 }
@@ -261,10 +273,17 @@ namespace ZXSpectrumSpriteGenerator.Models
                     int t2 = (val >> 2) & 0x03;
                     int t3 = val & 0x03;
 
-                    if (startX < Width) Tiles[startX, y] = t0;
-                    if (startX + 1 < Width) Tiles[startX + 1, y] = t1;
-                    if (startX + 2 < Width) Tiles[startX + 2, y] = t2;
-                    if (startX + 3 < Width) Tiles[startX + 3, y] = t3;
+                    int ResolveVal(int v)
+                    {
+                        if (AssignedTileIds != null && v < AssignedTileIds.Count)
+                            return AssignedTileIds[v];
+                        return v + 1;
+                    }
+
+                    if (startX < Width) Tiles[startX, y] = ResolveVal(t0);
+                    if (startX + 1 < Width) Tiles[startX + 1, y] = ResolveVal(t1);
+                    if (startX + 2 < Width) Tiles[startX + 2, y] = ResolveVal(t2);
+                    if (startX + 3 < Width) Tiles[startX + 3, y] = ResolveVal(t3);
                 }
             }
         }

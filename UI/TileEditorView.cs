@@ -247,7 +247,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             _txtName.Text = tile.Name;
             _isUpdatingName = false;
 
-            int idx = _project != null ? _project.SelectedTileIndex + 1 : 1;
+            int idx = _project != null ? _project.SelectedTileIndex : 0;
             int total = _project != null ? _project.Tiles.Count : 1;
             _lblInfo.Text = $"Tile #{idx} di {total}\r\nDimensione: 8x8 pixel\r\nMemoria: 9 byte (1 attr + 8 pixel)\r\nColore: Ink={tile.InkColor}, Paper={tile.PaperColor}\r\nAttributi: Bright={(tile.Bright ? "ON" : "OFF")}, Flash={(tile.Flash ? "ON" : "OFF")}";
 
