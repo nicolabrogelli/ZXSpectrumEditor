@@ -311,9 +311,11 @@ namespace ZXSpectrumSpriteGenerator.Services
                             Bright = bright
                         };
 
+                        bool isLegacy8Bit = false;
                         if (!string.IsNullOrEmpty(tilesHex))
                         {
                             byte[] mapBytes = HexToByteArray(tilesHex);
+                            isLegacy8Bit = (mapBytes.Length < mW * mH * 2);
                             map.FromByteArray(mapBytes, mW, mH);
                         }
 
@@ -344,6 +346,12 @@ namespace ZXSpectrumSpriteGenerator.Services
                                     usedTiles.Add(i);
                             }
                             map.AssignedTileIds = (usedTiles.Count > maxAllowed) ? usedTiles.GetRange(0, maxAllowed) : usedTiles;
+                        }
+
+                        // Ripara automaticamente tile troncati a 8-bit nei file di salvataggio legacy
+                        if (isLegacy8Bit)
+                        {
+                            map.RepairLegacyTileIds();
                         }
 
                         project.Maps.Add(map);

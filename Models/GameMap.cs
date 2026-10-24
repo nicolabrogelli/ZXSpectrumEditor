@@ -190,34 +190,122 @@ namespace ZXSpectrumSpriteGenerator.Models
         }
 
         /// <summary>
-        /// Esporta la griglia della mappa preservando i raw TileId del progetto (senza rimappatura agli slot di esportazione).
+        /// Esporta la griglia della mappa preservando i raw TileId del progetto (senza rimappatura agli slot di esportazione)
+        /// in formato a 16-bit per cella (2 byte per cella, big-endian), consentendo di supportare fino a 65535 tile.
         /// Utilizzato per il salvataggio nel file di progetto .zxproj.
         /// </summary>
         public byte[] ToRawByteArray()
         {
-            byte[] bytes = new byte[Width * Height];
+            byte[] bytes = new byte[Width * Height * 2];
             int idx = 0;
             for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    bytes[idx++] = (byte)(Tiles[x, y] & 0xFF);
+                    int val = Math.Max(0, Math.Min(65535, Tiles[x, y]));
+                    bytes[idx++] = (byte)((val >> 8) & 0xFF);
+                    bytes[idx++] = (byte)(val & 0xFF);
                 }
             }
             return bytes;
         }
 
+        /// <summary>
+        /// Carica i dati della mappa da un array di byte.
+        /// Supporta sia il formato corrente a 16-bit (2 byte per cella, big-endian),
+        /// sia il formato legacy a 8-bit (1 byte per cella).
+        /// </summary>
         public void FromByteArray(byte[] data, int width, int height)
         {
             Width = width;
             Height = height;
             Tiles = new int[Width, Height];
-            int idx = 0;
-            for (int y = 0; y < Height && idx < data.Length; y++)
+            if (data == null || data.Length == 0) return;
+
+            int totalCells = width * height;
+            if (data.Length >= totalCells * 2)
             {
-                for (int x = 0; x < Width && idx < data.Length; x++)
+                // Formato 16-bit (2 byte per cella, big-endian)
+                int idx = 0;
+                for (int y = 0; y < Height && (idx + 1) < data.Length; y++)
                 {
-                    Tiles[x, y] = data[idx++];
+                    for (int x = 0; x < Width && (idx + 1) < data.Length; x++)
+                    {
+                        int hi = data[idx++];
+                        int lo = data[idx++];
+                        Tiles[x, y] = (hi << 8) | lo;
+                    }
+                }
+            }
+            else
+            {
+                // Formato legacy a 8-bit (1 byte per cella)
+                int idx = 0;
+                for (int y = 0; y < Height && idx < data.Length; y++)
+                {
+                    for (int x = 0; x < Width && idx < data.Length; x++)
+                    {
+                        Tiles[x, y] = data[idx++];
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ripara eventuali tileId troncati a 8-bit (modulo 256) presenti nei file di salvataggio creati con versioni precedenti.
+        /// Ricostruisce il tileId corretto (> 255) confrontando il valore della cella con il byte basso delle tile assegnate alla mappa.
+        /// </summary>
+        public void RepairLegacyTileIds()
+        {
+            if (AssignedTileIds == null || AssignedTileIds.Count == 0) return;
+
+            // Se tutte le tile assegnate sono < 256, non c'è stato alcun troncamento a 8-bit
+            bool hasHighAssigned = false;
+            for (int i = 0; i < AssignedTileIds.Count; i++)
+            {
+                if (AssignedTileIds[i] >= 256)
+                {
+                    hasHighAssigned = true;
+                    break;
+                }
+            }
+            if (!hasHighAssigned) return;
+
+            // Cerca se esiste una tile assegnata che è un multiplo esatto di 256 (es. 256, 512)
+            int tileModuloZero = 0;
+            foreach (int id in AssignedTileIds)
+            {
+                if (id > 0 && (id & 0xFF) == 0)
+                {
+                    tileModuloZero = id;
+                    break;
+                }
+            }
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    int val = Tiles[x, y];
+                    if (val == 0)
+                    {
+                        if (tileModuloZero > 0)
+                        {
+                            Tiles[x, y] = tileModuloZero;
+                        }
+                    }
+                    else if (!AssignedTileIds.Contains(val))
+                    {
+                        // Trova la tile assegnata il cui byte basso corrisponde a val
+                        foreach (int assignedId in AssignedTileIds)
+                        {
+                            if ((assignedId & 0xFF) == val)
+                            {
+                                Tiles[x, y] = assignedId;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }

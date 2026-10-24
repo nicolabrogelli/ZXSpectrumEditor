@@ -1,0 +1,3497 @@
+﻿{
+  "formatVersion": 1,
+  "title": "Nemico ZX Spectrum (4 Posizioni)",
+  "defaultWidth": 16,
+  "defaultHeight": 16,
+  "selectedIndex": 0,
+  "sprites": [
+    {
+      "name": "Sprite_0",
+      "groupName": "Nemico 1",
+      "width": 16,
+      "height": 16,
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "selectedTileIndex": 353,
+  "tilesPerMap": 8,
+  "tiles": [
+    {
+      "name": "Tile_ABitOfTree_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_ABitOfTree_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AD52290001020000"
+    },
+    {
+      "name": "Tile_ABitOfTree_Wall",
+      "inkColor": 6,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "D66B66DB696BD96D"
+    },
+    {
+      "name": "Tile_ABitOfTree_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1500AA55AA00150A"
+    },
+    {
+      "name": "Tile_ABitOfTree_Ramp",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "0308241040208080"
+    },
+    {
+      "name": "Tile_ABitOfTree_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_AbovetheWestBedroom_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_AbovetheWestBedroom_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F7AA55EF00000000"
+    },
+    {
+      "name": "Tile_AbovetheWestBedroom_Wall",
+      "inkColor": 3,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA55AA55AA55AA55"
+    },
+    {
+      "name": "Tile_AbovetheWestBedroom_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "3060C08000000000"
+    },
+    {
+      "name": "Tile_AbovetheWestBedroom_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0100060913066C98"
+    },
+    {
+      "name": "Tile_AbovetheWestBedroom_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_AtTheFootTheMegaTree_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_AtTheFootTheMegaTree_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F0F9BF1F0C102844"
+    },
+    {
+      "name": "Tile_AtTheFootTheMegaTree_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "ABABADAAAAAE5555"
+    },
+    {
+      "name": "Tile_AtTheFootTheMegaTree_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "6E74381E6E74381E"
+    },
+    {
+      "name": "Tile_AtTheFootTheMegaTree_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C00030000C000300"
+    },
+    {
+      "name": "Tile_AtTheFootTheMegaTree_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BackDoor_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BackDoor_Floor",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFFFFAA55AA5500"
+    },
+    {
+      "name": "Tile_BackDoor_Wall",
+      "inkColor": 6,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "69D2A54B962D5AB4"
+    },
+    {
+      "name": "Tile_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BackDoor_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030D0F363DDAF4"
+    },
+    {
+      "name": "Tile_BackDoor_Conveyor",
+      "inkColor": 2,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F0F0F0F066660000"
+    },
+    {
+      "name": "Tile_BackStairway_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BackStairway_Flor",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FF4444FF1111FF00"
+    },
+    {
+      "name": "Tile_BackStairway_Wall",
+      "inkColor": 6,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "15F18FA88AF81F15"
+    },
+    {
+      "name": "Tile_BackStairway_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BackStairway_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03010C043010C040"
+    },
+    {
+      "name": "Tile_BackStairway_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BallRoomEast_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BallRoomEast_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA55224422442244"
+    },
+    {
+      "name": "Tile_BallRoomEast_Wall",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4444FF1111FF55AA"
+    },
+    {
+      "name": "Tile_BallRoomEast_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BallRoomEast_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BallRoomEast_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BallRoomWest_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_BallRoomWest_Floor",
+      "inkColor": 2,
+      "paperColor": 6,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AAA8ADAF20AA5555"
+    },
+    {
+      "name": "Tile_BallRoomWest_Wall",
+      "inkColor": 3,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1122881144882244"
+    },
+    {
+      "name": "Tile_BallRoomWest_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "2854AA54A854142E"
+    },
+    {
+      "name": "Tile_BallRoomWest_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C0C030B00C0C030B"
+    },
+    {
+      "name": "Tile_BallRoomWest_Conveyor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFFFFAA55181818"
+    },
+    {
+      "name": "Tile_ColdStore_Background",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_ColdStore_Floor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFF55AA55AA0000"
+    },
+    {
+      "name": "Tile_ColdStore_Wall",
+      "inkColor": 2,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "92524A492925A492"
+    },
+    {
+      "name": "Tile_ColdStore_Nastry",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "202214D81B284404"
+    },
+    {
+      "name": "Tile_ColdStore_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_ColdStore_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_ConservatoryRoof_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_ConservatoryRoof_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AC532AD08A242204"
+    },
+    {
+      "name": "Tile_ConservatoryRoof_Wall",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F7EF000000666600"
+    },
+    {
+      "name": "Tile_ConservatoryRoof_Nastry",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "DAD57F2E111F0A1B"
+    },
+    {
+      "name": "Tile_ConservatoryRoof_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0102041008204080"
+    },
+    {
+      "name": "Tile_ConservatoryRoof_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_CuckoosNest_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_CuckoosNest_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0403C9D830362301"
+    },
+    {
+      "name": "Tile_CuckoosNest_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FF600EF0033CC738"
+    },
+    {
+      "name": "Tile_CuckoosNest_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C2340B44880B3008"
+    },
+    {
+      "name": "Tile_CuckoosNest_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_CuckoosNest_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_DrJonesWillNeverBelieveThis_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_DrJonesWillNeverBelieveThis_Floor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FE552AAA55AAAAFF"
+    },
+    {
+      "name": "Tile_DrJonesWillNeverBelieveThis_Wall",
+      "inkColor": 7,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1144228811442288"
+    },
+    {
+      "name": "Tile_DrJonesWillNeverBelieveThis_Nastry",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "0104220811442288"
+    },
+    {
+      "name": "Tile_DrJonesWillNeverBelieveThis_Ramp",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4090244812240902"
+    },
+    {
+      "name": "Tile_DrJonesWillNeverBelieveThis_Conveyor",
+      "inkColor": 6,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A500A500AAFFFF55"
+    },
+    {
+      "name": "Tile_EastWallBase_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_EastWallBase_Floor",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "5BA4A4550A000000"
+    },
+    {
+      "name": "Tile_EastWallBase_Wall",
+      "inkColor": 6,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "592526D929D65496"
+    },
+    {
+      "name": "Tile_EastWallBase_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_EastWallBase_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_EastWallBase_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_IEmergencyGenerator_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_IEmergencyGenerator_Floor",
+      "inkColor": 7,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "6666666666666666"
+    },
+    {
+      "name": "Tile_IEmergencyGenerator_Wall",
+      "inkColor": 3,
+      "paperColor": 6,
+      "bright": false,
+      "flash": false,
+      "dataHex": "BF150051FB510015"
+    },
+    {
+      "name": "Tile_IEmergencyGenerator_Nastry",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FF3F031F7F1F033F"
+    },
+    {
+      "name": "Tile_IEmergencyGenerator_Ramp",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_IEmergencyGenerator_Conveyor",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA54AA5428102810"
+    },
+    {
+      "name": "Tile_FirstLanding_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_FirstLanding_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFAA55805D945D80"
+    },
+    {
+      "name": "Tile_FirstLanding_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": true,
+      "flash": false,
+      "dataHex": "2255005588550022"
+    },
+    {
+      "name": "Tile_FirstLanding_Nastry",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": true,
+      "flash": false,
+      "dataHex": "7E81A59999A5817E"
+    },
+    {
+      "name": "Tile_FirstLanding_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030C0C3030C0C0"
+    },
+    {
+      "name": "Tile_FirstLanding_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_HalfwayUpTheEastWal_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_HalfwayUpTheEastWal_Floor",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFF5A99BD5A3C5A"
+    },
+    {
+      "name": "Tile_HalfwayUpTheEastWal_Wall",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "331144CC331144CC"
+    },
+    {
+      "name": "Tile_HalfwayUpTheEastWal_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_HalfwayUpTheEastWal_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "80C0E070B81C4EC7"
+    },
+    {
+      "name": "Tile_HalfwayUpTheEastWal_Conveyor",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_IAmSureIHaveSeenThiBefore_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_IAmSureIHaveSeenThiBefore_Floor",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "8040205048545255"
+    },
+    {
+      "name": "Tile_IAmSureIHaveSeenThiBefore_Wall",
+      "inkColor": 3,
+      "paperColor": 2,
+      "bright": true,
+      "flash": false,
+      "dataHex": "6666660066666666"
+    },
+    {
+      "name": "Tile_IAmSureIHaveSeenThiBefore_Nastry",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "5155545515554555"
+    },
+    {
+      "name": "Tile_IAmSureIHaveSeenThiBefore_Ramp",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_IAmSureIHaveSeenThiBefore_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_InsideTheMegaTrunk_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_InsideTheMegaTrunk_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F5FABF1F26142210"
+    },
+    {
+      "name": "Tile_InsideTheMegaTrunk_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "ABABADAAAAAE5555"
+    },
+    {
+      "name": "Tile_InsideTheMegaTrunk_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "6E74381E6E74381E"
+    },
+    {
+      "name": "Tile_InsideTheMegaTrunk_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4000100004000100"
+    },
+    {
+      "name": "Tile_InsideTheMegaTrunk_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_MastreBedRoom_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_MastreBedRoom_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FF6BB500AD004A00"
+    },
+    {
+      "name": "Tile_MastreBedRoom_Wall",
+      "inkColor": 3,
+      "paperColor": 6,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0051FB5100AABFAA"
+    },
+    {
+      "name": "Tile_MastreBedRoom_Nastry",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "000000007CFE7F3E"
+    },
+    {
+      "name": "Tile_MastreBedRoom_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C040B000AC005300"
+    },
+    {
+      "name": "Tile_MastreBedRoom_Conveyor",
+      "inkColor": 1,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "55555555515F40AA"
+    },
+    {
+      "name": "Tile_NomenLuni_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_NomenLuni_Floor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FF22448855220000"
+    },
+    {
+      "name": "Tile_NomenLuni_Wall",
+      "inkColor": 3,
+      "paperColor": 6,
+      "bright": true,
+      "flash": true,
+      "dataHex": "AA70AA6CB15FAA55"
+    },
+    {
+      "name": "Tile_NomenLuni_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "55A255981C2A458A"
+    },
+    {
+      "name": "Tile_NomenLuni_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C00340AC400"
+    },
+    {
+      "name": "Tile_NomenLuni_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OnABranchOverTheDrive_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OnABranchOverTheDrive_Floor",
+      "inkColor": 2,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1FF3E160302C4080"
+    },
+    {
+      "name": "Tile_OnABranchOverTheDrive_Wall",
+      "inkColor": 2,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "09120A1FE4080808"
+    },
+    {
+      "name": "Tile_OnABranchOverTheDrive_Nastry",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4229542687232A04"
+    },
+    {
+      "name": "Tile_OnABranchOverTheDrive_Ramp",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0502040850204080"
+    },
+    {
+      "name": "Tile_OnABranchOverTheDrive_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OntheRoof_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OntheRoof_Floor",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "80C0E0D0589CDECD"
+    },
+    {
+      "name": "Tile_OntheRoof_Wall",
+      "inkColor": 6,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "11F80708F00FD03F"
+    },
+    {
+      "name": "Tile_OntheRoof_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "5599DDCC5599DDCC"
+    },
+    {
+      "name": "Tile_OntheRoof_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OntheRoof_Conveyor",
+      "inkColor": 2,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F0F0F0FFFF0000FF"
+    },
+    {
+      "name": "Tile_OnTopOfTheHouse_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OnTopOfTheHouse_Floor",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A040800000000000"
+    },
+    {
+      "name": "Tile_OnTopOfTheHouse_Wall",
+      "inkColor": 3,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "51AA00AA15AA00AA"
+    },
+    {
+      "name": "Tile_OnTopOfTheHouse_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OnTopOfTheHouse_Ramp",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0103060D1A3468D0"
+    },
+    {
+      "name": "Tile_OnTopOfTheHouse_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_Orangery_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_Orangery_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A54A240204000200"
+    },
+    {
+      "name": "Tile_Orangery_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1555552425554922"
+    },
+    {
+      "name": "Tile_Orangery_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "82413E6AB7192544"
+    },
+    {
+      "name": "Tile_Orangery_Ramp",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0102040010204080"
+    },
+    {
+      "name": "Tile_Orangery_Conveyor",
+      "inkColor": 6,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C6AAA82A59240000"
+    },
+    {
+      "name": "Tile_OutALimb_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OutALimb_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "011E067A1AE868A0"
+    },
+    {
+      "name": "Tile_OutALimb_Wall",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "07FFFC3818102000"
+    },
+    {
+      "name": "Tile_OutALimb_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0181065820408882"
+    },
+    {
+      "name": "Tile_OutALimb_Ramp",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_OutALimb_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_PriestsHole_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_PriestsHole_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "55555DD770000000"
+    },
+    {
+      "name": "Tile_PriestsHole_Wall",
+      "inkColor": 2,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "2211448822114488"
+    },
+    {
+      "name": "Tile_PriestsHole_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_PriestsHole_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_PriestsHole_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_RescueEsmerelda_Background",
+      "inkColor": 7,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_RescueEsmerelda_Floor",
+      "inkColor": 7,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030C0C3132C4C8"
+    },
+    {
+      "name": "Tile_RescueEsmerelda_Wall",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "EE00BB00EE00BB00"
+    },
+    {
+      "name": "Tile_RescueEsmerelda_Nastry",
+      "inkColor": 5,
+      "paperColor": 2,
+      "bright": true,
+      "flash": false,
+      "dataHex": "D1E2C4C8D1E2C4C8"
+    },
+    {
+      "name": "Tile_RescueEsmerelda_Ramp",
+      "inkColor": 7,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_RescueEsmerelda_Corveyor",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F1AAF8AA00EE00BB"
+    },
+    {
+      "name": "Tile_SwimmingPool_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_SwimmingPool_Floor",
+      "inkColor": 1,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_SwimmingPool_Wall",
+      "inkColor": 2,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4444BB444444BB44"
+    },
+    {
+      "name": "Tile_SwimmingPool_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_SwimmingPool_Ramp",
+      "inkColor": 7,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030F0F3F3FFFFF"
+    },
+    {
+      "name": "Tile_SwimmingPool_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheAttic_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheAttic_Floor",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "CEFF00E7007F00FB"
+    },
+    {
+      "name": "Tile_TheAttic_Wall",
+      "inkColor": 6,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "EE116C9211C9229C"
+    },
+    {
+      "name": "Tile_TheAttic_Nastry",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "241244AA55AA5BFF"
+    },
+    {
+      "name": "Tile_TheAttic_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheAttic_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "F0AA3CAA55AA55AA"
+    },
+    {
+      "name": "Tile_TheBanyanTree_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheBanyanTree_Floor",
+      "inkColor": 0,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "00A2000000460093"
+    },
+    {
+      "name": "Tile_TheBanyanTree_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4A29254992A42594"
+    },
+    {
+      "name": "Tile_TheBanyanTree_Nastry",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A55AA55AA55AA55A"
+    },
+    {
+      "name": "Tile_TheBanyanTree_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_TheBanyanTree_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheBathroom_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheBathroom_Floor",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "00400964922D96FF"
+    },
+    {
+      "name": "Tile_TheBathroom_Wall",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1FAA0055F85500AA"
+    },
+    {
+      "name": "Tile_TheBathroom_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheBathroom_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_TheBathroom_Corveyor",
+      "inkColor": 5,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A5000000000000FF"
+    },
+    {
+      "name": "TheBeach_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "TheBeach_Floor",
+      "inkColor": 2,
+      "paperColor": 6,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000400400100001"
+    },
+    {
+      "name": "TheBeach_Wall",
+      "inkColor": 2,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4400922480288250"
+    },
+    {
+      "name": "TheBeach_Nasty",
+      "inkColor": 0,
+      "paperColor": 6,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4281E7815A7E3C42"
+    },
+    {
+      "name": "TheBeach_Ramp",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0103070F1E377FFB"
+    },
+    {
+      "name": "TheBeach_Conveyor",
+      "inkColor": 4,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4EAA00404044AAFF"
+    },
+    {
+      "name": "Tile_TheBow_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheBow_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FFAA55FF00000000"
+    },
+    {
+      "name": "Tile_TheBow_Wall",
+      "inkColor": 5,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C9C9C9C9C9C9C9C9"
+    },
+    {
+      "name": "Tile_TheBow_Nastry",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "4082520000000000"
+    },
+    {
+      "name": "Tile_TheBow_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "8040201008040201"
+    },
+    {
+      "name": "Tile_TheBow_Conveyor",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFAAAA00AAFF0000"
+    },
+    {
+      "name": "Tile_TheBridge_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheBridge_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FFFFFDBBD6726040"
+    },
+    {
+      "name": "Tile_TheBridge_Wall",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "2277228822772288"
+    },
+    {
+      "name": "Tile_TheBridge_Nastry",
+      "inkColor": 7,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0384483003844830"
+    },
+    {
+      "name": "Tile_TheBridge_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030C0D3237C2C8"
+    },
+    {
+      "name": "Tile_TheBridge_Conveyor",
+      "inkColor": 4,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "014004464F79F0F9"
+    },
+    {
+      "name": "Tile_TheChapel_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheChapel_Floor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4949494949494949"
+    },
+    {
+      "name": "Tile_TheChapel_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A8250025A840DD40"
+    },
+    {
+      "name": "Tile_TheChapel_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "2854AA55AA282828"
+    },
+    {
+      "name": "Tile_TheChapel_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_TheChapel_Conveyor",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "000ABDFF00AA55AA"
+    },
+    {
+      "name": "Tile_TheDrive_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheDrive_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA55AAFFFF55AA55"
+    },
+    {
+      "name": "Tile_TheDrive_Wall",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "70077777003B0B7D"
+    },
+    {
+      "name": "Tile_TheDrive_Nastry",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "142A14096A9C0808"
+    },
+    {
+      "name": "Tile_TheDrive_Ramp",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C04070700C747705"
+    },
+    {
+      "name": "Tile_TheDrive_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "7B00ED00AA55AA55"
+    },
+    {
+      "name": "Tile_TheForgottenAbbey_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheForgottenAbbey_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFFF22440020088"
+    },
+    {
+      "name": "Tile_TheForgottenAbbey_Wall",
+      "inkColor": 5,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "44AA114411AA4411"
+    },
+    {
+      "name": "Tile_TheForgottenAbbey_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "183C7E99997E423C"
+    },
+    {
+      "name": "Tile_TheForgottenAbbey_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "8040E030A8D42289"
+    },
+    {
+      "name": "Tile_TheForgottenAbbey_Conveyor",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "705500BBAAAAAAAA"
+    },
+    {
+      "name": "Tile_TheFrontDoor_Background",
+      "inkColor": 7,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheFrontDoor_Floor",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FFAA77AA77AA55AA"
+    },
+    {
+      "name": "Tile_TheFrontDoor_Wall",
+      "inkColor": 2,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "20100EC13009C620"
+    },
+    {
+      "name": "Tile_TheFrontDoor_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheFrontDoor_Ramp",
+      "inkColor": 7,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C040B050AC54AB55"
+    },
+    {
+      "name": "Tile_TheFrontDoor_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheHall_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheHall_Floor",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FFAA77AA77AA55AA"
+    },
+    {
+      "name": "Tile_TheHall_Wall",
+      "inkColor": 2,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "20100EC13009C620"
+    },
+    {
+      "name": "Tile_TheHall_Nastry",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "88A9A9BBBFBFBF5E"
+    },
+    {
+      "name": "Tile_TheHall_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C0C030300C0C0303"
+    },
+    {
+      "name": "Tile_TheHall_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheKitchen_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheKitchen_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FE017D8581818101"
+    },
+    {
+      "name": "Tile_TheKitchen_Wall",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "42A55A24245AA542"
+    },
+    {
+      "name": "Tile_TheKitchen_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheKitchen_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_TheKitchen_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheNightmareRoom_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheNightmareRoom_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FFA5522442224004"
+    },
+    {
+      "name": "Tile_TheNightmareRoom_Wall",
+      "inkColor": 3,
+      "paperColor": 6,
+      "bright": false,
+      "flash": false,
+      "dataHex": "002A540000A24500"
+    },
+    {
+      "name": "Tile_TheNightmareRoom_Nastry",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "429966A19F81665A"
+    },
+    {
+      "name": "Tile_TheNightmareRoom_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "80C0A0F0F85CBA02"
+    },
+    {
+      "name": "Tile_TheNightmareRoom_Conveyor",
+      "inkColor": 1,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FF5AFFFFAA55AA55"
+    },
+    {
+      "name": "Tile_TheOffLicence_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheOffLicence_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FFDE6C8812400400"
+    },
+    {
+      "name": "Tile_TheOffLicence_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "22FF88FF22FF88FF"
+    },
+    {
+      "name": "Tile_TheOffLicence_Nastry",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F8889EBDBD9E88F8"
+    },
+    {
+      "name": "Tile_TheOffLicence_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_TheOffLicence_Conveyor",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "33FF3300FF00AA00"
+    },
+    {
+      "name": "Tile_TheSecurityGuard_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheSecurityGuard_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFFAA55AA55AA55"
+    },
+    {
+      "name": "Tile_TheSecurityGuard_Wall",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0EC695B03686C0ED"
+    },
+    {
+      "name": "Tile_TheSecurityGuard_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheSecurityGuard_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "E04020100E040201"
+    },
+    {
+      "name": "Tile_TheSecurityGuard_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "6F00B700AA55AA55"
+    },
+    {
+      "name": "Tile_TheWineCellar_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheWineCellar_Floor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "FF18E710C7380000"
+    },
+    {
+      "name": "Tile_TheWineCellar_Wall",
+      "inkColor": 1,
+      "paperColor": 5,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0A412805A0148250"
+    },
+    {
+      "name": "Tile_TheWineCellar_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "2424245ADBBDC37E"
+    },
+    {
+      "name": "Tile_TheWineCellar_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030D0E353AD5EA"
+    },
+    {
+      "name": "Tile_TheWineCellar_Conveyor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA55AA55AA55AA55"
+    },
+    {
+      "name": "Tile_TheYacht_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TheYacht_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "BBDDDDEE00000000"
+    },
+    {
+      "name": "Tile_TheYacht_Wall",
+      "inkColor": 5,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "BB77EEDDBB77EEDD"
+    },
+    {
+      "name": "Tile_TheYacht_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "7EBFBF6E2C2CADFF"
+    },
+    {
+      "name": "Tile_TheYacht_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "8040201008040201"
+    },
+    {
+      "name": "Tile_TheYacht_Conveyor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "E0AA380183C77C10"
+    },
+    {
+      "name": "Tile_ToolShed_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_ToolShed_Floor",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "5AFF224422400000"
+    },
+    {
+      "name": "Tile_ToolShed_Wall",
+      "inkColor": 6,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "55AA442255AA4422"
+    },
+    {
+      "name": "Tile_ToolShed_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0404048850201008"
+    },
+    {
+      "name": "Tile_ToolShed_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030C0C3030C0C0"
+    },
+    {
+      "name": "Tile_ToolShed_Conveyor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "E0AA006666666666"
+    },
+    {
+      "name": "Tile_TopLanding_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TopLanding_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFAA55FF00000000"
+    },
+    {
+      "name": "Tile_TopLanding_Wall",
+      "inkColor": 2,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "6990906996696996"
+    },
+    {
+      "name": "Tile_TopLanding_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TopLanding_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "07023C087020C080"
+    },
+    {
+      "name": "Tile_TopLanding_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TotheKitchensMainStairway_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TotheKitchensMainStairway_Floor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFF00FF00000000"
+    },
+    {
+      "name": "Tile_TotheKitchensMainStairway_Wall",
+      "inkColor": 2,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0015BF150051FB51"
+    },
+    {
+      "name": "Tile_TotheKitchensMainStairway_Nastry",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": true,
+      "flash": false,
+      "dataHex": "185ABD197E992424"
+    },
+    {
+      "name": "Tile_TotheKitchensMainStairway_Ramp",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "C08030200C080302"
+    },
+    {
+      "name": "Tile_TotheKitchensMainStairway_Conveyor",
+      "inkColor": 3,
+      "paperColor": 5,
+      "bright": true,
+      "flash": false,
+      "dataHex": "F0AA78FFAA55AA55"
+    },
+    {
+      "name": "Tile_TreeRoot_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TreeRoot_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFF000000000000"
+    },
+    {
+      "name": "Tile_TreeRoot_Wall",
+      "inkColor": 2,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "6699242477888D72"
+    },
+    {
+      "name": "Tile_TreeRoot_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1C2A5F7DBEFED27C"
+    },
+    {
+      "name": "Tile_TreeRoot_Ramp",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "03020D023108D522"
+    },
+    {
+      "name": "Tile_TreeRoot_Conveyor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "EEAA38FFFF101038"
+    },
+    {
+      "name": "Tile_TreeTop_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_TreeTop_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA55AA5830101008"
+    },
+    {
+      "name": "Tile_TreeTop_Wall",
+      "inkColor": 6,
+      "paperColor": 2,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A52852555549A2B5"
+    },
+    {
+      "name": "Tile_TreeTop_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "894A123418345291"
+    },
+    {
+      "name": "Tile_TreeTop_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4000100004000100"
+    },
+    {
+      "name": "Tile_TreeTop_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UnderTheDrive_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UnderTheDrive_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFFA55824422000"
+    },
+    {
+      "name": "Tile_UnderTheDrive_Wall",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "102A55A010201008"
+    },
+    {
+      "name": "Tile_UnderTheDrive_Nastry",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "1818142222551128"
+    },
+    {
+      "name": "Tile_UnderTheDrive_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "8040A050A854AA55"
+    },
+    {
+      "name": "Tile_UnderTheDrive_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "E0AAF800FFFF6666"
+    },
+    {
+      "name": "Tile_UnderTheMegaTree_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UnderTheMegaTree_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "D7B3756D5C180804"
+    },
+    {
+      "name": "Tile_UnderTheMegaTree_Wall",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "BDAA5DA2F30A0601"
+    },
+    {
+      "name": "Tile_UnderTheMegaTree_Nastry",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "496A3B3AFC1E6BE8"
+    },
+    {
+      "name": "Tile_UnderTheMegaTree_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "000000FF00000000"
+    },
+    {
+      "name": "Tile_UnderTheMegaTree_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UnderTheRoof_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UnderTheRoof_Floor",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "B5AA554A25420102"
+    },
+    {
+      "name": "Tile_UnderTheRoof_Wall",
+      "inkColor": 6,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "66B66DBB66B96DB6"
+    },
+    {
+      "name": "Tile_UnderTheRoof_Nastry",
+      "inkColor": 5,
+      "paperColor": 6,
+      "bright": true,
+      "flash": true,
+      "dataHex": "66AA5FBC63AC6BA4"
+    },
+    {
+      "name": "Tile_UnderTheRoof_Ramp",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0102042810284080"
+    },
+    {
+      "name": "Tile_UnderTheRoof_Conveyor",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A5AABD6666666666"
+    },
+    {
+      "name": "Tile_UpOnTheBattlements_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UpOnTheBattlements_Floor",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "80C0E0B09094D677"
+    },
+    {
+      "name": "Tile_UpOnTheBattlements_Wall",
+      "inkColor": 6,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "007F7F636B637F7F"
+    },
+    {
+      "name": "Tile_UpOnTheBattlements_Nastry",
+      "inkColor": 0,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4A2A1A486C6A2988"
+    },
+    {
+      "name": "Tile_UpOnTheBattlements_Ramp",
+      "inkColor": 4,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_UpOnTheBattlements_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "28AA0A00555555FF"
+    },
+    {
+      "name": "Tile_WatchTower_Background",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WatchTower_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFFFAA55AA550000"
+    },
+    {
+      "name": "Tile_WatchTower_Wall",
+      "inkColor": 5,
+      "paperColor": 3,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA5555AA55AAAA55"
+    },
+    {
+      "name": "Tile_WatchTower_Nastry",
+      "inkColor": 4,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "4689893648838468"
+    },
+    {
+      "name": "Tile_WatchTower_Ramp",
+      "inkColor": 7,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0102040810204080"
+    },
+    {
+      "name": "Tile_WatchTower_Conveyor",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "F6FFE70000000000"
+    },
+    {
+      "name": "Tile_WeMustPerformQuirkafleeg_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WeMustPerformQuirkafleeg_Floor",
+      "inkColor": 0,
+      "paperColor": 7,
+      "bright": false,
+      "flash": false,
+      "dataHex": "33BBDDCC5599DDEE"
+    },
+    {
+      "name": "Tile_WeMustPerformQuirkafleeg_Wall",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "27F600DCD1047780"
+    },
+    {
+      "name": "Tile_WeMustPerformQuirkafleeg_Nastry",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "40E44E444444EEFF"
+    },
+    {
+      "name": "Tile_WeMustPerformQuirkafleeg_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "80402030A8642211"
+    },
+    {
+      "name": "Tile_WeMustPerformQuirkafleeg_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "28AA0A00555555FF"
+    },
+    {
+      "name": "Tile_WestBedroom_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestBedroom_Floor",
+      "inkColor": 6,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "AA55824182418241"
+    },
+    {
+      "name": "Tile_WestBedroom_Wall",
+      "inkColor": 5,
+      "paperColor": 1,
+      "bright": false,
+      "flash": false,
+      "dataHex": "A855A856CF2E26C1"
+    },
+    {
+      "name": "Tile_WestBedroom_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestBedroom_Ramp",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestBedroom_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "A5FFBDAA55BA4583"
+    },
+    {
+      "name": "Tile_WestOfKitchen_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestOfKitchen_Floor",
+      "inkColor": 5,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFBDA5A5A5420000"
+    },
+    {
+      "name": "Tile_WestOfKitchen_Wall",
+      "inkColor": 2,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0942902409429024"
+    },
+    {
+      "name": "Tile_WestOfKitchen_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestOfKitchen_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "C040B050AC54AB55"
+    },
+    {
+      "name": "Tile_WestOfKitchen_Conveyor",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "F055AA5555AA2A08"
+    },
+    {
+      "name": "Tile_WestWing_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestWing_Floor",
+      "inkColor": 1,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "F9FF3FD5AA154A84"
+    },
+    {
+      "name": "Tile_WestWing_Wall",
+      "inkColor": 7,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "ACAE01ADAD02ACE8"
+    },
+    {
+      "name": "Tile_WestWing_Nastry",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestWing_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03030C0C3030C0C0"
+    },
+    {
+      "name": "Tile_WestWing_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestWingRoof_Background",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "0000000000000000"
+    },
+    {
+      "name": "Tile_WestWingRoof_Floor",
+      "inkColor": 3,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "FFAAFFA4A4A7E43C"
+    },
+    {
+      "name": "Tile_WestWingRoof_Wall",
+      "inkColor": 5,
+      "paperColor": 4,
+      "bright": false,
+      "flash": false,
+      "dataHex": "E1841E48E1841E48"
+    },
+    {
+      "name": "Tile_WestWingRoof_Nastry",
+      "inkColor": 2,
+      "paperColor": 0,
+      "bright": true,
+      "flash": false,
+      "dataHex": "183C7EFFAF553A10"
+    },
+    {
+      "name": "Tile_WestWingRoof_Ramp",
+      "inkColor": 7,
+      "paperColor": 0,
+      "bright": false,
+      "flash": false,
+      "dataHex": "03000C003000C000"
+    },
+    {
+      "name": "Tile_WestWingRoof_Conveyor",
+      "inkColor": 7,
+      "paperColor": 7,
+      "bright": true,
+      "flash": true,
+      "dataHex": "0000000000000000"
+    }
+  ],
+  "selectedMapIndex": 45,
+  "maps": [
+    {
+      "name": "ABitOfTreeLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "0101010101010101010101010303010101010101010101010101010101010100010101010101010101010101030301010101010101010101010101010101010001010101010101010101010103030101010101010101010101010101010101000101010101010101010101010303010101010101010101010101010101010100010101010101010101020101030301010101010102010101010101010101010001010101010101010101010103030101010101010101010101010101010101000101010101020201010101010303010101010101010101020201010101010100010101010101010101020101030301010101010101010101010101010101010001010101010101010101010103030101010101020101010101010101010101000101010101010101010202010303010101010101010101010201010101010100020202020202010101010101030302020201010101010101010101010101010001010101010101010101010103030101010101010101010101010102010101000101010101010101010101010303010101010101010101010201010101010100010101010101010101010101030301010101020201010101010101010101010001010101010101010101010103030101010101010101010101010101010101000101010101010101010101020303020101010101010101010101010101010100",
+      "assignedTileIds": [1, 2, 3, 4, 5, 6]
+    },
+    {
+      "name": "AboveTheWestBedroomLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "07070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707080808080808080707070707070707070707070707070707070707070707070A0807070707070707070707070707070707070707070707070707070707070A0708070707070707070707070707070707070707070707070707070707070A0707080707070707070707070707070707070707070707070707070707070A070707080707070707070707070707070707070707070707070707070708080808080808080808080808070707070707070707070707070707070707070A0707070707070707070707070707070707070707070708070707070707070A0707070707070707070707070707070707070707070707070707070707090907070707070707070707070707070707070707070707070807070707070709090707080808080808080808070707",
+      "assignedTileIds": [7, 8, 9, 10, 11, 12]
+    },
+    {
+      "name": "AtTheFootTheMegaTreeLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "0D100D0D100D0D100D0D0F0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D100D0D100D0D0F0D0D0D0D0D0D0D0F0F0F0F0F0F0F0F0F0F0F0F0F0F0D100D0D100D0D100D0D0F0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D100D0D100D0D0F0D0D0D0D0E0E0E0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D100D0D100D0D0F0E0D0D0D0D0D0D0F0F0F0F0F0F0F0F0F0F0F0F0F0F0D100D0D100D0D100D0D0F0D0D0E0E0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D100D0D100D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D100D0D100D0D0F0E0D0D0D0D0D0E0F0F0F0F0F0F0F0F0F0F0F0F0F0F0D100D0D100D0D100D0D0F0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D100D0D100D0D0F0D0D0D0D0D0E0E0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D100D0D0D0D0D100D0D0F0E0E0D0D0D0D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0F0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0E0E0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0D0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E",
+      "assignedTileIds": [13, 14, 15, 16, 17, 18]
+    },
+    {
+      "name": "BackDoorLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "1313131313131313131313131313131315151313131313131313131313131313131313131313131313131313131313131515131313131313131313131313131313131313131313131313131313131313151513131313131313131313131313131313131313131313131313131313131315151313131313131313131313131313131313131313131313131313131313131515131313131313131313131313131313131313131313131313131313131313151513131313131313131313131313131313131313131313131313131313131315151313131313131313131313131313131313131313131313131313131313131515131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131414141414141414141414141414141414141313131313131313131313131315151515151313131313131313131313131313131313131313131313131313151515151515131313131313131313131313131313131313131313131313131515151515151513131313131313131313131313131313131313131313131315151515151515151313131313131313131313131313",
+      "assignedTileIds": [19, 20, 21, 22, 23, 24]
+    },
+    {
+      "name": "BackStairwayLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "1919191919191919191919191919191919191B1B1B1B1B1B1B1B1B1B1B1B1B1B19191919191919191919191919191919191B1B1B1B1B1B1B1B1B1B1B1B1B1B1B191919191919191919191919191919191A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A19191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A19191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191A1A1A1A1A1A1A191A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1919191A1A1A1A1A",
+      "assignedTileIds": [25, 26, 27, 28, 29, 30]
+    },
+    {
+      "name": "BallRoomEastLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "21211F1F201F1F1F1F1F21211F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F21211F1F201F1F1F1F1F21211F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F21211F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F2020202020202020202021211F1F2121212121212121212121212121212121211F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F20202020202020202020202020202020202020202020201F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F201F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F21212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121",
+      "assignedTileIds": [31, 32, 33, 34, 35, 36]
+    },
+    {
+      "name": "BallRoomWestLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "2525252525252525252525252525252525252525252525252525252525252727252525252525252525252525252525252525252525252525252525252525272725252525252525252525252525252525252525252525252525252525252527272525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252526262626262626262626262626262626262626262626262626262626262626262525252525252525272725252525252525252525252525252525252525252525252525252525252527272525252525252525252525252525252525252525252525252525252525252727252525252525252525252525252526262626262626262525252525252525272725252525252525252525252525252525252525252525252525252525252527272525252525252525252525252525252525252525252525252525252525252727252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252526262626262626262626262626262626262626262626262626262626262626262727272727272727272727272727272727272727272727272727272727272727",
+      "assignedTileIds": [37, 38, 39, 40, 41, 42]
+    },
+    {
+      "name": "ColdStoreLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "2B2B2B2B2B2B2B2E2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2E2B2B2B2B2B2B2B2B2B2B2E2B2B2B2B2B2B2B2C2C2C2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2E2B2B2B2B2B2B2E2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2C2C2C2C2C2C2C2C2C2C2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2C2C2C2C2C2C2C2C2C2C2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2D2D2D2D2D2D2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2D2D2D2D2D2D2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2C2C2C2C2B2B2D2D2D2D2D2D2C2C2C2C2C2C2C2C2C2C2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2D2D2D2D2D2D2B2B2B2B2B2B2B2B2B2E2B2B2B2B2B2B2B2B2B2B2B2C2C2B2B2B2D2D2D2D2D2D2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2C2C2C2C2B2B2B2B2B2B2D2D2D2D2D2D2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2B2C2C2B2B2B2D2D2D2D2D2D2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2D2D2D2D2D2D",
+      "assignedTileIds": [43, 44, 45, 46, 47, 48]
+    },
+    {
+      "name": "ConservatoryRoofLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "3131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131333333333333333333333331313131313131313131313131313131313131313131313431313431313431313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131323232323232323231313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131323232313131313131313131",
+      "assignedTileIds": [49, 50, 51, 52, 53, 54]
+    },
+    {
+      "name": "CuckoosNestLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "3737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373A3A373737373737373737373737373737373737373737373737373737373738383838373737373737373737373737373737373737373737373737373737383838383837373737373737373737373737393939393939393939393939393939383838383737373737373737373737373737373737373737373737373737373838383837373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737",
+      "assignedTileIds": [55, 56, 57, 58, 59, 60]
+    },
+    {
+      "name": "DrJonesWillNeverBelieveThisLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D403F3F3F3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3F3F3F3F3F3F3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3F3E3E3E3E3E3E3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D403F3F3F3F3D403E3E3E3D3E3E3E3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3F3F3F3F3F3F3F3D3D3E3F3F3F3F3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3E3E3E3E3D3D3F3E3D3D3F3F3F3D3D3F3D3D3D3D3D3D3D3D3D3D3E3E3D3D3D3D3E3E3E3E3D3D3F3D3D3E3F3F3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3F3F3E3E3D3D3F3E3D3D3F3F3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3E3D3D3D3F3F3E3E3D3D3F3D3D3E3F3D3D3D3E3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3E3D3F3E3E3D3D3F3E3D3D3F3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3E3D3D3F3E3E3D3D3D3D3D3E3F3D3D3D3D3E3D3D3D3D3D3D3D3E3D3D3D3D3D3D3D3D3D3F3D3D3D3D3D3D3D3E3F3D3D3D3D3D3D3D3E3D3D3D3D3D3D3D3D3D3D3D3D3D3D3F3F3E3E3D3D3D3D3E3F3E3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D",
+      "assignedTileIds": [61, 62, 63, 64, 65, 66]
+    },
+    {
+      "name": "EastWallBaseLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "4545434343434343434345454343434343434343434343434343434343434343454543434343434343434545434343434343434343434343434343434343434345454343434343434344454543434343434343434343434343434343434343434545434444434343444345454343434343434343434343434343434343434343454543434343434343444545434343434343434343434343434343434343434345454343434444434343454543434343434343434343434343434343434343434545434343434344434345454343434343434343434343434343434343434343454544434343434343434545434343434343434343434343434343434343434345454343434344434343434343434343434343434343434343434343434343434545434343434343434343434343434343434343434343434343434343434343454543434343434343444545434343434343434343434343434343434343434345454343434443434343454543434343434343434343434343434343434343434545434343434343434345454343434343434343434343434343434343434343454543434343444343434545434343434343434343434343434343434343434345454343434343434344454543434343434343434343434343434343434343434545434344434343434345454343434343434343434343434343434343434343",
+      "assignedTileIds": [67, 68, 69, 70, 71, 72]
+    },
+    {
+      "name": "EmergencyGeneratorLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "4949494949494949494949494949494949494949494949494949494949494B4B4949494949494949494949494949494949494949494949494949494949494B4B4949494949494949494949494949494949494949494949494949494949494B4B494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494949494A4A494949494949494949494949494949494A4A494949494B4B4949494949494A4A494949494949494949494949494949494A4A49494949494C4949494949494A4A494949494949494949494949494949494A4A49494949494C4949494949494A4A494949494949494949494949494949494A4A49494949494C4949494949494A4A494949494949494949494949494949494A4A49494949494C49494949494B4B4B4B49494949494949494949494949494B4B4B4B494949494C49494949494B4B494B49494949494949494949494949494B494B4B494949494C494949494B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4949494C494949494B4B4B4B494B4B4B4B494B4B4B4B494B4B4B4B494B4B4B4B4949494C494949494B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4949494C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B",
+      "assignedTileIds": [73, 74, 75, 76]
+    },
+    {
+      "name": "FirstLandingLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F524F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F5252524F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F524F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F524F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F524F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F51514F4F4F4F4F4F51514F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F4F5151515151515151505050505050505050505050505050505050505050504F4F5151515151515151",
+      "assignedTileIds": [79, 80, 82, 83, 81, 84]
+    },
+    {
+      "name": "HalfwayUpTheEastWallLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "5757555555555555555557575555555555555555555555555555555555555555575755555555555555555757555555555555555555555555555555555555555557575555555555555555555555555555555555555555555555555555555555555757555555555755555555555555555555555555555555555555555555555555575755555555575755555555555555555555555555555555555555555555555557575655555657575755555555555555555555555555555555555555555555555757555555555555555755555555555555555555555555555555555555555555575756555555555555575755555555555555555555555555555555555555555557575555565557575757575755555555555555555555555555555555555555555757555555555757575757575555555555555555555555555555555555555555575755555556555555555757555555555555555555555555555555555555555557575656555555555555575755555555555555555555555555555555555555555757555555555555555557575555555555555555555555555555555555555555575755555555565555555757555555555555555555555555555555555555555557575555555555555555575755555555555555555555555555555555555555555757555555555555555657575555555555555555555555555555555555555555",
+      "assignedTileIds": [85, 86, 87, 88, 89, 90]
+    },
+    {
+      "name": "IAmSureIHaveSeenThiBeforeLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5D5D5D5D5C5B5B5D5D5D5C5B5B5D5D5D5D5D5C5B5B5D5D5D5C5B5B5D5D5D5D5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5E5B5B5D5D5D5E5B5B5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D",
+      "assignedTileIds": [91, 92, 93, 94, 95, 96]
+    },
+    {
+      "name": "InsideTheMegaTrunkLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "6161616161616161616163616161616161616361616161616161616161616161616161616161616161616361616161616161636161616161616161616161616161616161616161616161636161616161616163616161616161616161616161616161616161616161616163616161616262616161616161616161616161616161616161616161616161616362616161616161616161616161616161616161616161616161616161616161616161616161616263636363636363616161616161616161616161616161616161616161626261616361616161616161616161616161636363636363636363636361616161616161636161616161616161616161616161646161646161646161636261616161616163616161616161616161616161616164616164616164616163616161616162626361616161616161616161616161616461616461616461616361616161616161636161616161616161616161616161646161646161646161636161616262616161616161616161616161616161616164616164616164616163616161616161616161616161616161616161616161616461616461616461616362616161616161636363636363636363636363636361646161646161646161636161616161616163616161616161616161616161616164616164616164616163616161616162626361616161616161616161616161",
+      "assignedTileIds": [97, 98, 99, 100, 101, 102]
+    },
+    {
+      "name": "MastreBedRoomLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "6969696969696969696969696969696969696969696969696969696969696969696967676767676767676767676769696767676767676767676767676767676769696767676767676767676767676969676767676767676767676767676767676969676767676767676767676767696967676767676767676767676767676767696967676767676767676767676769696767676767676767676767676767676769696767676767676767676767676969676767676767676767676767676767676969676767676767676767676767696967676767676767676767676767676767696967676767676767676767676769696767676767676767676767676767676769696767676767676767676767676969676767676767676767676767676767676969676767676767676767676767696967676767676767676767676767676767696967676767676767676767676769696767676767676767676767676767676769696A67676767676767676767676767676767676767676767676767676767676969676767676767676767676767676767676767676767676767676767676767696868686868686868686868686868686867676767676767676767676767676769696969696969696969696969696969696967676767676767676767676767676969696969696969696969696969696969696968686868686868686868686868",
+      "assignedTileIds": [103, 104, 105, 106, 107, 108]
+    },
+    {
+      "name": "NomenLuniLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6F6F6F6F6F6F6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6E6D6D6F6F6F6F6F6F6D6D6D6D6E6E6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6F6F6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6E6E6E6D6D6D6D6D6D6F6F6D6D6E6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6E6D6F6F6D6D6D6D6D6D6D6D6F6F6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6F6F6D6D6D6D6D6D6D6F6F6F6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6E6E6D6D6D6F6F6D6D6D6D6F6F6F6F6D6F6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6E6F6F6D6D6D6F6D6E6E6D6D6F6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6D6F6F6D6D6D6D6D6D6D6D6F6F6D6D6D6D6D6D6D6D6D6D6D6D6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6D6F6D6D6D6D6D6D6D6D6D6D6D6D6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6F6D6F",
+      "assignedTileIds": [109, 110, 111, 112, 113, 114]
+    },
+    {
+      "name": "OnABranchOverTheDriveLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "7373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373747573737373737373737373737373737373737373737373737373737373747575767573737373737373737373737373737373737373737373737373737376767676747474737373737373737373737373737373737373737373737373737373767676767373737373747474747474747474747474747473737373737373737373737373737373737376767576767673767576767373737373737373737373737373737373737373737376767673737376757673737373737373737373737373737373737373737373737373737373737376767373737373737373737373737373737374747373737373737373737373737373737373737373737374747373737373737373737373737373737373737373737373737373737373737373737373737474737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373",
+      "assignedTileIds": [115, 116, 117, 118, 119, 120]
+    },
+    {
+      "name": "OntheRoofLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "7979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797B7B7B7B7A7979797B7B7B7B7A7979797B7B7B7B7A797979797B7B7B7B7B7B7B7B7B7B7B7C7979797B7B7B7B7C7979797B7B7B7B7C797979797B7B7B7B7B7B7B7B7B7B7B7C7979797B7B7B7B7C7979797B7B7B7B7C797979797B7B7B7B7B7B7B7B7B7B7B7B7A79797B7B7B7B7B7A79797B7B7B7B7B7A7979797B7B7B7B7B7B7B7B7B7B7B7B7C79797B7B7B7B7B7C79797B7B7B7B7B7C7979797B7B7B7B7B7B7B7B7B7B7B7B7C79797B7B7B7B7B7C79797B7B7B7B7B7C7979797B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B7B",
+      "assignedTileIds": [121, 122, 123, 124, 125, 126]
+    },
+    {
+      "name": "OnTopOfTheHouseLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F817F7F7F7F7F7F7F7F7F7F7F7F7F7F807F7F7F7F7F7F7F7F7F7F7F7F7F81807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F807F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F7F7F7F7F7F7F7F7F7F7F7F7F7F807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F817F7F7F7F7F7F7F7F7F7F7F807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F81817F7F7F7F7F7F7F7F7F807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F8181817F7F817F7F817F807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F818181818181818181807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F81807F8181818181818181817F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F807F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F818181818181818181818181818181817F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F",
+      "assignedTileIds": [127, 128, 129, 130, 131, 132]
+    },
+    {
+      "name": "OrangeryLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "8585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585868585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585858585868585858585858585868585858585858585858585858585858585858585858585858585858586858585858586858585858585858585858585858585858585858585858585858585858585858585858587858585858585858585858585858685858585858585858585858585858585858585858585858585858585858585858585858586858585858585858585858585858585858587858585858585868585858585858585858585858586868585858585858585858786858585858585858585868585858585858585858585868686868585858585878585858585858585858585858585858585858586858585858585858585858587858585858586858585858585858585858585858585858585858585858585858785858585858585858585858585858685858585858585858585858787878787878787858585858585858686858585858585858585858585858585",
+      "assignedTileIds": [133, 134, 135, 136, 137, 138]
+    },
+    {
+      "name": "OutALimbLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8C8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8C8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8C8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8B8B8B8B8B8B8B8C8B8C8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8B8B8B8B8C8B8C8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8C8B8D8D8D8D8D8D8D8D8D8D8D8D8D8D8B8B8B8C8B8B8B8B8B8B8C8C8B8B8B8B8B8B8B8B8C8E8E8E8E8E8E8E8B8B8B8B8B8B8B8B8B8B8B8B8C8B8B8B8B8B8C8C8C8B8B8B8B8C8E8E8E8E8E8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8C8C8C8B8B8B8B8B8B8B8B8C8C8C8B8B8B8B8B8B",
+      "assignedTileIds": [139, 140, 141, 142, 143, 144]
+    },
+    {
+      "name": "PriestsHoleLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "9393919191919191919193939191919191919191919191919191919191919191939391919191919191919393919191919191919191919191919191919191919193939191919191919191939391919191919191919191919191919191919191919191919191919191919193939191919191919191919191919191919191919191919191919191919191919393919191919191919191919191919191919191919193939292919191919292939391919191919191919191919191919191919191919393919191919191919193939191919191919191919191919191919191919191939391929191919191919393919191919191919191919191919191919191919193939191919191919291939391919191919191919191919191919191919191919393919191919191919193939191919191919191919191919191919191919191939391929191919191919191919191919191919191919191919191919191919193939191919191919191919191919191919191919191919191919191919191919393919191919191929293939191919191919191919191919191919191919191939391919191919191919393919191919191919191919191919191919191919193939191929191919191939391919191919191919191919191919191919191919393919191919192919193939191919191919191919191919191919191919191",
+      "assignedTileIds": [145, 146, 147, 148, 149, 150]
+    },
+    {
+      "name": "RescueEsmereldaLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "97979797979797979797979797979797979797979797979797979997979797999797979797979797979797979797979797979797979797979797999797979799979797979797979797979797979797979797979797979797979797979797979997979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979797979999999997979797979797979797979797979797979797979797979797979797979797979797989997979797979797979797979797979797979797979797979797979797979797999797979797979797979797979797979797979797979797979797979798979799979797979797979797979797979797979797979797979797979797979797979999999999979798999999999997979899999999999797999999999999979798999999999997979A999999999997979A99999999999797979797979797979797999999999997979A999999999997979A99999999999797979797979797979798999999999997979A999999999997979A99999999999797979797979797979797999999999997979A999999999997979A99999999999797979797979797989797979999999997979A999999999997979A99999999999797979797979797979797979999999999999999999999999999999999999999999999999797979799999999",
+      "assignedTileIds": [151, 152, 153, 154, 155, 156]
+    },
+    {
+      "name": "SwimmingPoolLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9F9F9F9F9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9D9F9F9F9F9F9F9F9F9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9D9F9F9F9F9F9F9F9F9F9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9E9D9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F",
+      "assignedTileIds": [157, 158, 159, 160, 161, 162]
+    },
+    {
+      "name": "TheAtticLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A6A3A3A3A3A3A3A6A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A4A4A4A4A5A4A4A4A4A4A4A5A4A4A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A5A5A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A5A5A4A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A4A4A3A3A3A3A3A3A3A3A3A3A4A4A5A5A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A5A5A4A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A4A4A3A3A3A3A3A3A3A3A3A3A5A5A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A5A5A4A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A4A3A3A3A3A3A3A3A3A3A5A5A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A5A5A4A3A3A3A3A6A3A3A3A3A6A3A3A3A6A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A4A4A4A4A4A5A4A4A5A4A4A4A5A4A4A5A4A4A4A4A5A4A4A4A4A4A4A5A4A4A5A4",
+      "assignedTileIds": [163, 164, 165, 166, 167, 168]
+    },
+    {
+      "name": "TheBanyanTreeLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "A9A9A9A9A9A9A9A9A9A9A9A9ABABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABAAA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABAAAAA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABAAAAAAAAAAA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABA9A9AAA9A9AAA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9AAA9A9AAA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9AAA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABA9A9ABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABA9A9ABA9A9ABA9A9ABA9A9ABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9ABA9A9ABA9A9ABA9A9ABA9A9ABA9A9A9A9A9A9A9A9A9A9A9A9A9ABABABABABABABABABABABABABABABABABABABABABABABABAAAAABABABABABABABABABABABABABABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9AAAAABABABABABABABABABABABABABABA9A9A9A9A9A9A9A9A9A9A9A9A9A9A9A9AAAAABABABABABABABABABABABABABABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABABABABABAB",
+      "assignedTileIds": [169, 170, 171, 172, 173, 174]
+    },
+    {
+      "name": "TheBathroomLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1B0B0B0B0B0B0B0B0B0B0B0B0B0B0AFAFAFB1B0B0B0B0B0B0B0B0B0B0B0B0B1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1AFAFAFAFAFAFAFAFAFAFAFAFB1B1AFAFAFAFAFAFB0B0B0AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1AFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFB1B1B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B1B1",
+      "assignedTileIds": [175, 176, 177, 178, 179, 180]
+    },
+    {
+      "name": "TheBeachLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B7B7B7B7B7B7B7B7B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B7B7B7B7B7B7B7B7B7B7B7B7B7B7B5B5B5B5B5B7B7B7B7B7B7B5B5B5B5B5B7B7B7B7B7B7B7B7B7B7B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B7B7B7B7B7B7B7B7B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B7B7B7B7B7B7B7B7B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B5B7B7B7B7B7B7B7B7B5B5B5B5B5B5B6B6B8B6B6B6B6B8B6B6B6B6B8B6B6B8B6B6B7B7B7B7B7B7B7B7B5B5B5B5B5B6B6B6B6B6B6B6B6B6B6B6B6B6B6B6B6B6B6B6B7B7B7B7B7B7B7B7",
+      "assignedTileIds": [181, 182, 183, 184, 185, 186]
+    },
+    {
+      "name": "TheBowLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCBCBCBCBCBCBCBCBCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBDBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCBBBBBBBBBBBDBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBDBCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBDBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "assignedTileIds": [187, 188, 189, 190, 191, 192]
+    },
+    {
+      "name": "TheBridgeLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C3C3C1C1C1C1C1C3C3C3C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C3C3C3C1C1C1C1C1C3C3C3C3C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C3C3C3C3C4C4C4C4C4C3C3C3C3C3C1C1C1C1C1C1C1C1C1C1C2C2C2C2C2C2C2C2C3C3C3C3C4C4C4C4C4C3C3C3C3C3C2C2C2C2C2C2C2C2C2C2",
+      "assignedTileIds": [193, 194, 195, 196, 197, 198]
+    },
+    {
+      "name": "TheChapelLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C7C7C7C7C8C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C7C7C7C7C8C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C9C7C7C7C7C8C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C9C9C7C7C7C7C8C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C9C9C9C9C9C7C7C7C7C8C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C8C9C9C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C7C8C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C7C7C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C9C7C7C9C9C9C9",
+      "assignedTileIds": [199, 200, 201, 202, 203, 204]
+    },
+    {
+      "name": "TheDriveLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCECECECDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCFCFCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCFCFCFCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCFCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCFCFCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCDCDCFCFCFCFCFCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCFCFCDCDCFCFCFCFCFCFCECECECECECECECECECECECECFCFCECECECECECECECE",
+      "assignedTileIds": [205, 206, 207, 208, 209, 210]
+    },
+    {
+      "name": "TheForgottenAbbey",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D3D3D3D3D3D3D3D6D3D3D3D3D3D3D6D3D3D3D3D3D3D3D6D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D6D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D4D5D5D5D5D4D4D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D4D4D3D3D3D3D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D4D5D5D4D4D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D3D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5",
+      "assignedTileIds": [211, 212, 213, 214, 215, 216]
+    },
+    {
+      "name": "TheFrontDoorLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9DBDBDBDBDBDBDBDBDBDBDBDBDBD9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9DADADADAD9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9DBDBDBDBD9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9D9",
+      "assignedTileIds": [217, 218, 219, 220, 221, 222]
+    },
+    {
+      "name": "TheHallLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1DFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE2DFDFDFE2DFDFDFDFE2DFDFDFDFDFDFDFDFDFDFDFDFDFDFE1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1E1",
+      "assignedTileIds": [223, 224, 225, 226, 227, 228]
+    },
+    {
+      "name": "TheKitchenLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E6E6E6E5E5E6E6E6E6E5E5E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E6E5E5E5E5E5E5E5E5E5E5E5E5E5E6E6E6E5E5E6E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E7E7E7E5E5E5E5E5E5E5E5E5E5E5E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E7E7E7E7E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E7E7E7E7E7E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E6E6E6E5E5E6E6E6E6E5E5E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7E7",
+      "assignedTileIds": [229, 230, 231, 232, 233, 234]
+    },
+    {
+      "name": "TheNightmareRoomLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "EBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBECEBEBEBEBEBECEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBECEBEBEBEDEDEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEBECEBEBEBEBEBEBEBEDEDEDEDEDEDEDEDEDEBEBEBEBEBEBECEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEDEDEDEDEDEDEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEDEDEDEDEDEDEDEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDED",
+      "assignedTileIds": [235, 236, 237, 238, 239, 240]
+    },
+    {
+      "name": "TheOffLicenceLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F4F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F3F3F3F3F1F1F1F1F1F1F1F1F1F1F1F3F3F3F3F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F1F3F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2",
+      "assignedTileIds": [241, 242, 243, 244, 245, 246]
+    },
+    {
+      "name": "TheSecurityGuardLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F9F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F7F7F8F8F8F8F8F8F7F7F8F7F7F8F7F7F8F8F8F8F7F7F8F8F8F8F8F8F8F9F9F9F7F7F9F9F9F9F9F9F7F7F9F7F7F9F7F7F9F9F9F9F7F7F9F9F9F9F9F9F9F7F7F7F7F7F7F7F7F9F9F9F7F7F9F7F7F9F7F7F9F9F9F9F7F7F9F9F9F9F9F9F9F7F7F7F7F7F7F7F7F9F9F9F7F7F9F7F7F9F7F7F9F9F9F9F7F7F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F7F7F9F7F7F9F7F7F9F9F9F9F7F7F9F9F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9F9",
+      "assignedTileIds": [247, 248, 249, 250, 251, 252]
+    },
+    {
+      "name": "TheWineCellarLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFEFEFDFDFDFDFDFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFFFFFFFFFDFDFDFDFDFEFDFDFDFEFDFDFDFDFDFEFEFEFEFEFEFFFFFFFFFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFFFFFFFFFFFDFDFDFDFEFDFDFDFEFDFDFDFDFEFEFEFEFEFEFEFFFFFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFDFDFDFDFDFEFDFDFDFDFEFEFEFEFEFEFEFEFEFEFEFEFEFFFFFFFFFDFDFDFDFDFDFDFDFDFD00FDFDFDFD00FDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "assignedTileIds": [253, 254, 255, 256, 257, 258]
+    },
+    {
+      "name": "TheYachtLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "0303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030304040404040503030303030303030303030303030303030303030303030303030303030303050303030303030303030303030303030303030303030303030303030303030305030303030303030303030303030303030303030303030303030303030303030503030303030303030303030303030303030303030303030303030303030303050303030303060303030603030303060303030303030303030303040404040405050505050505050505050505050505030304040404040404040403030304030303030303030303030303030303050503030403030303030303030303030403030303030303030303030303030305050303040303030303030303030303040303030303030303030303030303030505030304030303030303030303030304030303030303030303030303030303050503030303030303030303030505050505050505050505050505050505050505050303030303030303030303",
+      "assignedTileIds": [259, 260, 261, 262, 263, 264]
+    },
+    {
+      "name": "ToolShedLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "09090909090909090909090B0B0B0B0B0B0B0909090909090909090909090909090909090909090909090B0B0B0B0B0B0B0B09090909090909090909090909090909090909090909090B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B090909090909090909090909090909090C0909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090B0B0B0B090909090909090909090909090909090909090909090909090909090B0B0B0B090909090909090909090909090909090909090909090909090909090B0B0B0B0B0B0B0B0B0B0B0909090A090A09090A090909090A090909090B0B0B0B0B0B0B0B0B0B0B0B0B0B0909090909090909090909090909090909090B0B0B0B0B0B0B0B0B0B0B0B0B0B09090909090909090909090909090909090A0B0B0B0B0B0B0B0B0B0B0B0B0B0B09090A090A09090909090A090909090909090B0B0B0B0B0B0B0B0B0B0B0B0B0B090909090909090909090909090A090909090B0B0B0B0B0B0B0B0B0B0B0B0B0B09090909090909090909090909090909090A0B0B0B0B0B0B0B0B0B0B0B0B0B0B09090909090909090909090909090909090C0B0B0B0B0B0B0B0B0B0B0B0B0B0B0A0A0A0A0A0A0A0A0A0A0A0A0A0A0A0A0A0A0B0B0B0B0B0B0B",
+      "assignedTileIds": [265, 266, 267, 268, 269, 270]
+    },
+    {
+      "name": "TopLandingLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F1111101010100F0F101010100F0F101010101010101010100F0F0F0F0F0F0F0F11110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F111111111111111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F11111111101010100F0F101010100F0F1010101010100F0F0F0F0F0F0F0F0F0F111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F111111110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F11111111101010100F0F101010100F0F1010100F0F0F0F0F0F0F0F0F0F0F0F0F11110F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F10101010101010101010101010101010101010100F0F10101010101010101010",
+      "assignedTileIds": [271, 272, 273, 274, 275, 276]
+    },
+    {
+      "name": "TotheKitchensMainStairwayLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "1515151515151515171515151515151515151515151515151515151515151515151515151515151517151515151515151515151515151515151515151515151515151515151515151715151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151815151515151515151515151515151515151515151515151515151515151515151515151515151515151515161716161616161616161616161616151515151515161616161515151515151515171515151515151515151515151515151515151515151515151515151515151517151515151515151515151515151515151515151515151517171616161616161715161615151515151515151515151515151515151515151717151515151515171515151515151515151515151515151616161616151515171715151515151517151515151515151515151616151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151517171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717171717",
+      "assignedTileIds": [277, 278, 279, 280, 281, 282]
+    },
+    {
+      "name": "TreeRootLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "1D1D1D1D1B1B1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1B1B1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1B1B1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1B1B1D1D1D1D1B1B1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1B1B1D1D1D1D1B1B1D1D1D1D1B1B1B1B1D1D1B1B1B1B1B1B1B1B1D1D1D1D1D1D1B1B1D1D1D1D1B1B1D1D1D1D1B1B1B1B1D1D1B1B1B1B1B1B1B1B1D1D1D1D1D1D1B1B1D1D1D1D1B1B1B1B1B1B1B1B1B1B1D1D1B1B1B1B1B1B1B1B1D1D1D1D1D1D1B1B1D1D1D1D1B1B1B1B1B1B1B1B1B1B1D1D1B1B1B1B1B1B1B1B1D1D1B1B1B1B1B1B1B1B1B1B1C1C1B1B1B1B1B1B1B1B1D1D1B1B1B1B1B1B1B1B1D1D1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1D1D1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1D1D1D1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1C1C1C1C1C1C1C1C1C1C1B1B1B1D1D1D1D1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1D1D1D1D1D1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1B1D1D1D1D1D1D1B1B1B1B1B1B1E1B1B1B1B1E1B1B1B1E1B1B1B1B1B1E1B1B1B1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D",
+      "assignedTileIds": [283, 284, 285, 286, 287, 288]
+    },
+    {
+      "name": "TreeTopLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "2121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212122212121212121212121212121212121212121212121212122222221212121212121212121212121212121212121212121212121212121212121212121222221212121212121222121212121212121212121212222222121212121212121212121222221212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212122222121212121212121212222222222222222222222212121212121212321212121212121212121212121212124212424212424212321212221212121232121212121222221212121212124212424212424242121232121212121212123212222212121212121212121212124212121242121212123212121212122222321212121212121212121212121",
+      "assignedTileIds": [289, 290, 291, 292, 293, 294]
+    },
+    {
+      "name": "UnderTheDriveLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "2D2D2D2D2D2D2D3030303030302D30303030302D2D2D2D2D2D2D2D2D2D2D2D2D2F2F2F2F2F2F2F2F2F2F3030303030302D3030302D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D303030302E2D2D2E2E302D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2F2F2F2F2F2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2E2E2D2D2D2D2D2E2D2D2D2D2D2D2D2E2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2E2D2D2D2D2D2D2E2D2D2D2D2D2D2D2D2D2D2D2D2D2F2F2F2F2F2F2F2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2E2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2E2E2D2D2E2D2D2D2E2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E",
+      "assignedTileIds": [301, 302, 303, 304, 305, 306]
+    },
+    {
+      "name": "UnderTheRoofLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "3333333333333333333333333636363636363636363636363636363636363333333333333333333333333333333333333633333636363633333633333333333333333333333333333333333333333336363633363636363336363633333333333333333333333333333333333333333333333333363633333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333353535353434343433333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333335353333333333333333333434333333333333333333333333333333343433333535333333333334333333333333333333333333343434343434333333333333353533333433333333333333333333333333333334343433333333333333333435353333333333333333333333333333333333333333333333333333333333333535333333333333343333333333333333333333",
+      "assignedTileIds": [307, 308, 309, 310, 311, 312]
+    },
+    {
+      "name": "UpOnTheBattlementsLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "3939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393B3B3B3B3A39393B3B3B3A39393B3B3B3B3B3A39393B3B3B3A39393B3B3B3B3B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3C39393B3B3B3C39393B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B3B",
+      "assignedTileIds": [313, 314, 315, 316]
+    },
+    {
+      "name": "WatchTowerLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F413F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F413F3F3F3F3F3F3F3F3F3F3F3F413F3F3F423F3F3F3F3F3F3F3F3F423F3F3F42413F3F3F3F3F3F3F3F3F3F414141414141414141413F3F3F40414141414141414141413F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F41413F3F3F3F41413F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F414140403F3F41413F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F41413F3F3F3F41413F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F3F41413F3F404041413F3F3F3F3F3F3F3F3F3F3F3F",
+      "assignedTileIds": [319, 320, 321, 322, 323, 324]
+    },
+    {
+      "name": "WeMustPerformQuirkafleegLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "4545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454645454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454645454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545464545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454546454545454545454545454545454545454545454545454545454545454545454545454545454545454747474746454547474746454547474747474645454747474645454747474747474747474845454747474845454747474747484545474747484545474747474747474747484545474747484545474747474748454547474748454547474747474747474748454547474748454547474747474845454747474845454747474747474747474845454747474845454747474747484545474747484545474747474747474747484545474747484545474747474748454547474748454547474747474747474747474747474747474747474747474747474747474747474747474747",
+      "assignedTileIds": [325, 326, 327, 328, 329, 330]
+    },
+    {
+      "name": "WestBedroomLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4C4C4C4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4C4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4D4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4B4B4B4B4B4B4B4B4B4C4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4B4B4B4B4B4B4B4B4B4B4D4D4D4D4D4D4D4D4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4D4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4D4D4B4B4B4B4B4B4B4B4B4B4B4B4B4B",
+      "assignedTileIds": [331, 332, 333, 334]
+    },
+    {
+      "name": "WestOfKitchenLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "5151515151515151515151525151515151515151515151515151515151515151515151515151515151515152515151515151515151515151515151515151515151515151515151515151515251515151515151515151515151515151515151515151515151515151515151525151515151515151515151515151515151515151515151515151515151515152515151515151515151515151515151515151515151515151515151515151515251515151515251515151525252525251515252525151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515151515153535151515151515151515151515151515151515151525151515151515252525353535151515151515151515151515151525252515151515252515151515151535353535151515151515151525251515151515151515151515151515151515153535353535151515151515151515151515151515151515151515151515151515353535353535151515151515151515151525252515152525252525151525252535353535353535151515151515151515151515151515151515151515151515153535353535353535151515151515151515151515151515151515151515151515353535353535353535353535353535353535353535353535353535353535353",
+      "assignedTileIds": [337, 338, 339, 340, 341, 342]
+    },
+    {
+      "name": "WestWingLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "5757575759595757575757575757575757575757575757575757575757575757575757575959575757575757575757575757575757575757575757575757575757575757595957575757575757575757575757575757575757575757575757575858585859595757575757575757575757575757575757575757575757575757575757575959575757575757575757575757575757575757575757575757575757575757595957575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575858585858585858585858585858575757575757585858585858585858585858575757575757575757575757575757575757575959595959595959595959595957575757575757575757575757575757575759595959595959595959595959595757575757575757575757575757575757595959595959595959595959595959",
+      "assignedTileIds": [343, 344, 345, 346]
+    },
+    {
+      "name": "WestWingRoofLayout",
+      "width": 32,
+      "height": 16,
+      "tileSize": 8,
+      "defaultPaper": 0,
+      "defaultInk": 7,
+      "bright": true,
+      "tilesHex": "5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5E5E5E5E5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5F5F5D5D5D605D5D5D605D5D5D5D605D5D5D605D5D5D5D605D5D5D5D5D5D5D5D5F5F5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5D5D5D5D5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5E5E5D5D5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5E5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5F5F5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5D5E5E5E5E5F5F5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5D5D5D5D5E5E",
+      "assignedTileIds": [349, 350, 351, 352, 353, 354]
+    }
+  ]
+}
