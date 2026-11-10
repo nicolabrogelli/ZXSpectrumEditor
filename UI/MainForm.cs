@@ -62,6 +62,9 @@ namespace ZXSpectrumSpriteGenerator.UI
                 _mSubPresets.DropDownItems.Add(new ToolStripMenuItem(curPreset.DisplayName, null, (s, e) => ActionAddEnemyPreset(curPreset)));
             }
 
+            var mNewMM = new ToolStripMenuItem("🕹️ Nuovo Progetto Manic Miner (Central Cavern)", null, (s, e) => ActionNewManicMinerProject());
+            _mFile.DropDownItems.Insert(1, mNewMM);
+
             LayoutNavBar();
         }
 
@@ -878,6 +881,20 @@ namespace ZXSpectrumSpriteGenerator.UI
                     LoadProject(newProj);
                     SetModified(false);
                 }
+            }
+        }
+
+        private void ActionNewManicMinerProject()
+        {
+            if (!PromptSaveChanges()) return;
+            var mmProject = ManicMinerService.CreateManicMinerProject();
+            _currentFilePath = null;
+            LoadProject(mmProject);
+            SetModified(false);
+            UpdateWindowTitle();
+            if (_mainTabs != null && _mainTabs.TabPages.Count > 2)
+            {
+                _mainTabs.SelectedIndex = 2; // Passa alla tab Mappe
             }
         }
 

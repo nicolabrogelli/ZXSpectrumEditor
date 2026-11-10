@@ -968,5 +968,216 @@ namespace ZXSpectrumSpriteGenerator.Services
                 default: return 0;
             }
         }
+
+        /// <summary>
+        /// Rileva automaticamente il formato più probabile per i dati byte incollati.
+        /// </summary>
+        public static MapImportFormat DetectFormat(IReadOnlyList<byte> bytes, int expectedWidth = 32, int expectedHeight = 16)
+        {
+            if (bytes == null || bytes.Count == 0) return MapImportFormat.Packed2Bit;
+
+            // Se sono 512 byte (o tra 500 e 520)
+            if (bytes.Count == 512 || (bytes.Count >= 500 && bytes.Count <= 520))
+            {
+                // Controlla se ci sono valori tipici di attributi Spectrum (> 7, es. 22, 66, 68)
+                bool hasHighAttributes = false;
+                for (int i = 0; i < Math.Min(bytes.Count, 512); i++)
+                {
+                    if (bytes[i] > 7)
+                    {
+                        hasHighAttributes = true;
+                        break;
+                    }
+                }
+                return hasHighAttributes ? MapImportFormat.ManicMinerAttributes : MapImportFormat.Linear1BytePerCell;
+            }
+
+            // Se corrisponde alla dimensione 2-bit (es. 128 byte per 32x16, o 192 per 32x24)
+            int packed2BitExpected = ((expectedWidth + 3) / 4) * expectedHeight;
+            if (bytes.Count == packed2BitExpected || (bytes.Count >= packed2BitExpected && bytes.Count <= packed2BitExpected + 3))
+            {
+                return MapImportFormat.Packed2Bit;
+            }
+
+            // Se corrisponde esattamente a W * H
+            if (bytes.Count == expectedWidth * expectedHeight)
+            {
+                return MapImportFormat.Linear1BytePerCell;
+            }
+
+            return MapImportFormat.Packed2Bit;
+        }
+
+        /// <summary>
+        /// Importa il layout della caverna (512 byte di attributi ZX Spectrum conformi a SkoolKit 45056)
+        /// mappando ciascun attributo sulla rispettiva tile della caverna o del progetto.
+        /// </summary>
+        public static void ImportManicMinerAttributes(
+            GameMap targetMap,
+            IReadOnlyList<byte> bytes,
+            SpriteProject project,
+            int width = 32,
+            int height = 16,
+            IDictionary<byte, int> customAttrToTileMap = null,
+            bool updateCavernData = true)
+        {
+            if (targetMap == null || bytes == null || bytes.Count == 0) return;
+
+            width = Math.Max(1, width);
+            height = Math.Max(1, height);
+
+            if (targetMap.Width != width || targetMap.Height != height)
+            {
+                targetMap.Resize(width, height);
+            }
+
+            // Costruisci dizionario attributo -> tileId (1-based)
+            Dictionary<byte, int> attrMap = new Dictionary<byte, int>();
+
+            if (customAttrToTileMap != null && customAttrToTileMap.Count > 0)
+            {
+                foreach (var kvp in customAttrToTileMap)
+                    attrMap[kvp.Key] = kvp.Value;
+            }
+            else
+            {
+                // Mappatura automatica basata sui tile della caverna ManicMinerData se presente
+                if (targetMap.ManicMinerData != null && targetMap.ManicMinerData.TileDefs != null)
+                {
+                    for (int s = 0; s < 8; s++)
+                    {
+                        var td = targetMap.ManicMinerData.TileDefs[s];
+                        if (td != null)
+                        {
+                            int tid = (targetMap.AssignedTileIds != null && s < targetMap.AssignedTileIds.Count)
+                                ? targetMap.AssignedTileIds[s]
+                                : (s + 1);
+                            if (!attrMap.ContainsKey(td.Attribute))
+                            {
+                                attrMap[td.Attribute] = tid;
+                            }
+                        }
+                    }
+                }
+
+                // Altrimenti basata sulle tile assegnate alla mappa
+                if (targetMap.AssignedTileIds != null && targetMap.AssignedTileIds.Count > 0 && project != null)
+                {
+                    foreach (int tid in targetMap.AssignedTileIds)
+                    {
+                        if (tid > 0 && tid <= project.Tiles.Count)
+                        {
+                            var t = project.Tiles[tid - 1];
+                            byte attr = (byte)((t.Flash ? 128 : 0) | (t.Bright ? 64 : 0) | (t.PaperColor << 3) | t.InkColor);
+                            if (!attrMap.ContainsKey(attr)) attrMap[attr] = tid;
+                        }
+                    }
+                }
+
+                // Altrimenti basata su tutte le tile del progetto
+                if (attrMap.Count == 0 && project != null)
+                {
+                    for (int i = 0; i < project.Tiles.Count; i++)
+                    {
+                        var t = project.Tiles[i];
+                        byte attr = (byte)((t.Flash ? 128 : 0) | (t.Bright ? 64 : 0) | (t.PaperColor << 3) | t.InkColor);
+                        if (!attrMap.ContainsKey(attr)) attrMap[attr] = i + 1;
+                    }
+                }
+            }
+
+            targetMap.Clear();
+
+            int maxCells = Math.Min(bytes.Count, width * height);
+            for (int i = 0; i < maxCells; i++)
+            {
+                int x = i % width;
+                int y = i / width;
+                byte attr = bytes[i];
+
+                int tileId = 0;
+                if (attrMap.TryGetValue(attr, out int mappedId))
+                {
+                    tileId = mappedId;
+                }
+                else if (attr < 8 && targetMap.AssignedTileIds != null && attr < targetMap.AssignedTileIds.Count)
+                {
+                    // Fallback: se l'attributo è < 8 ed è un indice slot valido
+                    tileId = targetMap.AssignedTileIds[attr];
+                }
+
+                targetMap.SetTile(x, y, tileId);
+            }
+
+            if (updateCavernData && targetMap.ManicMinerData != null)
+            {
+                targetMap.ManicMinerData.UpdateFromGameMap(targetMap, project);
+            }
+        }
+
+        /// <summary>
+        /// Importa i dati nel formato lineare 1 byte per cella (riga per riga),
+        /// mappando ciascun valore (0..N) sulla corrispondente tile o slot del Set Mappa.
+        /// </summary>
+        public static void ImportLinear1BytePerCell(
+            GameMap targetMap,
+            IReadOnlyList<byte> bytes,
+            int width,
+            int height,
+            IReadOnlyList<int> slotTileIds,
+            bool isZeroBased = true,
+            SpriteProject project = null)
+        {
+            if (targetMap == null || bytes == null || bytes.Count == 0) return;
+
+            width = Math.Max(1, width);
+            height = Math.Max(1, height);
+
+            if (targetMap.Width != width || targetMap.Height != height)
+            {
+                targetMap.Resize(width, height);
+            }
+
+            targetMap.Clear();
+
+            int maxCells = Math.Min(bytes.Count, width * height);
+            for (int i = 0; i < maxCells; i++)
+            {
+                int x = i % width;
+                int y = i / width;
+                int val = bytes[i];
+
+                int tileId = 0;
+                if (slotTileIds != null && slotTileIds.Count > 0)
+                {
+                    int slotIdx = isZeroBased ? val : (val - 1);
+                    if (slotIdx >= 0 && slotIdx < slotTileIds.Count)
+                    {
+                        tileId = slotTileIds[slotIdx];
+                    }
+                }
+                else
+                {
+                    tileId = isZeroBased ? val : val;
+                }
+
+                targetMap.SetTile(x, y, tileId);
+            }
+
+            if (targetMap.ManicMinerData != null && project != null)
+            {
+                targetMap.ManicMinerData.UpdateFromGameMap(targetMap, project);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Formato dei dati di input per l'importazione di mappe.
+    /// </summary>
+    public enum MapImportFormat
+    {
+        Packed2Bit,           // Formato compresso 2-bit (4 tile per byte, Jet Set Willy / Standard)
+        ManicMinerAttributes, // 512 byte di attributi ZX Spectrum (SkoolKit 45056, 32x16)
+        Linear1BytePerCell    // Formato lineare 1 byte per cella (indici tile 0..N)
     }
 }

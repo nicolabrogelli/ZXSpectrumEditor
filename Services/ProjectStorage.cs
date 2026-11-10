@@ -122,7 +122,15 @@ namespace ZXSpectrumSpriteGenerator.Services
                 string assignedStr = (map.AssignedTileIds != null && map.AssignedTileIds.Count > 0)
                     ? string.Join(", ", map.AssignedTileIds)
                     : string.Empty;
-                sb.AppendLine($"      \"assignedTileIds\": [{assignedStr}]");
+                sb.Append($"      \"assignedTileIds\": [{assignedStr}]");
+
+                if (map.ManicMinerData != null)
+                {
+                    sb.AppendLine(",");
+                    string mmHex = ByteArrayToHex(map.ManicMinerData.To1024ByteArray());
+                    sb.Append($"      \"manicMinerHex\": \"{mmHex}\"");
+                }
+                sb.AppendLine();
 
                 sb.Append("    }");
                 if (m < project.Maps.Count - 1)
@@ -352,6 +360,21 @@ namespace ZXSpectrumSpriteGenerator.Services
                         if (isLegacy8Bit)
                         {
                             map.RepairLegacyTileIds();
+                        }
+
+                        // Ripristina metadati specifici di Manic Miner se presenti
+                        string mmHex = ExtractString(objStr, "manicMinerHex");
+                        if (!string.IsNullOrEmpty(mmHex))
+                        {
+                            try
+                            {
+                                byte[] mmBytes = HexToByteArray(mmHex);
+                                if (mmBytes.Length >= 1024)
+                                {
+                                    map.ManicMinerData = ManicMinerCavern.From1024ByteArray(mmBytes, 0, project.Maps.Count);
+                                }
+                            }
+                            catch { }
                         }
 
                         project.Maps.Add(map);

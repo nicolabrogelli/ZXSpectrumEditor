@@ -22,6 +22,15 @@ namespace ZXSpectrumSpriteGenerator.UI
         private bool _isUpdatingMapCombo = false;
         private bool _isUpdatingTilesPerMap = false;
 
+        // Controlli specifici per Manic Miner (SkoolKit 45056)
+        private ToolStripDropDownButton _btnManicMiner;
+        private ToolStripSeparator _sepMM;
+        private ToolStripButton _btnToolWilly;
+        private ToolStripButton _btnToolPortal;
+        private ToolStripButton _btnToolItem;
+        private ToolStripButton _btnToolGuardian;
+        private ToolStripButton _btnToolMMProps;
+
         public event EventHandler ProjectModified;
         public event EventHandler RequestSwitchToSprites;
         public event EventHandler<int> RequestSwitchToTiles;
@@ -36,6 +45,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             _pnlAssignedTiles.DragEnter += PnlAssignedTiles_DragEnter;
             _pnlAssignedTiles.DragOver += PnlAssignedTiles_DragOver;
             _pnlAssignedTiles.DragDrop += PnlAssignedTiles_DragDrop;
+
+            InitializeManicMinerControls();
 
             _rightPanel.Resize += (s, e) => LayoutRightPanel();
             LayoutRightPanel();
@@ -131,6 +142,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             _btnToolRect.Checked = (activeBtn == _btnToolRect);
             _btnToolRectFill.Checked = (activeBtn == _btnToolRectFill);
             _btnToolPicker.Checked = (activeBtn == _btnToolPicker);
+            if (_btnToolWilly != null) _btnToolWilly.Checked = (activeBtn == _btnToolWilly);
+            if (_btnToolPortal != null) _btnToolPortal.Checked = (activeBtn == _btnToolPortal);
+            if (_btnToolItem != null) _btnToolItem.Checked = (activeBtn == _btnToolItem);
+            if (_btnToolGuardian != null) _btnToolGuardian.Checked = (activeBtn == _btnToolGuardian);
         }
 
         private void CenterPanel_Resize(object sender, EventArgs e) => CenterCanvas();
@@ -243,6 +258,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             RefreshTilesetPalette();
             UpdateMapInfo();
             UpdateQuickAsm();
+            UpdateManicMinerUiState();
             CenterCanvas();
             _canvas.Invalidate();
         }
@@ -465,7 +481,13 @@ namespace ZXSpectrumSpriteGenerator.UI
             };
 
             string statusText = usageCount > 0 ? $"Usata: {usageCount}x" : "Non usata";
-            if (isBeyondLimit) statusText += " (Fuori limite)";
+            if (_project?.CurrentMap?.IsManicMinerMode == true && slotNum >= 0 && slotNum < 8)
+            {
+                var mmDefs = _project.CurrentMap.ManicMinerData.TileDefs;
+                string role = (mmDefs != null && mmDefs[slotNum] != null) ? mmDefs[slotNum].RoleName : "";
+                statusText = $"[{role}] • {statusText}";
+            }
+            else if (isBeyondLimit) statusText += " (Fuori limite)";
             Label lblStatus = new Label
             {
                 Top = 24,
@@ -1241,7 +1263,11 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             if (_project == null) return;
 
-            using (var dlg = new ImportMapDialog(_project))
+            var defaultFmt = (_project.CurrentMap != null && _project.CurrentMap.IsManicMinerMode)
+                ? MapImportFormat.ManicMinerAttributes
+                : MapImportFormat.Packed2Bit;
+
+            using (var dlg = new ImportMapDialog(_project, defaultFmt))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -1284,9 +1310,13 @@ namespace ZXSpectrumSpriteGenerator.UI
                 cmbType.Items.AddRange(new object[] {
                     "Compresso 2-bit (4 tile/byte)",
                     "Standard 1:1 (1 byte/tile)",
-                    "Entrambi (Standard + Compresso)"
+                    "Entrambi (Standard + Compresso)",
+                    "Manic Miner (1024 Byte - SkoolKit 45056)"
                 });
-                cmbType.SelectedIndex = (SelectedCompressionMode == MapCompressionMode.Uncompressed) ? 1 : (SelectedCompressionMode == MapCompressionMode.Both ? 2 : 0);
+                if (_project.CurrentMap.IsManicMinerMode)
+                    cmbType.SelectedIndex = 3;
+                else
+                    cmbType.SelectedIndex = (SelectedCompressionMode == MapCompressionMode.Uncompressed) ? 1 : (SelectedCompressionMode == MapCompressionMode.Both ? 2 : 0);
 
                 Label lblTilesTitle = new Label
                 {
@@ -1367,6 +1397,25 @@ namespace ZXSpectrumSpriteGenerator.UI
 
                 Action updateAllTabs = () =>
                 {
+                    if (cmbType.SelectedIndex == 3)
+                    {
+                        var mm = _project.CurrentMap.ManicMinerData ?? ManicMinerCavern.CreateCentralCavernDefault();
+                        mm.UpdateFromGameMap(_project.CurrentMap, _project);
+                        txtAsm.Text = mm.ToSkoolKitAssembly(45056, AsmDirective.Defb);
+                        txtC.Text = $"// Manic Miner 1024 Byte Cavern: {mm.Name}\nconst unsigned char cavern_{mm.CavernIndex}[1024] = {{\n\t" +
+                                    string.Join(", ", mm.To1024ByteArray()) + "\n};\n";
+                        txtBasic.Text = $"10 REM Manic Miner Loader for {mm.Name}\n20 CLEAR 45055\n30 LOAD \"\" CODE 45056,1024\n40 RANDOMIZE USR 33792\n";
+                        lblFormatInfo.Text = "Manic Miner 1024 Byte (SkoolKit 45056): Blocco esatto 1024 byte da $B000 (layout attributi 32x16, 8 tile, Willy spawn, portale, nastro, chiavi, guardiani e grafica).";
+                        lblBinInfo.Text = $"FILE BINARIO CAVERNA MANIC MINER (1024 BYTE)\n" +
+                                          $"--------------------------------------------------\n" +
+                                          $"Caverna: {mm.Name}\n" +
+                                          $"Dimensione file: 1024 byte (1 KB esatto)\n" +
+                                          $"Indirizzo base Spectrum: 45056 ($B000)\n" +
+                                          $"Conforme a: Richard Dymond / SkoolKit 45056 / Matthew Smith 1983\n" +
+                                          $"Include: Layout 32x16 (512B) + Nome (32B) + 8 Tile (72B) + Willy (7B) + Nastro (4B) + Bordo (1B) + Items (25B) + Portale (37B) + Item Graphic (8B) + Aria (2B) + Guardiani (28B) + Grafica Guardiani (256B)";
+                        return;
+                    }
+
                     MapCompressionMode mode;
                     switch (cmbType.SelectedIndex)
                     {
@@ -1449,6 +1498,20 @@ namespace ZXSpectrumSpriteGenerator.UI
                 {
                     using (SaveFileDialog sfd = new SaveFileDialog())
                     {
+                        if (cmbType.SelectedIndex == 3)
+                        {
+                            var mm = _project.CurrentMap.ManicMinerData ?? ManicMinerCavern.CreateCentralCavernDefault();
+                            mm.UpdateFromGameMap(_project.CurrentMap, _project);
+                            sfd.Filter = "File Binario Manic Miner (*.bin)|*.bin";
+                            sfd.FileName = $"{mm.Name.Replace(" ", "_")}_1024b.bin";
+                            if (sfd.ShowDialog(dlg) == DialogResult.OK)
+                            {
+                                File.WriteAllBytes(sfd.FileName, mm.To1024ByteArray());
+                                MessageBox.Show($"File binario salvato con successo (1024 byte):\n{sfd.FileName}", "Salvataggio Completato", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            return;
+                        }
+
                         bool isPacked = (cmbType.SelectedIndex == 0);
                         sfd.Filter = "File Binario (*.bin)|*.bin";
                         sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.bin" : $"{_project.CurrentMap.Name}.bin";
@@ -1480,13 +1543,14 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Button btnSaveFile = new Button { Text = "💾 Salva su File...", Left = 165, Top = 9, Width = 140, Height = 28, BackColor = Color.FromArgb(40, 130, 80), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
                 btnSaveFile.Click += (s, e) =>
                 {
+                    bool isMM = (cmbType.SelectedIndex == 3);
                     bool isPacked = (cmbType.SelectedIndex == 0);
                     using (SaveFileDialog sfd = new SaveFileDialog())
                     {
                         if (tc.SelectedTab == tabAsm)
                         {
                             sfd.Filter = "Assembly Z80 (*.asm;*.z80)|*.asm;*.z80";
-                            sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.asm" : $"{_project.CurrentMap.Name}.asm";
+                            sfd.FileName = isMM ? $"{_project.CurrentMap.Name}_45056.asm" : (isPacked ? $"{_project.CurrentMap.Name}_packed.asm" : $"{_project.CurrentMap.Name}.asm");
                         }
                         else if (tc.SelectedTab == tabC)
                         {
@@ -1501,15 +1565,24 @@ namespace ZXSpectrumSpriteGenerator.UI
                         else
                         {
                             sfd.Filter = "File Binario (*.bin)|*.bin";
-                            sfd.FileName = isPacked ? $"{_project.CurrentMap.Name}_packed.bin" : $"{_project.CurrentMap.Name}.bin";
+                            sfd.FileName = isMM ? $"{_project.CurrentMap.Name}_1024b.bin" : (isPacked ? $"{_project.CurrentMap.Name}_packed.bin" : $"{_project.CurrentMap.Name}.bin");
                         }
 
                         if (sfd.ShowDialog(dlg) == DialogResult.OK)
                         {
                             if (tc.SelectedTab == tabBin)
                             {
-                                MapCompressionMode bMode = isPacked ? MapCompressionMode.Packed2Bit : MapCompressionMode.Uncompressed;
-                                MapExporter.ExportToBinary(sfd.FileName, _project.CurrentMap, bMode);
+                                if (isMM)
+                                {
+                                    var mm = _project.CurrentMap.ManicMinerData ?? ManicMinerCavern.CreateCentralCavernDefault();
+                                    mm.UpdateFromGameMap(_project.CurrentMap, _project);
+                                    File.WriteAllBytes(sfd.FileName, mm.To1024ByteArray());
+                                }
+                                else
+                                {
+                                    MapCompressionMode bMode = isPacked ? MapCompressionMode.Packed2Bit : MapCompressionMode.Uncompressed;
+                                    MapExporter.ExportToBinary(sfd.FileName, _project.CurrentMap, bMode);
+                                }
                             }
                             else
                             {
@@ -1547,6 +1620,457 @@ namespace ZXSpectrumSpriteGenerator.UI
                 }
             }
         }
+
+        #region Supporto e Funzionalità Manic Miner (SkoolKit 45056)
+
+        private void InitializeManicMinerControls()
+        {
+            _btnManicMiner = new ToolStripDropDownButton("🕹️ Manic Miner")
+            {
+                DisplayStyle = ToolStripItemDisplayStyle.ImageAndText,
+                ForeColor = Color.FromArgb(0, 240, 255),
+                Font = new Font("Segoe UI", 9f, FontStyle.Bold)
+            };
+
+            var miToggleMM = new ToolStripMenuItem("⚙️ Attiva / Configura Caverna Manic Miner per Mappa Corrente", null, (s, e) => ActionToggleManicMiner());
+            var miNewMM = new ToolStripMenuItem("➕ Nuova Caverna (Central Cavern Default)", null, (s, e) => ActionNewManicMinerCavern());
+            var miPaste512 = new ToolStripMenuItem("📋 Incolla 512 Byte Layout Caverna dagli Appunti...", null, (s, e) => ActionPasteCavern512Bytes());
+            var miImportMM = new ToolStripMenuItem("📂 Importa Caverna (.BIN, .SNA o .ASM 512B)...", null, (s, e) => ActionImportManicMiner());
+            var miExportMM = new ToolStripMenuItem("💾 Esporta Caverna Corrente (1024 Byte .BIN)...", null, (s, e) => ActionExportCurrentCavernBin());
+            var miExportAllMM = new ToolStripMenuItem("💾 Esporta Tutte le Caverne (20 KB .BIN)...", null, (s, e) => ActionExportAllCavernsBin());
+            var miInjectSNA = new ToolStripMenuItem("⚡ Inietta Caverne in Snapshot .SNA...", null, (s, e) => ActionInjectSna());
+            var miAsmMM = new ToolStripMenuItem("📋 Visualizza / Esporta Assembly SkoolKit (45056)...", null, (s, e) => ActionShowSkoolKitAsm());
+            var miPropsMM = new ToolStripMenuItem("📝 Parametri Caverna (Nome, Bordo, Aria, Nastro)...", null, (s, e) => ActionShowManicMinerProperties());
+
+            _btnManicMiner.DropDownItems.AddRange(new ToolStripItem[] {
+                miToggleMM,
+                new ToolStripSeparator(),
+                miNewMM,
+                miPaste512,
+                miImportMM,
+                new ToolStripSeparator(),
+                miExportMM,
+                miExportAllMM,
+                miInjectSNA,
+                new ToolStripSeparator(),
+                miAsmMM,
+                miPropsMM
+            });
+
+            _tsMgmt.Items.Add(new ToolStripSeparator());
+            _tsMgmt.Items.Add(_btnManicMiner);
+
+            // Tools per posizionamento interattivo entità MM sulla mappa
+            _sepMM = new ToolStripSeparator();
+            _btnToolWilly = new ToolStripButton("🚩 Willy") { ToolTipText = "Posiziona Miner Willy (Spawn)" };
+            _btnToolWilly.Click += (s, e) => SetTool(MapDrawingTool.PlaceWilly, _btnToolWilly);
+
+            _btnToolPortal = new ToolStripButton("🚪 Portale") { ToolTipText = "Posiziona Portale Uscita (16x16 / 2x2 celle)" };
+            _btnToolPortal.Click += (s, e) => SetTool(MapDrawingTool.PlacePortal, _btnToolPortal);
+
+            _btnToolItem = new ToolStripButton("💎 Chiave") { ToolTipText = "Aggiungi/Rimuovi Chiave / Item (fino a 5)" };
+            _btnToolItem.Click += (s, e) => SetTool(MapDrawingTool.PlaceItem, _btnToolItem);
+
+            _btnToolGuardian = new ToolStripButton("👾 Guardiano") { ToolTipText = "Aggiungi/Rimuovi Guardiano Orizzontale (fino a 4)" };
+            _btnToolGuardian.Click += (s, e) => SetTool(MapDrawingTool.PlaceGuardian, _btnToolGuardian);
+
+            _btnToolMMProps = new ToolStripButton("⚙️ Caverna") { ToolTipText = "Modifica Parametri Caverna (Nome, Bordo, Aria, Nastro)" };
+            _btnToolMMProps.Click += (s, e) => ActionShowManicMinerProperties();
+
+            _tsTools.Items.AddRange(new ToolStripItem[] {
+                _sepMM, _btnToolWilly, _btnToolPortal, _btnToolItem, _btnToolGuardian, _btnToolMMProps
+            });
+
+            UpdateManicMinerUiState();
+        }
+
+        private void UpdateManicMinerUiState()
+        {
+            bool isMM = (_project?.CurrentMap?.IsManicMinerMode == true);
+            if (_btnToolWilly != null) _btnToolWilly.Visible = isMM;
+            if (_btnToolPortal != null) _btnToolPortal.Visible = isMM;
+            if (_btnToolItem != null) _btnToolItem.Visible = isMM;
+            if (_btnToolGuardian != null) _btnToolGuardian.Visible = isMM;
+            if (_btnToolMMProps != null) _btnToolMMProps.Visible = isMM;
+            if (_sepMM != null) _sepMM.Visible = isMM;
+
+            if (_btnManicMiner != null)
+            {
+                _btnManicMiner.Text = isMM ? "🕹️ Manic Miner [Attivo]" : "🕹️ Manic Miner";
+                _btnManicMiner.BackColor = isMM ? Color.FromArgb(30, 60, 80) : Color.Transparent;
+            }
+        }
+
+        private void ActionToggleManicMiner()
+        {
+            if (_project?.CurrentMap == null) return;
+            var curMap = _project.CurrentMap;
+            if (curMap.ManicMinerData == null)
+            {
+                var cavern = ManicMinerCavern.CreateCentralCavernDefault();
+                cavern.Name = curMap.Name;
+                cavern.CavernIndex = _project.SelectedMapIndex;
+                curMap.ManicMinerData = cavern;
+                curMap.Resize(32, 16);
+                MessageBox.Show($"La mappa '{curMap.Name}' è ora configurata come Caverna Manic Miner (32x16, 1024 byte).\n" +
+                                $"Puoi usare gli strumenti 🚩 Willy, 🚪 Portale, 💎 Chiave e 👾 Guardiano sulla barra strumenti.",
+                                "Modalità Manic Miner Attivata", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                if (MessageBox.Show("Disattivare la modalità Manic Miner per questa mappa?", "Conferma", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    curMap.ManicMinerData = null;
+                }
+            }
+            UpdateManicMinerUiState();
+            _canvas.Invalidate();
+            RefreshTilesetPalette();
+            ProjectModified?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ActionNewManicMinerCavern()
+        {
+            if (_project == null) return;
+            int idx = _project.Maps.Count;
+            string cName = (idx < ManicMinerService.OriginalCavernNames.Length)
+                ? ManicMinerService.OriginalCavernNames[idx]
+                : $"Caverna {idx + 1}";
+
+            var cavern = ManicMinerCavern.CreateCentralCavernDefault();
+            cavern.CavernIndex = idx;
+            cavern.Name = cName;
+
+            var newMap = cavern.ToGameMap(_project);
+            _project.Maps.Add(newMap);
+            UpdateMapListCombo();
+            SwitchToMapIndex(_project.Maps.Count - 1);
+            ProjectModified?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void ActionPasteCavern512Bytes()
+        {
+            if (_project == null) return;
+            string clipText = string.Empty;
+            if (Clipboard.ContainsText())
+            {
+                clipText = Clipboard.GetText();
+            }
+
+            var bytes = MapImporter.ParseBytesFromText(clipText);
+            if (bytes == null || bytes.Count < 500)
+            {
+                // Se gli appunti non contengono 512 byte validi, apri la finestra di dialogo preimpostata su Manic Miner
+                using (var dlg = new ImportMapDialog(_project, MapImportFormat.ManicMinerAttributes))
+                {
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        UpdateMapListCombo();
+                        SwitchToMapIndex(_project.SelectedMapIndex);
+                        ProjectModified?.Invoke(this, EventArgs.Empty);
+                    }
+                }
+                return;
+            }
+
+            var curMap = _project.CurrentMap;
+            if (curMap == null)
+            {
+                curMap = _project.AddMap("Nuova Caverna", 32, 16);
+            }
+
+            var result = MessageBox.Show(
+                $"Rilevati {bytes.Count} byte negli appunti (Layout 32x16 Manic Miner).\n\n" +
+                $"Vuoi applicarli direttamente alla caverna corrente '{curMap.Name}'?",
+                "Incolla Layout Caverna (512 Byte)",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                curMap.PushUndoState();
+                if (curMap.ManicMinerData == null)
+                {
+                    curMap.ManicMinerData = ManicMinerCavern.CreateCentralCavernDefault();
+                    curMap.ManicMinerData.Name = curMap.Name;
+                }
+
+                MapImporter.ImportManicMinerAttributes(curMap, bytes, _project, 32, 16, null, true);
+
+                RefreshTilesetPalette();
+                UpdateMapInfo();
+                UpdateQuickAsm();
+                _canvas.Invalidate();
+                ProjectModified?.Invoke(this, EventArgs.Empty);
+
+                MessageBox.Show(
+                    $"Layout della caverna '{curMap.Name}' (512 byte) importato con successo!\n" +
+                    $"Dimensioni: 32x16 celle.",
+                    "Importazione Completata",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+        }
+
+        private void ActionImportManicMiner()
+        {
+            if (_project == null) return;
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Tutti i formati Manic Miner (*.bin;*.sna;*.asm;*.txt)|*.bin;*.sna;*.asm;*.txt|" +
+                             "Snapshot ZX Spectrum (*.sna)|*.sna|" +
+                             "File Binari Caverna (*.bin)|*.bin|" +
+                             "Sorgenti Assembly / Dati 512B (*.asm;*.txt)|*.asm;*.txt|" +
+                             "Tutti i file (*.*)|*.*";
+                ofd.Title = "Importa Caverna / Snapshot / Dati Manic Miner";
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    try
+                    {
+                        string ext = Path.GetExtension(ofd.FileName).ToLowerInvariant();
+                        if (ext == ".asm" || ext == ".txt")
+                        {
+                            string text = File.ReadAllText(ofd.FileName);
+                            var bytes = MapImporter.ParseBytesFromText(text);
+                            if (bytes.Count == 512)
+                            {
+                                var curMap = _project.CurrentMap ?? _project.AddMap("Caverna Importata", 32, 16);
+                                curMap.PushUndoState();
+                                if (curMap.ManicMinerData == null)
+                                {
+                                    curMap.ManicMinerData = ManicMinerCavern.CreateCentralCavernDefault();
+                                    curMap.ManicMinerData.Name = curMap.Name;
+                                }
+                                MapImporter.ImportManicMinerAttributes(curMap, bytes, _project, 32, 16, null, true);
+                                RefreshTilesetPalette();
+                                UpdateMapInfo();
+                                UpdateQuickAsm();
+                                _canvas.Invalidate();
+                                ProjectModified?.Invoke(this, EventArgs.Empty);
+                                MessageBox.Show($"Layout caverna da 512 byte importato con successo in '{curMap.Name}'!", "Importazione Riuscita", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                            else if (bytes.Count >= 1024)
+                            {
+                                var cav = ManicMinerCavern.From1024ByteArray(bytes.ToArray(), 0, _project.Maps.Count);
+                                var gMap = cav.ToGameMap(_project);
+                                _project.Maps.Add(gMap);
+                                UpdateMapListCombo();
+                                SwitchToMapIndex(_project.Maps.Count - 1);
+                                ProjectModified?.Invoke(this, EventArgs.Empty);
+                                MessageBox.Show($"Caverna '{cav.Name}' (1024 byte) importata con successo!", "Importazione Riuscita", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                        }
+
+                        byte[] fileBytes = File.ReadAllBytes(ofd.FileName);
+                        var imported = ManicMinerService.ImportFromBinary(fileBytes);
+                        if (imported == null || imported.Count == 0)
+                        {
+                            MessageBox.Show("Nessuna caverna valida trovata nel file selezionato.", "Importazione Fallita", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        int startIdx = _project.Maps.Count;
+                        foreach (var cav in imported)
+                        {
+                            var gMap = cav.ToGameMap(_project);
+                            _project.Maps.Add(gMap);
+                        }
+
+                        UpdateMapListCombo();
+                        SwitchToMapIndex(startIdx);
+                        ProjectModified?.Invoke(this, EventArgs.Empty);
+                        MessageBox.Show($"Importate con successo {imported.Count} caverna/e da:\n{Path.GetFileName(ofd.FileName)}",
+                                        "Importazione Completata", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Errore durante l'importazione:\n{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void ActionExportCurrentCavernBin()
+        {
+            if (_project?.CurrentMap == null) return;
+            var curMap = _project.CurrentMap;
+            var cavern = curMap.ManicMinerData ?? ManicMinerCavern.CreateCentralCavernDefault();
+            cavern.UpdateFromGameMap(curMap, _project);
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "File Binario Manic Miner (*.bin)|*.bin";
+                sfd.FileName = $"{cavern.Name.Replace(" ", "_")}_1024b.bin";
+                if (sfd.ShowDialog(this) == DialogResult.OK)
+                {
+                    byte[] bytes = cavern.To1024ByteArray();
+                    File.WriteAllBytes(sfd.FileName, bytes);
+                    MessageBox.Show($"Caverna esportata con successo (1024 byte esatti conforme a SkoolKit 45056):\n{sfd.FileName}",
+                                    "Esportazione Completata", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void ActionExportAllCavernsBin()
+        {
+            if (_project == null) return;
+            var list = new List<ManicMinerCavern>();
+            foreach (var m in _project.Maps)
+            {
+                if (m.ManicMinerData != null)
+                {
+                    m.ManicMinerData.UpdateFromGameMap(m, _project);
+                    list.Add(m.ManicMinerData);
+                }
+            }
+            if (list.Count == 0)
+            {
+                MessageBox.Show("Nessuna caverna Manic Miner trovata nel progetto.", "Avviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "File Binario 20 Caverne (*.bin)|*.bin";
+                sfd.FileName = "ManicMiner_20Caverns_20KB.bin";
+                if (sfd.ShowDialog(this) == DialogResult.OK)
+                {
+                    byte[] bytes = ManicMinerService.ExportAllCavernsToBinary(list);
+                    File.WriteAllBytes(sfd.FileName, bytes);
+                    MessageBox.Show($"Esportate con successo {list.Count} caverne in blocco unico da {bytes.Length} byte:\n{sfd.FileName}",
+                                    "Esportazione Completata", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void ActionInjectSna()
+        {
+            if (_project == null) return;
+            var list = new List<ManicMinerCavern>();
+            foreach (var m in _project.Maps)
+            {
+                if (m.ManicMinerData != null)
+                {
+                    m.ManicMinerData.UpdateFromGameMap(m, _project);
+                    list.Add(m.ManicMinerData);
+                }
+            }
+            if (list.Count == 0)
+            {
+                MessageBox.Show("Nessuna caverna Manic Miner configurata nel progetto da iniettare.", "Avviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Snapshot ZX Spectrum (*.sna)|*.sna";
+                ofd.Title = "Seleziona Snapshot .SNA originale di Manic Miner";
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    using (SaveFileDialog sfd = new SaveFileDialog())
+                    {
+                        sfd.Filter = "Snapshot ZX Spectrum (*.sna)|*.sna";
+                        sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + "_modded.sna";
+                        if (sfd.ShowDialog(this) == DialogResult.OK)
+                        {
+                            try
+                            {
+                                ManicMinerService.InjectIntoSna(ofd.FileName, sfd.FileName, list);
+                                MessageBox.Show($"Iniezione completata con successo!\nNuovo file: {sfd.FileName}\nPuoi aprirlo subito in qualsiasi emulatore ZX Spectrum!",
+                                                "Snapshot Generato", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Errore durante l'iniezione: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ActionShowSkoolKitAsm()
+        {
+            if (_project?.CurrentMap == null) return;
+            var curMap = _project.CurrentMap;
+            var cavern = curMap.ManicMinerData ?? ManicMinerCavern.CreateCentralCavernDefault();
+            cavern.UpdateFromGameMap(curMap, _project);
+
+            string asmCode = cavern.ToSkoolKitAssembly(45056, AsmDirective.Defb);
+
+            using (Form dlg = new Form())
+            {
+                dlg.Text = $"Assembly SkoolKit 45056 - {cavern.Name}";
+                dlg.Size = new Size(720, 540);
+                dlg.StartPosition = FormStartPosition.CenterParent;
+                dlg.BackColor = Color.FromArgb(30, 30, 36);
+                dlg.ForeColor = Color.White;
+
+                TextBox txt = new TextBox
+                {
+                    Dock = DockStyle.Fill,
+                    Multiline = true,
+                    ReadOnly = true,
+                    ScrollBars = ScrollBars.Both,
+                    BackColor = Color.FromArgb(20, 20, 25),
+                    ForeColor = Color.FromArgb(180, 255, 180),
+                    Font = new Font("Consolas", 9f),
+                    Text = asmCode
+                };
+
+                Panel pnl = new Panel { Dock = DockStyle.Bottom, Height = 45, BackColor = Color.FromArgb(24, 24, 28) };
+                Button btnCopy = new Button { Text = "📋 Copia", Left = 15, Top = 8, Width = 100, Height = 28, BackColor = Color.FromArgb(0, 122, 204), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+                btnCopy.Click += (s, e) => { Clipboard.SetText(txt.Text); MessageBox.Show("Codice copiato negli appunti!", "Copia", MessageBoxButtons.OK, MessageBoxIcon.Information); };
+
+                Button btnSave = new Button { Text = "💾 Salva File ASM...", Left = 125, Top = 8, Width = 140, Height = 28, BackColor = Color.FromArgb(40, 130, 80), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+                btnSave.Click += (s, e) =>
+                {
+                    using (SaveFileDialog sfd = new SaveFileDialog())
+                    {
+                        sfd.Filter = "File Assembly (*.asm;*.skool)|*.asm;*.skool";
+                        sfd.FileName = $"{cavern.Name.Replace(" ", "_")}_45056.asm";
+                        if (sfd.ShowDialog(dlg) == DialogResult.OK)
+                        {
+                            File.WriteAllText(sfd.FileName, txt.Text, Encoding.UTF8);
+                            MessageBox.Show($"File salvato con successo:\n{sfd.FileName}", "Salvataggio", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                };
+
+                Button btnClose = new Button { Text = "Chiudi", Left = 600, Top = 8, Width = 90, Height = 28, BackColor = Color.FromArgb(60, 60, 70), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.OK, Anchor = AnchorStyles.Right | AnchorStyles.Top };
+
+                pnl.Controls.AddRange(new Control[] { btnCopy, btnSave, btnClose });
+                dlg.Controls.Add(txt);
+                dlg.Controls.Add(pnl);
+                dlg.ShowDialog(this);
+            }
+        }
+
+        private void ActionShowManicMinerProperties()
+        {
+            if (_project?.CurrentMap == null) return;
+            var curMap = _project.CurrentMap;
+            if (curMap.ManicMinerData == null)
+            {
+                curMap.ManicMinerData = ManicMinerCavern.CreateCentralCavernDefault();
+                curMap.ManicMinerData.Name = curMap.Name;
+            }
+
+            using (var dlg = new ManicMinerPropertiesDialog(curMap))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    UpdateMapListCombo();
+                    _canvas.Invalidate();
+                    RefreshTilesetPalette();
+                    ProjectModified?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -1562,13 +2086,20 @@ namespace ZXSpectrumSpriteGenerator.UI
     }
 
     /// <summary>
-    /// Dialog modale per l'importazione di mappe di gioco in formato compresso 2-bit (4 tile per byte riga per riga).
-    /// Supporta l'incollamento da codice sorgente (Assembly, C, BASIC o numeri grezzi) o il caricamento da file.
-    /// Mappa tutti e 4 i valori a 2-bit (%00, %01, %10, %11) e preserva intatte le tile già presenti nel Set Mappa.
+    /// Dialog modale per l'importazione di mappe di gioco.
+    /// Supporta:
+    /// 1. Formato Manic Miner (512 byte di attributi colore ZX Spectrum, specifica SkoolKit 45056, 32x16)
+    /// 2. Formato Lineare 1 byte per cella (indici tile 0..N per qualsiasi dimensione W x H)
+    /// 3. Formato Compresso 2-bit (4 tile per byte, standard Jet Set Willy / compresso)
+    /// Riconosce automaticamente il formato dai byte incollati o caricati da file.
     /// </summary>
     public class ImportMapDialog : Form
     {
         private readonly SpriteProject _project;
+        private MapImportFormat _selectedFormat = MapImportFormat.Packed2Bit;
+
+        // Selettore Formato
+        private ComboBox _cmbFormat;
 
         // Controlli destinazione e dimensioni
         private RadioButton _rbOverwriteCurrent;
@@ -1579,17 +2110,16 @@ namespace ZXSpectrumSpriteGenerator.UI
         private Label _lblExpectedStats;
         private CheckBox _chkSkipHeader;
 
-        // Controlli assegnazione tile 2-bit
+        // Controlli assegnazione tile (fino a 8 slot per Manic Miner e formato lineare)
+        private GroupBox _grpTiles;
+        private Label _lblMode;
         private ComboBox _cmbMappingMode;
         private CheckBox _chkKeepExistingTiles;
-        private ComboBox _cmbSlot0;
-        private ComboBox _cmbSlot1;
-        private ComboBox _cmbSlot2;
-        private ComboBox _cmbSlot3;
-        private PictureBox _picSlot0;
-        private PictureBox _picSlot1;
-        private PictureBox _picSlot2;
-        private PictureBox _picSlot3;
+        private Button _btnAutoMapMM;
+
+        private Label[] _lblSlots = new Label[8];
+        private ComboBox[] _cmbSlots = new ComboBox[8];
+        private PictureBox[] _picSlots = new PictureBox[8];
 
         // Editor testo e statistiche
         private TextBox _txtCode;
@@ -1606,35 +2136,36 @@ namespace ZXSpectrumSpriteGenerator.UI
             public override string ToString() => DisplayName;
         }
 
-        public ImportMapDialog(SpriteProject project)
+        public ImportMapDialog(SpriteProject project, MapImportFormat defaultFormat = MapImportFormat.Packed2Bit)
         {
             _project = project;
+            _selectedFormat = defaultFormat;
             InitializeComponent();
         }
 
         private void InitializeComponent()
         {
-            this.Text = "📥 Importa Mappa di Gioco (Compresso 2-bit, 4 tile/byte)";
-            this.Size = new Size(820, 710);
-            this.MinimumSize = new Size(740, 600);
+            this.Text = "📥 Importa Mappa di Gioco / Caverna Manic Miner";
+            this.Size = new Size(840, 770);
+            this.MinimumSize = new Size(760, 640);
             this.StartPosition = FormStartPosition.CenterParent;
             this.BackColor = Color.FromArgb(28, 28, 33);
             this.ForeColor = Color.White;
             this.Font = new Font("Segoe UI", 9f);
             this.ShowIcon = false;
 
-            // 1. TOP PANEL: Titolo, Opzioni Mappa, Dimensioni e Assegnazione Tile
+            // 1. TOP PANEL: Titolo, Formato, Destinazione, Dimensioni e Mappatura Tile
             Panel pnlTop = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 275,
+                Height = 345,
                 BackColor = Color.FromArgb(22, 22, 26),
                 Padding = new Padding(14, 10, 14, 10)
             };
 
             Label lblTitle = new Label
             {
-                Text = "📥 IMPORTAZIONE MAPPA DI GIOCO - FORMATO COMPRESSO 2-BIT",
+                Text = "📥 IMPORTAZIONE MAPPA DI GIOCO",
                 Font = new Font("Segoe UI", 10.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(0, 220, 255),
                 AutoSize = true,
@@ -1644,11 +2175,44 @@ namespace ZXSpectrumSpriteGenerator.UI
             Label lblDesc = new Label
             {
                 Text = "Incolla nel box sottostante i dati Assembly (defb/db), array C, BASIC (DATA) o byte esadecimali/binari.\n" +
-                       "Formato compresso: ogni byte contiene 4 tile (2-bit per tile: %00, %01, %10, %11 riga per riga).",
+                       "Supporta Caverne Manic Miner (512 byte attributi SkoolKit), Lineare 1 byte/cella e Compresso 2-bit (JSW).",
                 Font = new Font("Segoe UI", 8.2f),
                 ForeColor = Color.FromArgb(200, 210, 225),
                 AutoSize = true,
-                Location = new Point(14, 32)
+                Location = new Point(14, 30)
+            };
+
+            // Raggruppamento Formato Dati
+            Label lblFormat = new Label
+            {
+                Text = "Formato Dati:",
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(255, 215, 0),
+                AutoSize = true,
+                Location = new Point(14, 68)
+            };
+
+            _cmbFormat = new ComboBox
+            {
+                Location = new Point(110, 65),
+                Width = 680,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                BackColor = Color.FromArgb(36, 36, 44),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold)
+            };
+            _cmbFormat.Items.Add("🕹️ Manic Miner / SkoolKit 45056 (512 Byte - Attributi Colore ZX Spectrum, 32x16)");
+            _cmbFormat.Items.Add("📄 Lineare 1 Byte per Cella (Indici Tile 0..N, larghezza x altezza)");
+            _cmbFormat.Items.Add("📦 Compresso 2-Bit (4 tile per byte - Jet Set Willy / Standard)");
+            _cmbFormat.SelectedIndex = (_selectedFormat == MapImportFormat.ManicMinerAttributes) ? 0 :
+                                       (_selectedFormat == MapImportFormat.Linear1BytePerCell) ? 1 : 2;
+            _cmbFormat.SelectedIndexChanged += (s, e) =>
+            {
+                _selectedFormat = (_cmbFormat.SelectedIndex == 0) ? MapImportFormat.ManicMinerAttributes :
+                                  (_cmbFormat.SelectedIndex == 1) ? MapImportFormat.Linear1BytePerCell :
+                                  MapImportFormat.Packed2Bit;
+                ApplyFormatChange();
+                UpdateStats();
             };
 
             // Raggruppamento Opzioni Mappa (Destinazione & Dimensioni)
@@ -1657,8 +2221,8 @@ namespace ZXSpectrumSpriteGenerator.UI
                 Text = "Destinazione e Dimensioni",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(255, 215, 0),
-                Location = new Point(14, 66),
-                Size = new Size(776, 90)
+                Location = new Point(14, 98),
+                Size = new Size(796, 85)
             };
 
             bool hasCurrentMap = _project?.CurrentMap != null;
@@ -1711,7 +2275,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 Text = "Larghezza (celle):",
                 AutoSize = true,
-                Location = new Point(14, 56),
+                Location = new Point(14, 54),
                 ForeColor = Color.LightGray,
                 Font = new Font("Segoe UI", 8.2f)
             };
@@ -1720,8 +2284,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 Minimum = 1,
                 Maximum = 256,
-                Value = _project?.CurrentMap?.Width ?? 32,
-                Location = new Point(125, 54),
+                Value = (_selectedFormat == MapImportFormat.ManicMinerAttributes) ? 32 : (_project?.CurrentMap?.Width ?? 32),
+                Location = new Point(125, 52),
                 Width = 60,
                 BackColor = Color.FromArgb(36, 36, 44),
                 ForeColor = Color.White,
@@ -1732,7 +2296,7 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 Text = "Altezza (celle):",
                 AutoSize = true,
-                Location = new Point(200, 56),
+                Location = new Point(200, 54),
                 ForeColor = Color.LightGray,
                 Font = new Font("Segoe UI", 8.2f)
             };
@@ -1741,8 +2305,8 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 Minimum = 1,
                 Maximum = 256,
-                Value = _project?.CurrentMap?.Height ?? 24,
-                Location = new Point(290, 54),
+                Value = (_selectedFormat == MapImportFormat.ManicMinerAttributes) ? 16 : (_project?.CurrentMap?.Height ?? 24),
+                Location = new Point(290, 52),
                 Width = 60,
                 BackColor = Color.FromArgb(36, 36, 44),
                 ForeColor = Color.White,
@@ -1751,9 +2315,9 @@ namespace ZXSpectrumSpriteGenerator.UI
 
             _lblExpectedStats = new Label
             {
-                Text = "Byte attesi: 192 (8 B/riga x 24 righe)",
+                Text = "Byte attesi: 512 (1 B/cella: 32x16)",
                 AutoSize = true,
-                Location = new Point(365, 56),
+                Location = new Point(365, 54),
                 ForeColor = Color.FromArgb(120, 230, 160),
                 Font = new Font("Segoe UI", 8.2f, FontStyle.Bold)
             };
@@ -1762,9 +2326,10 @@ namespace ZXSpectrumSpriteGenerator.UI
             {
                 Text = "Salta byte intestazione (width, height, bytes/row)",
                 AutoSize = true,
-                Location = new Point(570, 54),
+                Location = new Point(560, 52),
                 ForeColor = Color.FromArgb(180, 220, 255),
-                Font = new Font("Segoe UI", 8.2f)
+                Font = new Font("Segoe UI", 8.2f),
+                Visible = (_selectedFormat == MapImportFormat.Packed2Bit)
             };
 
             grpTarget.Controls.AddRange(new Control[] {
@@ -1772,20 +2337,20 @@ namespace ZXSpectrumSpriteGenerator.UI
                 lblW, _numWidth, lblH, _numHeight, _lblExpectedStats, _chkSkipHeader
             });
 
-            // Raggruppamento Assegnazione Tile per gli indici 2-bit
-            GroupBox grpTiles = new GroupBox
+            // Raggruppamento Mappatura Tile
+            _grpTiles = new GroupBox
             {
-                Text = "Mappatura Tile per Indici 2-bit (0..3)",
+                Text = "Mappatura Tile per Formato",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(0, 220, 255),
-                Location = new Point(14, 164),
-                Size = new Size(776, 98)
+                Location = new Point(14, 188),
+                Size = new Size(796, 148)
             };
 
-            Label lblMode = new Label
+            _lblMode = new Label
             {
-                Text = "Schema:",
-                Location = new Point(14, 22),
+                Text = "Schema 2-Bit:",
+                Location = new Point(14, 20),
                 AutoSize = true,
                 ForeColor = Color.LightGray,
                 Font = new Font("Segoe UI", 8.2f)
@@ -1793,8 +2358,8 @@ namespace ZXSpectrumSpriteGenerator.UI
 
             _cmbMappingMode = new ComboBox
             {
-                Location = new Point(70, 19),
-                Width = 340,
+                Location = new Point(100, 17),
+                Width = 320,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 BackColor = Color.FromArgb(36, 36, 44),
                 ForeColor = Color.White,
@@ -1807,43 +2372,74 @@ namespace ZXSpectrumSpriteGenerator.UI
 
             _chkKeepExistingTiles = new CheckBox
             {
-                Text = "Mantieni tutte le tile già presenti nel Set Mappa",
+                Text = "Mantieni tile già presenti nel Set Mappa",
                 Checked = true,
                 AutoSize = true,
-                Location = new Point(430, 20),
+                Location = new Point(430, 18),
                 ForeColor = Color.FromArgb(140, 230, 160),
                 Font = new Font("Segoe UI", 8.2f, FontStyle.Bold)
             };
 
-            // Slot 0
-            Label lblSlot0 = new Label { Text = "Slot 0 (%00):", Location = new Point(14, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot0 = new ComboBox { Location = new Point(82, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot0 = new PictureBox { Location = new Point(176, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            _btnAutoMapMM = new Button
+            {
+                Text = "🔍 Auto-Mappa da Attributi Tile",
+                Location = new Point(14, 18),
+                Size = new Size(240, 24),
+                BackColor = Color.FromArgb(0, 122, 204),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+                Cursor = Cursors.Hand,
+                Visible = false
+            };
+            _btnAutoMapMM.FlatAppearance.BorderSize = 0;
+            _btnAutoMapMM.Click += (s, e) => AutoMapManicMinerSlots();
 
-            // Slot 1
-            Label lblSlot1 = new Label { Text = "Slot 1 (%01):", Location = new Point(206, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot1 = new ComboBox { Location = new Point(274, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot1 = new PictureBox { Location = new Point(368, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            _grpTiles.Controls.AddRange(new Control[] { _lblMode, _cmbMappingMode, _chkKeepExistingTiles, _btnAutoMapMM });
 
-            // Slot 2
-            Label lblSlot2 = new Label { Text = "Slot 2 (%10):", Location = new Point(398, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot2 = new ComboBox { Location = new Point(466, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot2 = new PictureBox { Location = new Point(560, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+            // Creazione controlli per gli 8 slot (2 righe x 4 colonne)
+            int[] colX = new int[] { 14, 210, 406, 602 };
+            for (int i = 0; i < 8; i++)
+            {
+                int r = i / 4;
+                int c = i % 4;
+                int x = colX[c];
+                int y = (r == 0) ? 48 : 94;
 
-            // Slot 3
-            Label lblSlot3 = new Label { Text = "Slot 3 (%11):", Location = new Point(590, 60), Width = 66, Font = new Font("Segoe UI", 7.8f, FontStyle.Bold), ForeColor = Color.FromArgb(140, 220, 255) };
-            _cmbSlot3 = new ComboBox { Location = new Point(658, 57), Width = 92, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(36, 36, 44), ForeColor = Color.White, Font = new Font("Segoe UI", 7.8f) };
-            _picSlot3 = new PictureBox { Location = new Point(752, 57), Size = new Size(24, 24), BackColor = Color.Black, SizeMode = PictureBoxSizeMode.Zoom };
+                _lblSlots[i] = new Label
+                {
+                    Text = $"Slot {i}:",
+                    Location = new Point(x, y + 3),
+                    Width = 84,
+                    Font = new Font("Segoe UI", 7.6f, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(140, 220, 255)
+                };
 
-            grpTiles.Controls.AddRange(new Control[] {
-                lblMode, _cmbMappingMode, _chkKeepExistingTiles,
-                lblSlot0, _cmbSlot0, _picSlot0,
-                lblSlot1, _cmbSlot1, _picSlot1,
-                lblSlot2, _cmbSlot2, _picSlot2,
-                lblSlot3, _cmbSlot3, _picSlot3
-            });
+                _cmbSlots[i] = new ComboBox
+                {
+                    Location = new Point(x + 86, y),
+                    Width = 76,
+                    DropDownStyle = ComboBoxStyle.DropDownList,
+                    BackColor = Color.FromArgb(36, 36, 44),
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 7.6f)
+                };
 
-            pnlTop.Controls.AddRange(new Control[] { lblTitle, lblDesc, grpTarget, grpTiles });
+                _picSlots[i] = new PictureBox
+                {
+                    Location = new Point(x + 164, y),
+                    Size = new Size(24, 24),
+                    BackColor = Color.Black,
+                    SizeMode = PictureBoxSizeMode.Zoom
+                };
+
+                int slotIdx = i;
+                _cmbSlots[slotIdx].SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlots[slotIdx], _picSlots[slotIdx]);
+
+                _grpTiles.Controls.AddRange(new Control[] { _lblSlots[i], _cmbSlots[i], _picSlots[i] });
+            }
+
+            pnlTop.Controls.AddRange(new Control[] { lblTitle, lblDesc, lblFormat, _cmbFormat, grpTarget, _grpTiles });
 
             // 2. BOTTOM PANEL: Statistiche di Parsing & Pulsanti Azione
             Panel pnlBottom = new Panel
@@ -1869,7 +2465,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 DialogResult = DialogResult.OK,
                 Size = new Size(150, 36),
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                Location = new Point(500, 13),
+                Location = new Point(520, 13),
                 BackColor = Color.FromArgb(40, 130, 80),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
@@ -1886,7 +2482,7 @@ namespace ZXSpectrumSpriteGenerator.UI
                 DialogResult = DialogResult.Cancel,
                 Size = new Size(100, 36),
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                Location = new Point(660, 13),
+                Location = new Point(680, 13),
                 BackColor = Color.FromArgb(60, 60, 70),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
@@ -1994,40 +2590,181 @@ namespace ZXSpectrumSpriteGenerator.UI
             _numHeight.ValueChanged += (s, e) => UpdateStats();
             _chkSkipHeader.CheckedChanged += (s, e) => UpdateStats();
 
-            _cmbSlot0.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot0, _picSlot0);
-            _cmbSlot1.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot1, _picSlot1);
-            _cmbSlot2.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot2, _picSlot2);
-            _cmbSlot3.SelectedIndexChanged += (s, e) => UpdateSlotPreview(_cmbSlot3, _picSlot3);
-
             this.AcceptButton = _btnOk;
             this.CancelButton = _btnCancel;
+
+            ApplyFormatChange();
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             PopulateTileCombos();
-            ApplyDefaultSlotMapping();
+            if (_selectedFormat == MapImportFormat.ManicMinerAttributes)
+            {
+                AutoMapManicMinerSlots();
+            }
+            else
+            {
+                ApplyDefaultSlotMapping();
+            }
             UpdateStats();
         }
 
         private void PopulateTileCombos()
         {
-            ComboBox[] combos = new ComboBox[] { _cmbSlot0, _cmbSlot1, _cmbSlot2, _cmbSlot3 };
-            foreach (var cmb in combos)
+            for (int i = 0; i < 8; i++)
             {
+                var cmb = _cmbSlots[i];
                 cmb.Items.Clear();
-                cmb.Items.Add(new TileItem { TileId = 0, DisplayName = "(Vuoto / Sfondo)" });
+                cmb.Items.Add(new TileItem { TileId = 0, DisplayName = "(Vuoto / 0)" });
 
                 if (_project != null)
                 {
-                    for (int i = 0; i < _project.Tiles.Count; i++)
+                    for (int t = 0; t < _project.Tiles.Count; t++)
                     {
-                        int tid = i + 1;
-                        string name = $"Tile #{i}: {_project.Tiles[i].Name}";
+                        int tid = t + 1;
+                        string name = $"#{tid}: {_project.Tiles[t].Name}";
                         cmb.Items.Add(new TileItem { TileId = tid, DisplayName = name });
                     }
                 }
+            }
+        }
+
+        private void ApplyFormatChange()
+        {
+            bool isMM = (_selectedFormat == MapImportFormat.ManicMinerAttributes);
+            bool isLinear = (_selectedFormat == MapImportFormat.Linear1BytePerCell);
+            bool is2Bit = (_selectedFormat == MapImportFormat.Packed2Bit);
+
+            _chkSkipHeader.Visible = is2Bit;
+            _lblMode.Visible = is2Bit;
+            _cmbMappingMode.Visible = is2Bit;
+            _chkKeepExistingTiles.Visible = is2Bit;
+            _btnAutoMapMM.Visible = isMM;
+
+            if (isMM)
+            {
+                _grpTiles.Text = "Mappatura Tile Manic Miner (8 Ruoli Canonici / Attributi SkoolKit 45056)";
+                _numWidth.Value = 32;
+                _numHeight.Value = 16;
+
+                string[] mmNames = new string[] {
+                    "Background", "Floor", "Crumbling", "Wall", "Conveyor", "Nasty 1", "Nasty 2", "Spare"
+                };
+
+                for (int i = 0; i < 8; i++)
+                {
+                    _lblSlots[i].Visible = true;
+                    _cmbSlots[i].Visible = true;
+                    _picSlots[i].Visible = true;
+                    _lblSlots[i].Text = $"{i}: {mmNames[i]}";
+                }
+            }
+            else if (isLinear)
+            {
+                _grpTiles.Text = "Mappatura Tile Formato Lineare (Indici 0..7)";
+                for (int i = 0; i < 8; i++)
+                {
+                    _lblSlots[i].Visible = true;
+                    _cmbSlots[i].Visible = true;
+                    _picSlots[i].Visible = true;
+                    _lblSlots[i].Text = $"Slot {i}:";
+                }
+            }
+            else // Packed2Bit
+            {
+                _grpTiles.Text = "Mappatura Tile per Indici 2-bit (0..3)";
+                string[] labels2Bit = new string[] { "Slot 0 (%00):", "Slot 1 (%01):", "Slot 2 (%10):", "Slot 3 (%11):" };
+                for (int i = 0; i < 4; i++)
+                {
+                    _lblSlots[i].Visible = true;
+                    _cmbSlots[i].Visible = true;
+                    _picSlots[i].Visible = true;
+                    _lblSlots[i].Text = labels2Bit[i];
+                }
+                for (int i = 4; i < 8; i++)
+                {
+                    _lblSlots[i].Visible = false;
+                    _cmbSlots[i].Visible = false;
+                    _picSlots[i].Visible = false;
+                }
+            }
+        }
+
+        private void AutoMapManicMinerSlots()
+        {
+            if (_project == null) return;
+            var curMap = _project.CurrentMap;
+
+            byte[] expectedAttrs = new byte[] { 0, 66, 2, 22, 4, 68, 5, 0 };
+            string[] roleNames = new string[] {
+                "Background", "Floor", "Crumbling", "Wall", "Conveyor", "Nasty 1", "Nasty 2", "Spare"
+            };
+
+            if (curMap?.ManicMinerData?.TileDefs != null)
+            {
+                for (int s = 0; s < 8; s++)
+                {
+                    if (curMap.ManicMinerData.TileDefs[s] != null)
+                        expectedAttrs[s] = curMap.ManicMinerData.TileDefs[s].Attribute;
+                }
+            }
+
+            // Conta frequenza degli attributi nei byte parsati se disponibili
+            Dictionary<byte, int> attrFreq = new Dictionary<byte, int>();
+            foreach (var b in _parsedBytes)
+            {
+                attrFreq[b] = attrFreq.ContainsKey(b) ? attrFreq[b] + 1 : 1;
+            }
+
+            for (int s = 0; s < 8; s++)
+            {
+                byte targetAttr = expectedAttrs[s];
+                int matchedTileId = 0;
+
+                // 1. Cerca prima nelle tile già assegnate alla mappa
+                if (curMap?.AssignedTileIds != null && s < curMap.AssignedTileIds.Count)
+                {
+                    int candidateId = curMap.AssignedTileIds[s];
+                    if (candidateId > 0 && candidateId <= _project.Tiles.Count)
+                    {
+                        var t = _project.Tiles[candidateId - 1];
+                        byte candidateAttr = (byte)((t.Flash ? 128 : 0) | (t.Bright ? 64 : 0) | (t.PaperColor << 3) | t.InkColor);
+                        if (candidateAttr == targetAttr || (targetAttr == 0 && candidateAttr == 0))
+                        {
+                            matchedTileId = candidateId;
+                        }
+                    }
+                }
+
+                // 2. Se non trovata, cerca in tutte le tile del progetto per attributo ZX Spectrum
+                if (matchedTileId == 0)
+                {
+                    for (int i = 0; i < _project.Tiles.Count; i++)
+                    {
+                        var t = _project.Tiles[i];
+                        byte candidateAttr = (byte)((t.Flash ? 128 : 0) | (t.Bright ? 64 : 0) | (t.PaperColor << 3) | t.InkColor);
+                        if (candidateAttr == targetAttr)
+                        {
+                            if (targetAttr == 0 && s != 0 && s != 7) continue;
+                            matchedTileId = i + 1;
+                            break;
+                        }
+                    }
+                }
+
+                // 3. Fallback: assegna slot sequenziale se disponibile
+                if (matchedTileId == 0 && curMap?.AssignedTileIds != null && s < curMap.AssignedTileIds.Count)
+                {
+                    matchedTileId = curMap.AssignedTileIds[s];
+                }
+
+                SelectTileInCombo(_cmbSlots[s], matchedTileId);
+
+                int countInRoom = attrFreq.ContainsKey(targetAttr) ? attrFreq[targetAttr] : 0;
+                string freqInfo = countInRoom > 0 ? $" ({targetAttr}) [{countInRoom}]" : $" ({targetAttr})";
+                _lblSlots[s].Text = $"{s}: {roleNames[s]}{freqInfo}";
             }
         }
 
@@ -2073,10 +2810,10 @@ namespace ZXSpectrumSpriteGenerator.UI
                 }
             }
 
-            SelectTileInCombo(_cmbSlot0, d0);
-            SelectTileInCombo(_cmbSlot1, d1);
-            SelectTileInCombo(_cmbSlot2, d2);
-            SelectTileInCombo(_cmbSlot3, d3);
+            SelectTileInCombo(_cmbSlots[0], d0);
+            SelectTileInCombo(_cmbSlots[1], d1);
+            SelectTileInCombo(_cmbSlots[2], d2);
+            SelectTileInCombo(_cmbSlots[3], d3);
         }
 
         private void SelectTileInCombo(ComboBox cmb, int tileId)
@@ -2129,6 +2866,27 @@ namespace ZXSpectrumSpriteGenerator.UI
             }
 
             _parsedBytes = MapImporter.ParseBytesFromText(text);
+
+            // Auto-rilevamento intelligente formato in base al numero di byte e ai valori
+            if (_parsedBytes.Count == 512 || (_parsedBytes.Count >= 500 && _parsedBytes.Count <= 520))
+            {
+                _numWidth.Value = 32;
+                _numHeight.Value = 16;
+                bool hasHighAttr = false;
+                foreach (var b in _parsedBytes) { if (b > 7) { hasHighAttr = true; break; } }
+                _cmbFormat.SelectedIndex = hasHighAttr ? 0 : 1;
+                if (_cmbFormat.SelectedIndex == 0)
+                {
+                    AutoMapManicMinerSlots();
+                }
+            }
+            else if (_parsedBytes.Count == 128)
+            {
+                _numWidth.Value = 32;
+                _numHeight.Value = 16;
+                _cmbFormat.SelectedIndex = 2; // 2-bit
+            }
+
             UpdateStats();
         }
 
@@ -2136,43 +2894,97 @@ namespace ZXSpectrumSpriteGenerator.UI
         {
             int w = (int)_numWidth.Value;
             int h = (int)_numHeight.Value;
-            int bytesPerRow = (w + 3) / 4;
-            int expectedDataBytes = bytesPerRow * h;
-            _lblExpectedStats.Text = $"Byte attesi: {expectedDataBytes} ({bytesPerRow} B/riga x {h} righe)";
 
-            int availableBytes = _parsedBytes.Count;
-            if (_chkSkipHeader.Checked)
+            if (_selectedFormat == MapImportFormat.ManicMinerAttributes)
             {
-                availableBytes = Math.Max(0, availableBytes - 3);
-            }
+                int expectedDataBytes = w * h;
+                _lblExpectedStats.Text = $"Byte attesi: {expectedDataBytes} (1 B/cella: {w}x{h} - SkoolKit 45056)";
 
-            int completeRows = bytesPerRow > 0 ? (availableBytes / bytesPerRow) : 0;
+                int availableBytes = _parsedBytes.Count;
+                if (availableBytes == 0)
+                {
+                    _lblParseStatus.Text = "In attesa di dati...";
+                    _lblParseStatus.ForeColor = Color.Yellow;
+                    _btnOk.Enabled = false;
+                }
+                else if (availableBytes == expectedDataBytes)
+                {
+                    _lblParseStatus.Text = $"✔ Dati completi e validi per Manic Miner: {availableBytes} byte (32x16 celle)";
+                    _lblParseStatus.ForeColor = Color.FromArgb(120, 230, 160);
+                    _btnOk.Enabled = true;
+                }
+                else
+                {
+                    _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte su {expectedDataBytes} attesi.";
+                    _lblParseStatus.ForeColor = Color.FromArgb(255, 180, 80);
+                    _btnOk.Enabled = true;
+                }
+            }
+            else if (_selectedFormat == MapImportFormat.Linear1BytePerCell)
+            {
+                int expectedDataBytes = w * h;
+                _lblExpectedStats.Text = $"Byte attesi: {expectedDataBytes} (1 B/cella: {w}x{h})";
 
-            if (_parsedBytes.Count == 0)
-            {
-                _lblParseStatus.Text = "In attesa di dati...";
-                _lblParseStatus.ForeColor = Color.Yellow;
-                _btnOk.Enabled = false;
+                int availableBytes = _parsedBytes.Count;
+                if (availableBytes == 0)
+                {
+                    _lblParseStatus.Text = "In attesa di dati...";
+                    _lblParseStatus.ForeColor = Color.Yellow;
+                    _btnOk.Enabled = false;
+                }
+                else if (availableBytes == expectedDataBytes)
+                {
+                    _lblParseStatus.Text = $"✔ Dati completi per formato lineare: {availableBytes} byte ({w}x{h} celle)";
+                    _lblParseStatus.ForeColor = Color.FromArgb(120, 230, 160);
+                    _btnOk.Enabled = true;
+                }
+                else
+                {
+                    _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte su {expectedDataBytes} attesi.";
+                    _lblParseStatus.ForeColor = Color.FromArgb(255, 180, 80);
+                    _btnOk.Enabled = true;
+                }
             }
-            else if (availableBytes == expectedDataBytes)
+            else // Packed2Bit
             {
-                _lblParseStatus.Text = $"✔ Dati completi e validi: {availableBytes} byte ({completeRows}/{h} righe per mappa {w}x{h})";
-                _lblParseStatus.ForeColor = Color.FromArgb(120, 230, 160);
-                _btnOk.Enabled = true;
-            }
-            else if (availableBytes > expectedDataBytes)
-            {
-                int excess = availableBytes - expectedDataBytes;
-                _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte ({completeRows} righe complete). Eccedenza di +{excess} byte; verranno usati i primi {expectedDataBytes}.";
-                _lblParseStatus.ForeColor = Color.FromArgb(255, 180, 80);
-                _btnOk.Enabled = true;
-            }
-            else
-            {
-                int missing = expectedDataBytes - availableBytes;
-                _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte su {expectedDataBytes} attesi ({completeRows}/{h} righe complete). Mancano {missing} byte; le celle rimanenti saranno vuote.";
-                _lblParseStatus.ForeColor = Color.FromArgb(255, 140, 100);
-                _btnOk.Enabled = true;
+                int bytesPerRow = (w + 3) / 4;
+                int expectedDataBytes = bytesPerRow * h;
+                _lblExpectedStats.Text = $"Byte attesi: {expectedDataBytes} ({bytesPerRow} B/riga x {h} righe, 4 tile/byte)";
+
+                int availableBytes = _parsedBytes.Count;
+                if (_chkSkipHeader.Checked)
+                {
+                    availableBytes = Math.Max(0, availableBytes - 3);
+                }
+
+                int completeRows = bytesPerRow > 0 ? (availableBytes / bytesPerRow) : 0;
+
+                if (_parsedBytes.Count == 0)
+                {
+                    _lblParseStatus.Text = "In attesa di dati...";
+                    _lblParseStatus.ForeColor = Color.Yellow;
+                    _btnOk.Enabled = false;
+                }
+                else if (availableBytes == expectedDataBytes)
+                {
+                    _lblParseStatus.Text = $"✔ Dati completi e validi: {availableBytes} byte ({completeRows}/{h} righe per mappa {w}x{h})";
+                    _lblParseStatus.ForeColor = Color.FromArgb(120, 230, 160);
+                    _btnOk.Enabled = true;
+                }
+                else if (availableBytes > expectedDataBytes)
+                {
+                    int excess = availableBytes - expectedDataBytes;
+                    _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte ({completeRows} righe complete). Eccedenza di +{excess} byte; verranno usati i primi {expectedDataBytes}.";
+                    _lblParseStatus.ForeColor = Color.FromArgb(255, 180, 80);
+                    _btnOk.Enabled = true;
+                }
+                else
+                {
+                    int missing = expectedDataBytes - availableBytes;
+                    _lblParseStatus.Text = $"⚠ Trovati {availableBytes} byte su {expectedDataBytes} attesi ({completeRows}/{h} righe complete). Mancano {missing} byte; le celle rimanenti saranno vuote.";
+                    _lblParseStatus.ForeColor = Color.FromArgb(255, 140, 100);
+                    _btnOk.Enabled = true;
+                }
             }
         }
 
@@ -2235,11 +3047,6 @@ namespace ZXSpectrumSpriteGenerator.UI
             int w = (int)_numWidth.Value;
             int h = (int)_numHeight.Value;
 
-            int slot0 = (_cmbSlot0.SelectedItem is TileItem it0) ? it0.TileId : 0;
-            int slot1 = (_cmbSlot1.SelectedItem is TileItem it1) ? it1.TileId : 0;
-            int slot2 = (_cmbSlot2.SelectedItem is TileItem it2) ? it2.TileId : 0;
-            int slot3 = (_cmbSlot3.SelectedItem is TileItem it3) ? it3.TileId : 0;
-
             GameMap targetMap;
             if (_rbNewMap.Checked)
             {
@@ -2259,16 +3066,98 @@ namespace ZXSpectrumSpriteGenerator.UI
                 }
             }
 
-            bool keepExisting = _chkKeepExistingTiles.Checked;
-            MapImporter.ImportPacked2Bit(targetMap, _parsedBytes, w, h, slot0, slot1, slot2, slot3, _chkSkipHeader.Checked, keepExisting);
+            if (_selectedFormat == MapImportFormat.ManicMinerAttributes)
+            {
+                // Mappa per Attributi Manic Miner (512 byte)
+                Dictionary<byte, int> customAttrToTile = new Dictionary<byte, int>();
 
-            MessageBox.Show(
-                $"Mappa '{targetMap.Name}' importata con successo nel formato compresso 2-bit!\n\n" +
-                $"Dimensioni: {targetMap.Width}x{targetMap.Height} celle\n" +
-                $"Tile nel Set Mappa: {targetMap.AssignedTileIds.Count} (mantenute intatte)",
-                "Importazione Riuscita",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                byte[] expectedAttrs = new byte[] { 0, 66, 2, 22, 4, 68, 5, 0 };
+                if (targetMap.ManicMinerData?.TileDefs != null)
+                {
+                    for (int s = 0; s < 8; s++)
+                    {
+                        if (targetMap.ManicMinerData.TileDefs[s] != null)
+                            expectedAttrs[s] = targetMap.ManicMinerData.TileDefs[s].Attribute;
+                    }
+                }
+
+                for (int s = 0; s < 8; s++)
+                {
+                    int tid = (_cmbSlots[s].SelectedItem is TileItem it) ? it.TileId : 0;
+                    byte attr = expectedAttrs[s];
+                    if (!customAttrToTile.ContainsKey(attr))
+                    {
+                        customAttrToTile[attr] = tid;
+                    }
+                }
+
+                // Popola gli 8 AssignedTileIds di targetMap
+                if (targetMap.AssignedTileIds == null) targetMap.AssignedTileIds = new List<int>();
+                for (int s = 0; s < 8; s++)
+                {
+                    int tid = (_cmbSlots[s].SelectedItem is TileItem it) ? it.TileId : 0;
+                    if (s < targetMap.AssignedTileIds.Count)
+                    {
+                        if (tid > 0) targetMap.AssignedTileIds[s] = tid;
+                    }
+                    else if (tid > 0)
+                    {
+                        targetMap.AssignedTileIds.Add(tid);
+                    }
+                }
+
+                if (targetMap.ManicMinerData == null)
+                {
+                    targetMap.ManicMinerData = ManicMinerCavern.CreateCentralCavernDefault();
+                    targetMap.ManicMinerData.Name = targetMap.Name;
+                }
+
+                MapImporter.ImportManicMinerAttributes(targetMap, _parsedBytes, _project, w, h, customAttrToTile, true);
+
+                MessageBox.Show(
+                    $"Caverna '{targetMap.Name}' importata con successo nel formato Manic Miner!\n\n" +
+                    $"Dimensioni: {targetMap.Width}x{targetMap.Height} celle (512 byte)\n" +
+                    $"Tile mappate per attributo: {customAttrToTile.Count}",
+                    "Importazione Caverna Riuscita",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else if (_selectedFormat == MapImportFormat.Linear1BytePerCell)
+            {
+                List<int> slotTileIds = new List<int>();
+                for (int s = 0; s < 8; s++)
+                {
+                    int tid = (_cmbSlots[s].SelectedItem is TileItem it) ? it.TileId : 0;
+                    slotTileIds.Add(tid);
+                }
+
+                MapImporter.ImportLinear1BytePerCell(targetMap, _parsedBytes, w, h, slotTileIds, true, _project);
+
+                MessageBox.Show(
+                    $"Mappa '{targetMap.Name}' importata con successo nel formato lineare 1 byte/cella!\n\n" +
+                    $"Dimensioni: {targetMap.Width}x{targetMap.Height} celle",
+                    "Importazione Riuscita",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else // Packed2Bit
+            {
+                int slot0 = (_cmbSlots[0].SelectedItem is TileItem it0) ? it0.TileId : 0;
+                int slot1 = (_cmbSlots[1].SelectedItem is TileItem it1) ? it1.TileId : 0;
+                int slot2 = (_cmbSlots[2].SelectedItem is TileItem it2) ? it2.TileId : 0;
+                int slot3 = (_cmbSlots[3].SelectedItem is TileItem it3) ? it3.TileId : 0;
+
+                bool keepExisting = _chkKeepExistingTiles.Checked;
+                MapImporter.ImportPacked2Bit(targetMap, _parsedBytes, w, h, slot0, slot1, slot2, slot3, _chkSkipHeader.Checked, keepExisting);
+
+                MessageBox.Show(
+                    $"Mappa '{targetMap.Name}' importata con successo nel formato compresso 2-bit!\n\n" +
+                    $"Dimensioni: {targetMap.Width}x{targetMap.Height} celle\n" +
+                    $"Tile nel Set Mappa: {targetMap.AssignedTileIds.Count} (mantenute intatte)",
+                    "Importazione Riuscita",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
 
             this.DialogResult = DialogResult.OK;
             this.Close();

@@ -1,12 +1,9 @@
-# ZX Spectrum Sprite Generator & Studio (C#)
+# ZX Spectrum Studio & Level Editor (C#)
 
-Applicazione grafica completa in C# per la progettazione, il disegno, l'animazione e l'esportazione di **sprite software per Sinclair ZX Spectrum** (processore Z80).
-
-L'applicazione include già precaricati i **4 sprite del nemico** (dimensione 16x16 pixel, 32 byte ciascuno), che rappresentano le diverse direzioni/posizioni del nemico:
-1. **Posizione 1 - Nord / Retro**: 32 byte (riga per riga)
-2. **Posizione 2 - Est / Diagonale Destra**: 32 byte
-3. **Posizione 3 - Sud / Fronte**: 32 byte
-4. **Posizione 4 - Ovest / Diagonale Sinistra**: 32 byte
+Applicazione grafica completa in C# per Windows per la progettazione, il disegno, l'animazione di **sprite software**, la creazione di **Tile/Tileset** e l'editing completo di **Mappe e Livelli per Sinclair ZX Spectrum** (processore Z80), con supporto nativo specializzato per:
+* **Manic Miner** (formato autentico da 1024 byte - specifica SkoolKit 45056 / `$B000`)
+* **Jet Set Willy** (stanze, guardiani, item e layout JSW)
+* **Sprite Software e Nemici Generici** (16x16 pixel con maschera, player di animazione ed esportazione Assembly)
 
 ---
 
@@ -22,11 +19,65 @@ Puoi aprirlo direttamente facendo doppio clic su `ZXSpectrumSpriteGenerator.exe`
 .\bin\Release\ZXSpectrumSpriteGenerator.exe
 ```
 
-Il progetto è anche una soluzione Visual Studio (`SpriteGenerator.sln`) compatibile con **Visual Studio 2019 / 2022**.
+Il progetto è compatibile con Visual Studio 2019 / 2022 (`SpriteGenerator.sln`) e compilabile tramite MSBuild.
 
 ---
 
-## 🎨 Caratteristiche Principali
+## ⛏️ Modalità Manic Miner (Specifiche SkoolKit 45056)
+
+L'applicazione include un modulo dedicato per progettare ed esportare le caverne di **Manic Miner** rispettando al 100% la struttura di memoria originale a partire dall'indirizzo **45056 ($B000)**:
+
+### 1. Struttura del Blocco Caverna (1024 Byte)
+* **0..511 (512 byte)**: Layout dello schermo in griglia 32x16 celle (offset $0000..$01FF).
+* **512..543 (32 byte)**: Nome della caverna in formato ASCII (es. `Central Cavern`).
+* **544..615 (72 byte)**: Definizioni degli 8 Tile standard (1 byte attributo + 8 byte bitmap per ciascuno):
+  1. `[Background]`
+  2. `[Floor]`
+  3. `[Crumbling Floor]`
+  4. `[Wall]`
+  5. `[Conveyor]`
+  6. `[Nasty 1]`
+  7. `[Nasty 2]`
+  8. `[Spare / Extra]`
+* **616..622 (7 byte)**: Stato iniziale e posizione di Miner Willy (X, Y, animazione, direzione, indirizzo nel buffer attributi).
+* **623..626 (4 byte)**: Nastro Trasportatore (Conveyor: direzione, indirizzo a video, lunghezza in celle).
+* **627 (1 byte)**: Colore del bordo dello Spectrum (0..7).
+* **629..653 (25 byte)**: Fino a 5 Oggetti / Chiavi collezionabili (5 byte ciascuno: attributo, indirizzo attributi, indirizzo video).
+* **654..690 (37 byte)**: Portale d'uscita (Exit Portal 16x16, attributo, grafica a 32 byte e indirizzi a video).
+* **691..698 (8 byte)**: Grafica bitmap dell'oggetto collezionabile.
+* **699..700 (2 byte)**: Riserva iniziale d'aria (Air Supply) e clock.
+* **701..728 (28 byte)**: Fino a 4 Guardiani Orizzontali (7 byte ciascuno con range di pattuglia MinX..MaxX, velocità e animazione).
+* **734..765 (32 byte)**: Grafica Pesce Spada (The Final Barrier).
+* **766..1021 (256 byte)**: 8 Sprite dei Guardiani (16x16 pixel, 32 byte ciascuno).
+
+### 2. Strumenti Interattivi per Manic Miner
+Nel tab **Mappe / Livelli** sono presenti pulsanti e scorciatoie dedicate:
+* ⛏️ **Menu `Manic Miner`**:
+  * *Attiva/Disattiva Modalità Manic Miner*: commuta l'editor abilitando overlay e controlli specifici.
+  * *Nuova Caverna Manic Miner*: inizializza una nuova stanza con i parametri predefiniti di Central Cavern.
+  * *📋 Incolla 512 Byte Layout Caverna dagli Appunti*: incolla istantaneamente i 512 byte (SkoolKit DEFB, hex o numeri) con auto-mappatura automatica per attributi ZX Spectrum!
+  * *Importa Caverna (.BIN, .SNA o .ASM 512B)*: carica un singolo blocco da 1024 byte, estrae da snapshot `.sna` o importa da sorgenti Assembly / testo `.asm`/`.txt`.
+  * *Esporta Caverna (1024 Byte .bin)*: genera il file binario puro pronto per injector o SkoolKit.
+  * *Esporta Tutte le 20 Caverne (20.480 Byte)*: genera il blocco completo dei 20 livelli da iniettare da $B000 a $FFFF.
+  * *Inietta Caverna Corrente in Snapshot (.sna)*: patcha direttamente un file `.sna` 48K esistente all'indirizzo $B000 (offset file 28.699).
+  * *Esporta Codice Assembly (SkoolKit DEFB / DEFM)*: genera sorgente Z80 compatibile con SkoolKit con etichette ed espressioni commentate.
+  * *Proprietà Caverna Manic Miner*: finestra di dialogo per modificare nome caverna, indice (0..19), colore del bordo, aria iniziale, Willy, Conveyor e Portale.
+* 🕹️ **Strumenti sulla Barra del Canvas**:
+  * 🚶 **Piazza Willy**: clicca sulla mappa per impostare le coordinate di partenza di Miner Willy.
+  * 🚪 **Piazza Portale**: clicca per posizionare il portale d'uscita 16x16.
+  * 🔑 **Piazza Item / Chiave**: clicca per posizionare o riposizionare fino a 5 oggetti collezionabili.
+  * 👾 **Piazza Guardiano**: clicca per posizionare e configurare i guardiani orizzontali.
+
+### 3. Progetto Precaricato
+Nel menu principale **File -> 🕹️ Nuovo Progetto Manic Miner (Central Cavern)** oppure aprendo:
+```
+Progetti\ManicMiner.zxproj
+```
+è possibile visualizzare e modificare immediatamente il primo livello storico del gioco (*Central Cavern*), completo di Willy a coordinate (2, 13), 5 chiavi posizionate, guardiano orizzontale di pattuglia e nastro trasportatore!
+
+---
+
+## 🎨 Caratteristiche Principali (Sprite & Mappe)
 
 ### 1. Canvas di Disegno Pixel-Art
 * **Griglia interattiva** con zoom personalizzabile (+ / -).

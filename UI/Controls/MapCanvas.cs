@@ -15,7 +15,11 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
         FloodFill,
         RectangleOutline,
         RectangleFilled,
-        PickTile
+        PickTile,
+        PlaceWilly,
+        PlacePortal,
+        PlaceItem,
+        PlaceGuardian
     }
 
     public class MapHoverEventArgs : EventArgs
@@ -119,6 +123,17 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
             set
             {
                 _activeTileId = Math.Max(0, value);
+                Invalidate();
+            }
+        }
+
+        private bool _showManicMinerOverlays = true;
+        public bool ShowManicMinerOverlays
+        {
+            get => _showManicMinerOverlays;
+            set
+            {
+                _showManicMinerOverlays = value;
                 Invalidate();
             }
         }
@@ -258,6 +273,12 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
                 }
             }
 
+            // Overlay Entità Manic Miner (Willy, Portale, Oggetti, Nastro, Guardiani)
+            if (_showManicMinerOverlays && _map?.ManicMinerData != null)
+            {
+                DrawManicMinerOverlays(g, step);
+            }
+
             // Evidenziazione tile sotto il cursore
             if (_currentHoverTile.X >= 0 && _currentHoverTile.X < _map.Width &&
                 _currentHoverTile.Y >= 0 && _currentHoverTile.Y < _map.Height)
@@ -266,6 +287,114 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
                 using (Pen cursorPen = new Pen(Color.FromArgb(200, 255, 255, 0), 1.5f))
                 {
                     g.DrawRectangle(cursorPen, hoverRect);
+                }
+            }
+        }
+
+        private void DrawManicMinerOverlays(Graphics g, int step)
+        {
+            var mm = _map.ManicMinerData;
+            if (mm == null) return;
+
+            using (Font overlayFont = new Font("Segoe UI", Math.Max(7.5f, step * 0.45f), FontStyle.Bold))
+            using (StringFormat sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+            {
+                // 1. Nastro Trasportatore (Conveyor)
+                if (mm.ConveyorLength > 0 && mm.ConveyorY < _map.Height)
+                {
+                    int startX = mm.ConveyorX * step;
+                    int y = mm.ConveyorY * step;
+                    int w = mm.ConveyorLength * step;
+                    Rectangle convRect = new Rectangle(startX, y, w, step);
+                    using (SolidBrush cBrush = new SolidBrush(Color.FromArgb(60, 0, 255, 120)))
+                    using (Pen cPen = new Pen(Color.FromArgb(0, 255, 120), 1.5f) { DashStyle = DashStyle.Dash })
+                    {
+                        g.FillRectangle(cBrush, convRect);
+                        g.DrawRectangle(cPen, convRect);
+                    }
+                    string arrow = mm.ConveyorDirection == 0 ? "◄ ◄ ◄ NASTRO ◄ ◄ ◄" : "► ► ► NASTRO ► ► ►";
+                    using (SolidBrush textBrush = new SolidBrush(Color.FromArgb(220, 255, 255, 255)))
+                    {
+                        g.DrawString(arrow, overlayFont, textBrush, convRect, sf);
+                    }
+                }
+
+                // 2. Portale di Uscita (16x16 pixel = 2x2 celle)
+                Rectangle portalRect = new Rectangle(mm.PortalX * step, mm.PortalY * step, 2 * step, 2 * step);
+                using (SolidBrush pBrush = new SolidBrush(Color.FromArgb(90, 255, 0, 200)))
+                using (Pen pPen = new Pen(Color.FromArgb(255, 220, 0), 2f))
+                {
+                    g.FillRectangle(pBrush, portalRect);
+                    g.DrawRectangle(pPen, portalRect);
+                }
+                using (SolidBrush pTextBrush = new SolidBrush(Color.Yellow))
+                {
+                    g.DrawString("🚪 EXIT", overlayFont, pTextBrush, portalRect, sf);
+                }
+
+                // 3. Oggetti Collezionabili (Items / Chiavi)
+                if (mm.Items != null)
+                {
+                    for (int i = 0; i < mm.Items.Count; i++)
+                    {
+                        var it = mm.Items[i];
+                        Rectangle itRect = new Rectangle(it.X * step, it.Y * step, step, step);
+                        using (SolidBrush itemBg = new SolidBrush(Color.FromArgb(180, 0, 220, 255)))
+                        using (Pen itPen = new Pen(Color.White, 1.5f))
+                        {
+                            g.FillEllipse(itemBg, itRect.X + 2, itRect.Y + 2, itRect.Width - 4, itRect.Height - 4);
+                            g.DrawEllipse(itPen, itRect.X + 2, itRect.Y + 2, itRect.Width - 4, itRect.Height - 4);
+                        }
+                        using (SolidBrush itTextBrush = new SolidBrush(Color.Black))
+                        {
+                            g.DrawString($"💎{i + 1}", overlayFont, itTextBrush, itRect, sf);
+                        }
+                    }
+                }
+
+                // 4. Guardiani Orizzontali (Range patrol + marker)
+                if (mm.HorizontalGuardians != null)
+                {
+                    for (int i = 0; i < mm.HorizontalGuardians.Count; i++)
+                    {
+                        var gObj = mm.HorizontalGuardians[i];
+                        int minPx = gObj.MinX * step;
+                        int maxPx = (gObj.MaxX + 1) * step;
+                        int cy = (int)((gObj.Y + 0.5f) * step);
+
+                        using (Pen patrolPen = new Pen(Color.FromArgb(220, 255, 60, 60), 2f) { DashStyle = DashStyle.DashDot })
+                        {
+                            g.DrawLine(patrolPen, minPx, cy, maxPx, cy);
+                            g.DrawLine(patrolPen, minPx, cy - 4, minPx, cy + 4);
+                            g.DrawLine(patrolPen, maxPx, cy - 4, maxPx, cy + 4);
+                        }
+
+                        Rectangle gRect = new Rectangle(gObj.InitialX * step, gObj.Y * step, step, step);
+                        using (SolidBrush gBrush = new SolidBrush(Color.FromArgb(200, 220, 40, 40)))
+                        using (Pen gPen = new Pen(Color.Yellow, 1.5f))
+                        {
+                            g.FillRectangle(gBrush, gRect);
+                            g.DrawRectangle(gPen, gRect);
+                        }
+                        using (SolidBrush gTextBrush = new SolidBrush(Color.White))
+                        {
+                            g.DrawString($"👾{i + 1}", overlayFont, gTextBrush, gRect, sf);
+                        }
+                    }
+                }
+
+                // 5. Miner Willy Spawn
+                Rectangle willyRect = new Rectangle(mm.WillyX * step, mm.WillyY * step, step, step);
+                using (SolidBrush wBrush = new SolidBrush(Color.FromArgb(210, 0, 200, 80)))
+                using (Pen wPen = new Pen(Color.White, 2f))
+                {
+                    g.FillRectangle(wBrush, willyRect);
+                    g.DrawRectangle(wPen, willyRect);
+                }
+                using (SolidBrush wTextBrush = new SolidBrush(Color.Black))
+                {
+                    string dirSymbol = mm.WillyDirection == 0 ? "W►" : "◄W";
+                    g.DrawString(dirSymbol, overlayFont, wTextBrush, willyRect, sf);
                 }
             }
         }
@@ -328,6 +457,77 @@ namespace ZXSpectrumSpriteGenerator.UI.Controls
                         _isDraggingShape = true;
                         _shapeStartTile = tile;
                         Invalidate();
+                        break;
+
+                    case MapDrawingTool.PlaceWilly:
+                        if (_map.ManicMinerData != null)
+                        {
+                            _map.PushUndoState();
+                            _map.ManicMinerData.WillyX = tile.X;
+                            _map.ManicMinerData.WillyY = tile.Y;
+                            _map.ManicMinerData.WillyPixelY = tile.Y * 8;
+                            Invalidate();
+                            MapChanged?.Invoke(this, EventArgs.Empty);
+                        }
+                        break;
+
+                    case MapDrawingTool.PlacePortal:
+                        if (_map.ManicMinerData != null)
+                        {
+                            _map.PushUndoState();
+                            _map.ManicMinerData.PortalX = Math.Min(30, tile.X);
+                            _map.ManicMinerData.PortalY = Math.Min(14, tile.Y);
+                            Invalidate();
+                            MapChanged?.Invoke(this, EventArgs.Empty);
+                        }
+                        break;
+
+                    case MapDrawingTool.PlaceItem:
+                        if (_map.ManicMinerData != null)
+                        {
+                            _map.PushUndoState();
+                            var existing = _map.ManicMinerData.Items.Find(it => it.X == tile.X && it.Y == tile.Y);
+                            if (existing != null)
+                            {
+                                _map.ManicMinerData.Items.Remove(existing);
+                            }
+                            else if (_map.ManicMinerData.Items.Count < 5)
+                            {
+                                byte nextAttr = (byte)(3 + _map.ManicMinerData.Items.Count);
+                                _map.ManicMinerData.Items.Add(new ManicMinerItem(tile.X, tile.Y, nextAttr));
+                            }
+                            Invalidate();
+                            MapChanged?.Invoke(this, EventArgs.Empty);
+                        }
+                        break;
+
+                    case MapDrawingTool.PlaceGuardian:
+                        if (_map.ManicMinerData != null)
+                        {
+                            _map.PushUndoState();
+                            var existingG = _map.ManicMinerData.HorizontalGuardians.Find(g => g.InitialX == tile.X && g.Y == tile.Y);
+                            if (existingG != null)
+                            {
+                                _map.ManicMinerData.HorizontalGuardians.Remove(existingG);
+                            }
+                            else if (_map.ManicMinerData.HorizontalGuardians.Count < 4)
+                            {
+                                int minX = Math.Max(0, tile.X - 4);
+                                int maxX = Math.Min(31, tile.X + 4);
+                                _map.ManicMinerData.HorizontalGuardians.Add(new ManicMinerGuardian
+                                {
+                                    Y = tile.Y,
+                                    InitialX = tile.X,
+                                    MinX = minX,
+                                    MaxX = maxX,
+                                    Direction = 0,
+                                    Speed = 0,
+                                    SpriteIndex = _map.ManicMinerData.HorizontalGuardians.Count * 2
+                                });
+                            }
+                            Invalidate();
+                            MapChanged?.Invoke(this, EventArgs.Empty);
+                        }
                         break;
                 }
             }

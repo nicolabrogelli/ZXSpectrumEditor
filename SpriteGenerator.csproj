@@ -53,6 +53,11 @@
     <Compile Include="Services\MapExporter.cs" />
     <Compile Include="Models\Tile.cs" />
     <Compile Include="Models\TilePresets.cs" />
+    <Compile Include="Models\ManicMinerCavern.cs" />
+    <Compile Include="Services\ManicMinerService.cs" />
+    <Compile Include="UI\ManicMinerPropertiesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\AddTilesDialog.cs">
       <SubType>Form</SubType>
     </Compile>

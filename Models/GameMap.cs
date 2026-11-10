@@ -26,6 +26,13 @@ namespace ZXSpectrumSpriteGenerator.Models
         public int[,] Tiles { get; private set; }
 
         /// <summary>
+        /// Dati e parametri specifici per la caverna se la mappa è configurata in modalità Manic Miner.
+        /// </summary>
+        public ManicMinerCavern ManicMinerData { get; set; }
+
+        public bool IsManicMinerMode => ManicMinerData != null;
+
+        /// <summary>
         /// Elenco degli ID delle tile (1-based index in project.Tiles) assegnate specificamente a questa mappa.
         /// Solo queste tile costituiscono il tileset locale della mappa e vengono esportate.
         /// </summary>
@@ -160,6 +167,10 @@ namespace ZXSpectrumSpriteGenerator.Models
             };
             clone.Tiles = CloneTiles(this.Tiles, Width, Height);
             clone.AssignedTileIds = new List<int>(this.AssignedTileIds);
+            if (this.ManicMinerData != null)
+            {
+                clone.ManicMinerData = ManicMinerCavern.From1024ByteArray(this.ManicMinerData.To1024ByteArray(), 0, this.ManicMinerData.CavernIndex);
+            }
             return clone;
         }
 
